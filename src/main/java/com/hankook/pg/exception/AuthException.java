@@ -1,0 +1,11 @@
+package com.hankook.pg.exception;
+
+public class AuthException extends Exception{
+    public AuthException(){
+        super();
+    }
+
+    public AuthException(String message){
+        super(message);
+    }
+}

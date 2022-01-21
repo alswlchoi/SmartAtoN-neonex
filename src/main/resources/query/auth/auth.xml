@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.auth.dao.AuthManageDao">
+    <select id="getAuthList" parameterType="com.hankook.pg.content.auth.vo.AuthVO" resultType="com.hankook.pg.content.auth.vo.AuthVO">
+        SELECT
+        	*
+        FROM PG_AUTH
+        WHERE 1=1
+        <if test='authCode != null and authCode!="" '>
+        	AND AUTH_CODE LIKE CONCAT('%',#{authCode},'%')
+        </if>
+        ORDER BY AUTH_ORDER
+    </select>
+    <insert id="insertAuth" parameterType="com.hankook.pg.content.auth.vo.AuthVO">
+		INSERT INTO PG_AUTH
+		(
+			AUTH_CODE,
+			AUTH_NM,
+			AUTH_LEVEL,
+			AUTH_ORDER
+		)
+		VALUES(
+			#{authCode},
+			#{authNm},
+			#{authLevel},
+			#{authOrder}
+		)
+    </insert>
+</mapper>

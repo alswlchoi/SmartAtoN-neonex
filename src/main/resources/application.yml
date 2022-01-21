@@ -1,0 +1,40 @@
+
+
+server:
+  attachment:
+#    path: /Users/ko/Downloads
+#    est-path: /home/skbcalc/tomcat-9.0/estimate
+  servlet:
+    context-path: /
+  error:
+    whitelabel:
+      enabled: false
+  port: 8888
+
+
+
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+    view:
+      prefix: /WEB-INF/views/jsp
+      suffix: .jsp
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+  datasource:
+    hikari:
+      driver-class-name: "org.mariadb.jdbc.Driver"
+      jdbc-url: "jdbc:mariadb://106.248.228.114:33306/hankook"
+      username: "hankook_pg"
+      password: "hankook_pg"
+      maximum-pool-size: 100
+      pool-name: hankook-db-cp
+      max-lifetime: 60000
+      connection-test-query: "SELECT 1 FROM DUAL"
+      minimum-idle: 20
+redirect-url: "http://localhost/errors/error.html"
+

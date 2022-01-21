@@ -1,0 +1,73 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.member.dao.MemberDAO">
+    <select id="getMmemberlist" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        SELECT * FROM PG_MEMBER
+    </select>
+    
+    <select id="getMemberinfo" parameterType="String" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        select
+            PM.MEM_ID
+            ,PM.MEM_PWD
+            ,PM.MEM_NAME
+            ,PM.AUTH_CODE
+            ,PM.COMP_CODE
+            ,PM.MEM_PHONE
+            ,PM.MEM_USER_TYPE
+            ,PM.MEM_USE_YN
+            ,PM.MEM_EMAIL
+            ,PM.MEM_REG_USER
+            ,PM.MEM_REG_DT
+            ,PA.AUTH_NM
+
+        from PG_MEMBER PM
+                 join PG_AUTH PA on PM.AUTH_CODE = PA.AUTH_CODE
+        where MEM_ID = #{memId};
+    </select>    
+    
+    <insert id="insertMember" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        INSERT INTO PG_MEMBER (
+            MEM_ID,
+        	MEM_PWD,
+        	MEM_NAME,
+            AUTH_CODE,
+            COMP_CODE,
+        	MEM_PHONE,
+        	MEM_USE_YN,
+        	MEM_EMAIL,
+        	MEM_REG_USER,
+        	MEM_REG_DT
+        ) VALUES (
+            #{memId},
+            #{memPwd},
+            #{memName},
+            #{authCode},
+            #{compCode},
+            #{memPhone},
+            #{memUseYn},
+            #{memEmail},
+            #{memRegUser},
+            #{memRegDt}
+        )
+    </insert>
+    
+    <update id="update" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        UPDATE MEMBERS
+        SET 
+            MEMBER_ID = #{memId},
+            MEMBER_PWD = #{memPwd},
+            MEMBER_NM = #{memNm},
+        WHERE id = #{memId}
+    </update>
+    
+    <update id = "deleteById" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        UPDATE MEMBERS
+        SET 
+            MEMBER_ID = #{memId},
+            MEMBER_PWD = '****',
+            MEMBER_NM = '****'
+        WHERE id = #{memId}
+    </update>
+</mapper>

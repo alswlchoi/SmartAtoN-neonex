@@ -1,0 +1,19 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.login.dao.LoginDao">
+	<select id="getMenuList" resultType="com.hankook.pg.content.login.dto.MenuDto">
+		SELECT PM.M_PARENT
+			 , PM.M_NAME
+			 , PM.M_URL
+			 , PA.AUTH_CODE
+			 , PM.M_USE_YN
+		FROM PG_MENU PM
+				 JOIN PG_MENU_MAPPING P
+					  ON PM.MENU_CODE = P.MENU_CODE
+				 JOIN PG_AUTH PA
+				     ON PA.AUTH_CODE = P.AUTH_CODE
+		WHERE PM.M_USE_YN = 'Y';
+	</select>
+</mapper>

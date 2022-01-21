@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="COMMON">
+
+    <!--  공용 페이징 상단 -->
+    <sql id="sqlPagingTop">
+        SELECT
+            W.*
+        FROM (
+                 SELECT
+                     (ROW_NUMBER() OVER()) AS RNUM, V.*
+                 FROM (
+    </sql>
+    <!--  공용 페이징 상단 -->
+
+    <!--  공용 페이징 하단 -->
+    <sql id="sqlPagingBottom">
+        ) OB
+        <if test="arrOrderColumn !=null">
+        <foreach collection="arrOrderColumn" item="orderColumn" open="ORDER BY" separator=",">
+            ${orderColumn}
+        </foreach>
+        </if>
+        ) V
+        WHERE
+        ROWNUM <![CDATA[ <= ]]> ${@com.hankook.pg.share.PagingUtil@getEndRowNum(pageNo, pageSize)}
+        ) W
+        WHERE W.RNUM <![CDATA[ >= ]]> ${@com.hankook.pg.share.PagingUtil@getStartRowNum(pageNo, pageSize)}
+
+    </sql>
+    <!--  공용 페이징 하단 -->
+
+    <sql id="sqlCountTop">
+        SELECT
+            COUNT(*)
+        FROM (
+    </sql>
+
+    <sql id="sqlCountBottom">
+        )
+    </sql>
+
+
+    <!-- COUNT OVER TOTAL CNT WRAPPER -->
+    <sql id="sqlCountOverTop">
+        SELECT COUNT_OVER_WRAP.*, COUNT(*) OVER() TOTAL_CNT
+        FROM
+            (
+    </sql>
+
+    <sql id="sqlCountOverBottom">
+        ) COUNT_OVER_WRAP
+    </sql>
+
+    <!-- PAGING COUNT OVER TOTAL CNT WRAPPER -->
+    <sql id="sqlPagingCountOverTop">
+        <include refid="COMMON.sqlPagingTop" />
+        <include refid="COMMON.sqlCountOverTop" />
+    </sql>
+
+    <sql id="sqlPagingCountOverBottom">
+        <include refid="COMMON.sqlCountOverBottom" />
+        <include refid="COMMON.sqlPagingBottom"/>
+    </sql>
+
+</mapper>
