@@ -102,7 +102,7 @@ public class Results {
    * @param dataList 데이터 목록
    * @return grid 응답형식 결과
    */
-  public static Map<String, Object> grid(com.hankook.pg.share.Paging paging, List<?> dataList) {
+  public static Map<String, Object> grid(Paging paging, List<?> dataList) {
     return getResultMap(
         new String[] {GRID_CURRENT_PAGE, GRID_TOTAL_PAGE, GRID_TOTAL_RECORD, GRID_DATA_LIST},
         new Object[] {
@@ -122,7 +122,7 @@ public class Results {
    * @param message 추가 메세지
    * @return grid 응답형식 결과
    */
-  public static Map<String, Object> grid(com.hankook.pg.share.Paging paging, List<?> dataList, String message) {
+  public static Map<String, Object> grid(Paging paging, List<?> dataList, String message) {
     return getResultMap(
         new String[] {
           GRID_CURRENT_PAGE, GRID_TOTAL_PAGE, GRID_TOTAL_RECORD, GRID_DATA_LIST, GRID_MESSAGE

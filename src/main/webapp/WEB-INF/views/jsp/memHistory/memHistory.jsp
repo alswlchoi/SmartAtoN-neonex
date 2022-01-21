@@ -20,11 +20,10 @@
 <script type="text/javascript">
 $(document).ready(function () {
   var param = {};
-  postAjax("/system/memHistory/list", param, "memHistoryList", null, null, null)
+  postAjax("/memHistory/list", param, "memHistoryList", null, null, null)
 });
 function memHistoryList(list) {
   // $("#memHistoryList").html("");
-  console.log(list);
   // $.forEach(list, function (i,el) {
   //   $("#memHistoryList").append("<li>"+list[i].memId+)
   // })

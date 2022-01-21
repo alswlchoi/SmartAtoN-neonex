@@ -16,15 +16,15 @@ public class MemHistoryService {
     return memHistoryDao.getHistory();
   }
 
-  public void insertHistory (MemHistoryVo memHistoryVo) {
-    memHistoryDao.insertHistory(memHistoryVo);
+  public int insertHistory (MemHistoryVo memHistoryVo) {
+    return memHistoryDao.insertHistory(memHistoryVo);
   }
 
-  public void updateHistory (MemHistoryVo memHistoryVo) {
-    memHistoryDao.updateHistory(memHistoryVo);
+  public int updateHistory (MemHistoryVo memHistoryVo) {
+    return memHistoryDao.updateHistory(memHistoryVo);
   }
 
-  public void deleteHistory (MemHistoryVo memHistoryVo) {
-    memHistoryDao.deleteHistory(memHistoryVo);
+  public int deleteHistory (MemHistoryVo memHistoryVo) {
+    return memHistoryDao.deleteHistory(memHistoryVo);
   }
 }

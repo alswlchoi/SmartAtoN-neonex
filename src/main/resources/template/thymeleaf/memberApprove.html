@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>::: [한국타이어] Technoring :::</title>
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: "Malgun Gothic", "Dotum", "Gulim", "tahoma";
+      letter-spacing: -1px;
+      font-size: 14px;
+      color: #666;
+      height: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    /* table list(공통) */
+    .tbl_wrap_list {
+      position: relative;
+      width: 100%;
+      border-top: 1px solid #666;
+    }
+
+    .tbl_wrap_list .tbl_list {
+      width: 100%;
+    }
+
+    .tbl_wrap_list .tbl_list thead th {
+      height: 30px;
+      padding: 3px 10px 0px 10px;
+      font-weight: normal;
+      color: #333;
+      font-size: 14px;
+      background: #f7f7f7;
+      text-align: center;
+      border-left: 1px solid #bbb;
+    }
+
+    .tbl_wrap_list .tbl_list thead th:first-child {
+      border-left: none;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td {
+      position: relative;
+      height: 30px;
+      padding: 5px 10px;
+      text-align: center;
+      border-left: 1px solid #ddd;
+      border-top: 1px solid #bbb;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tbl_wrap_list .tbl_list tbody tr:last-child td {
+      border-bottom: 1px solid #bbb;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td:first-child {
+      border-left: none;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td a {
+      text-decoration: underline;
+      color: #000;
+    }
+
+    /* //table list(공통) */
+  </style>
+</head>
+
+
+<body>
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ededed;">
+  <tr>
+    <td align="center" valign="top">
+      <!-- 이메일 컨텐츠 -->
+      <table width="760" border="0" cellspacing="0" cellpadding="0"
+             style="background-color: #fff; margin: 0 auto;">
+        <tr>
+          <td width="30" rowspan="10"
+              style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;">&nbsp;</td>
+          <td style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;"><a
+                  href="#"></a><img src="./images/BI_Technoring.png" alt="Technoring"></a></td>
+          <td width="30" rowspan="10"
+              style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td
+                  style="font-size: 34px; color: #000; letter-spacing: -1px; padding-top: 41px; line-height: 1;">
+            회원가입 승인 완료 안내</td>
+        </tr>
+        <tr>
+          <td style="padding-top: 30px; line-height: 26px; font-size: 16px;">테크노링 회원이 되신 것을
+            환영합니다.<br />아시아 최대 규모의 시험로와 다양한 서비스를 이용할 수 있습니다.</td>
+        </tr>
+        <tr>
+          <td style="padding-top: 30px;">
+            <!-- table list -->
+            <section class="tbl_wrap_list">
+              <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                <colgroup>
+                  <col width="50%" />
+                  <col width="50%" />
+                </colgroup>
+                <thead>
+                <tr>
+                  <th scope="col">승인일</th>
+                  <th scope="col">아이디</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td th:text="${compModDt}"></td>
+                  <td th:text="${memId}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </section>
+            <!-- //table list -->
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 50px;">
+            <p style="font-size: 18px; color: #333; margin: 0; line-height: 1; font-weight: bold;">이용 안내
+            </p>
+            <p style="padding-left: 10px; margin: 15px 0 0 0; font-weight: bold;">1) 운전자 정보 등록 안내</p>
+            <p style="padding-left: 20px; font-size: 12px; margin: 5px 0 0 0; line-height: 18px;">- 로그인
+              후 마이페이지 > 회원정보 관리
+              화면에서 운전자 정보를 등록해 주세요.<br />
+              : 운전자 정보 등록시 개인정보 이용 제공 및 수집 이용 동의서를 다운받아 해당 운전자의 자필서명 후 스캔하여 등록해 주세요.<br />
+              : 운전 면허증 사본 등록시 민감한 개인정보(사진, 주민등록번호 뒷자리, 주소, 식별자번호)는 음영처리(masking) 처리 후 등록해 주세요.<br />
+              - 등록된 운전자 정보를 바탕으로 관리자가 검토/승인 합니다.<br />
+              - 승인 완료된 운전자정보를 바탕으로 시험로 예약이 가능합니다.</p>
+            <p style="padding-left: 10px; margin: 15px 0 0 0; font-weight: bold">2) 시험로 예약 안내 및 유의사항</p>
+            <p style="padding-left: 20px; font-size: 12px; margin: 5px 0 0 0; line-height: 18px;">- 시험로
+              운영 시간 : 매주 월~ 목, 08:00~ 17:00<br />
+              : 공휴일 및 해당 기관의 사정에 따라 이용이 제한될 수도 있습니다.<br />
+              - 시험목적과 원하시는 일자를 선택하여 조회 해 주시기 바랍니다.<br />
+              - 조회 결과에 따라 원하시는 시험로를 선택후, 정보를 입력해 주시기 바랍니다.<br />
+              : 시험로 별로 운전가능한 운전자 레벨이 있으며, 운전자 레벨이 맞지 않을 경우 이용에 제한이 될 수 있습니다.<br />
+              : 주행장 입장시 운전자와 차량 정보 확인 후 운전자의 DCCP및 안전교육이수 여부 확인 후 통과된 운전자에 한하여 주행가능 합니다.<br />
+              - 공동 사용일 경우 트랙당 기본 4시간 이며, 단독 사용시 1시간 단위로 예약 가능합니다.<br />
+              - 14시 이후 예약시 이용시간과 별도로 기본 4시간 요금이 부과됩니다.<br />
+              - 복합 임대의 경우 이용금액 이 높은 트랙으로 이용 금액이 부과됩니다.</p>
+            <p style="padding-left: 10px; margin: 15px 0 0 0; font-weight: bold">3) 시험로 취소 위약금 안내</p>
+            <p style="padding-left: 20px; font-size: 12px; margin: 5px 0 0 0; line-height: 18px;">
+              - 7일 이전 : 위약금 없이 취소<br />
+              - 7일~3일전 : 위약금 50%<br />
+              - 2일전 ~ 시험당일 : 위약금 100%</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 30px;"><img src="./images/img_mail_info01.png" alt="이용안내" /></td>
+        </tr>
+        <tr>
+          <td style="padding-top: 50px;">
+            <p style="font-size: 18px; color: #333; margin: 0; line-height: 1; font-weight: bold;">기본 사용 요금</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 30px;">
+            <section class="tbl_wrap_list">
+              <table class="tbl_list" summary="기본 사용 요금테이블 입니다. 항목으로는 구분, 금액등이 있습니다">
+                <colgroup>
+                  <col width="50%">
+                  <col width="50%">
+                </colgroup>
+                <thead>
+                <tr>
+                  <th scope="col">구분</th>
+                  <th scope="col">금액</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>General Road (입장료)</td>
+                  <td th:text="${#numbers.formatInteger(entranceFee, 3, 'POINT')}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </section>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 50px;">
+            <p style="font-size: 18px; color: #333; margin: 0; line-height: 1; font-weight: bold;">시험로 사용료</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 15px;">
+            <!-- table list -->
+            <section class="tbl_wrap_list">
+              <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                <colgroup>
+                  <col width="50px" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                  <col width="" />
+                </colgroup>
+                <thead>
+                <tr>
+                  <th rowspan="2" scope="col">번호</th>
+                  <th rowspan="2" scope="col">구분</th>
+                  <th colspan="2" scope="col" style="border-bottom: 1px solid #bbb;">공통 사용 (1대당)</th>
+                  <th scope="col" style="border-bottom: 1px solid #bbb;">단독 사용</th>
+                </tr>
+                <tr>
+                  <th scope="col" style="border-left: 1px solid #bbb;">기본 4시간</th>
+                  <th scope="col">추가 1시간</th>
+                  <th scope="col">1시간</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="track,num : ${trackList}">
+                  <td th:text="${num.count}"></td>
+                  <td th:text="${track.tName}" style="text-align: left;"></td>
+                  <td th:text="${#numbers.formatInteger(track.tPrice, 3, 'POINT')}" style="text-align: right;"></td>
+                  <td th:text="${#numbers.formatInteger(track.tPriceAdd, 3, 'POINT')}" style="text-align: right;"></td>
+                  <td th:text="${#numbers.formatInteger(track.tSolo, 3, 'POINT')}" style="text-align: right;"></td>
+                </tr>
+                </tbody>
+              </table>
+            </section>
+            <!-- //table list -->
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 50px;"><img src="./images/img_mail_footer.png" /></td>
+        </tr>
+      </table>
+      <!-- //이메일 컨텐츠 -->
+    </td>
+  </tr>
+</table>
+</body>
+
+</html>

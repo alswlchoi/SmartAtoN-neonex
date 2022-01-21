@@ -4,7 +4,6 @@ import com.hankook.pg.exception.AuthException;
 import com.hankook.pg.exception.DataNotFoundException;
 import com.hankook.pg.exception.FileHandleException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -25,8 +24,8 @@ import java.util.Map;
 @ResponseBody
 public class ExceptionAdvice {
 
-  @Value("${redirect-url}")
-  private String redirectUrl;
+//  @Value("${redirect-url}")
+//  private String redirectUrl;
 
   /**
    * 인증 예외 처리
@@ -68,6 +67,16 @@ public class ExceptionAdvice {
     return createExceptionRes(HttpStatus.INTERNAL_SERVER_ERROR.value(), "server error");
   }
 
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  protected Map<String, Object> Exception(
+          Exception e, HttpServletResponse response) {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Headers", "content-type, x-auth-token, menu-id");
+
+    return createExceptionRes(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getClass().getSimpleName());
+  }
+
   /**
    * 잘못된 요청 예외 처리
    *
@@ -98,10 +107,10 @@ public class ExceptionAdvice {
     return response;
   }
 
-  private Map<String, Object> createExceptionResString(String errorCode, String message) {
-    Map<String, Object> response = new HashMap<>();
-    response.put("code", errorCode);
-    response.put("message", message);
-    return response;
-  }
+//  private Map<String, Object> createExceptionResString(String errorCode, String message) {
+//    Map<String, Object> response = new HashMap<>();
+//    response.put("code", errorCode);
+//    response.put("message", message);
+//    return response;
+//  }
 }

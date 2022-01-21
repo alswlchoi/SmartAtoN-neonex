@@ -14,4 +14,6 @@ public interface AuthService {
 
 	int deleteAuth(AuthVO authVo) throws Exception;
 
+	int getAuthListCnt(AuthVO authVo) throws Exception;
+
 }

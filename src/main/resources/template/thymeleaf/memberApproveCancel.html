@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>::: [한국타이어] Technoring :::</title>
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: "Malgun Gothic", "Dotum", "Gulim", "tahoma";
+      letter-spacing: -1px;
+      font-size: 14px;
+      color: #666;
+      height: 100%;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    /* table list(공통) */
+    .tbl_wrap_list {
+      position: relative;
+      width: 100%;
+      border-top: 1px solid #666;
+    }
+
+    .tbl_wrap_list .tbl_list {
+      width: 100%;
+    }
+
+    .tbl_wrap_list .tbl_list thead th {
+      height: 30px;
+      padding: 3px 10px 0px 10px;
+      font-weight: normal;
+      color: #333;
+      font-size: 14px;
+      background: #f7f7f7;
+      text-align: center;
+      border-left: 1px solid #bbb;
+    }
+
+    .tbl_wrap_list .tbl_list thead th:first-child {
+      border-left: none;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td {
+      position: relative;
+      height: 30px;
+      padding: 5px 10px;
+      text-align: center;
+      border-left: 1px solid #ddd;
+      border-top: 1px solid #bbb;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tbl_wrap_list .tbl_list tbody tr:last-child td {
+      border-bottom: 1px solid #bbb;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td:first-child {
+      border-left: none;
+    }
+
+    .tbl_wrap_list .tbl_list tbody td a {
+      text-decoration: underline;
+      color: #000;
+    }
+
+    /* //table list(공통) */
+  </style>
+</head>
+
+
+<body>
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ededed;">
+  <tr>
+    <td align="center" valign="top">
+      <!-- 이메일 컨텐츠 -->
+      <table width="760" border="0" cellspacing="0" cellpadding="0"
+             style="background-color: #fff; margin: 0 auto;">
+        <tr>
+          <td width="30" rowspan="10"
+              style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;">&nbsp;</td>
+          <td style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;"><a
+                  href="#"></a><img src="./images/BI_Technoring.png" alt="Technoring"></a></td>
+          <td width="30" rowspan="10"
+              style="padding-top: 30px; line-height: 31px; height: 31px; padding-bottom: 0px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td
+                  style="font-size: 34px; color: #000; letter-spacing: -1px; padding-top: 41px; line-height: 1;">
+            회원가입 승인 반려안내</td>
+        </tr>
+        <tr>
+          <td style="padding-top: 30px; line-height: 26px; font-size: 16px;">회원님께서 신청하신 회원가입 신청이 반려되었습니다.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 30px 0;">
+            <!-- table list -->
+            <section class="tbl_wrap_list">
+              <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                <colgroup>
+                  <col width="50%" />
+                  <col width="50%" />
+                </colgroup>
+                <thead>
+                <tr>
+                  <th scope="col">신청일</th>
+                  <th scope="col">기업명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td th:text="${compRegDt}"></td>
+                  <td th:text="${memId}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </section>
+            <!-- //table list -->
+          </td>
+        </tr>
+        <tr>
+          <td th:if="${not #strings.isEmpty(compMemo)}" th:utext="${compMemo}" style="padding: 20px; background-color: #feffec; font-weight: bold; color: #000; font-size: 16px;
+                        text-align: center; border: 1px solid #ddd;">첨부하신 사업자등록증 사본과 입력하신 정보가 일치하지 않습니다.</td>
+        </tr>
+        <tr>
+          <td style="padding-top: 50px;">
+            <p style="font-size: 18px; color: #333; margin: 0; line-height: 1; font-weight: bold;">안내
+            </p>
+            <p style="padding-left: 10px; margin: 15px 0 0 0; font-weight: bold;">1) 반려 사유 확인 후, 보완하여 다시 신청해 주시기 바랍니다.</p>
+            <p style="padding-left: 10px; margin: 5px 0 0 0; font-weight: bold;">2) 회원 가입  재 신청시, 회원 가입에 필요한 정보와 증명서에 대해  정확하게 기재 해 주시기 바랍니다.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top: 200px;"><img src="./images/img_mail_footer.png" /></td>
+        </tr>
+      </table>
+      <!-- //이메일 컨텐츠 -->
+    </td>
+  </tr>
+</table>
+</body>
+
+</html>

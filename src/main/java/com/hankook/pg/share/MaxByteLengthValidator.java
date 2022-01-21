@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
  * @author Kyeongjin.Kim
  * @since 2019-06-12
  */
-public class MaxByteLengthValidator implements ConstraintValidator<com.hankook.pg.share.MaxByteLength, CharSequence> {
+public class MaxByteLengthValidator implements ConstraintValidator<MaxByteLength, CharSequence> {
 
     private int size;
     private String encoding;
@@ -24,7 +24,7 @@ public class MaxByteLengthValidator implements ConstraintValidator<com.hankook.p
      * {@inheritDoc}
      */
     @Override
-    public void initialize(com.hankook.pg.share.MaxByteLength constraint) {
+    public void initialize(MaxByteLength constraint) {
         this.size = constraint.value();
         this.encoding = constraint.encoding();
     }

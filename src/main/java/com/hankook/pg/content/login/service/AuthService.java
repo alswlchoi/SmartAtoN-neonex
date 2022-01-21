@@ -1,10 +1,12 @@
 package com.hankook.pg.content.login.service;
 
 import com.google.common.collect.Lists;
-import com.hankook.pg.exception.AuthException;
 import com.hankook.pg.content.login.dao.AuthDao;
-import com.hankook.pg.content.login.dto.*;
-import com.hankook.pg.share.CheckIpRange;
+import com.hankook.pg.content.login.dto.AuthMenuFormatDto;
+import com.hankook.pg.content.login.dto.AuthResponseDto;
+import com.hankook.pg.content.login.dto.LoginDto;
+import com.hankook.pg.content.login.dto.LogoutDto;
+import com.hankook.pg.exception.AuthException;
 import com.hankook.pg.share.JWTUtil;
 import com.hankook.pg.share.Utils;
 import com.hankook.pg.share.entity.AccountEntity;
@@ -24,11 +26,11 @@ public class AuthService {
   private final static String NOT_FOUND_USER = "001"; //계정정보 없음
   private final static String ACCOUNT_PWD_ERR_CODE = "002"; //패스워드오류
   private final static String BLOCK_ACCOUNT_ERR_CODE = "003"; //계정잠김
-  private final static String SLEEP_ACCOUNT_ERR_CODE = "004"; //휴먼계정
-  private final static String ACCOUNT_ERR_CODE = "005";
+//  private final static String SLEEP_ACCOUNT_ERR_CODE = "004"; //휴먼계정
+//  private final static String ACCOUNT_ERR_CODE = "005";
   private final static String APROVAL_ERR_CODE = "006";
-  private final static String INVALID_IP_ERR_CODE = "007";
-  private final static String INVALID_ROLE_ERR_CODE = "008";
+//  private final static String INVALID_IP_ERR_CODE = "007";
+//  private final static String INVALID_ROLE_ERR_CODE = "008";
 
   @Autowired private AuthDao authDao;
 
@@ -147,7 +149,7 @@ public class AuthService {
       return menuFormat;
   }
 
-    private boolean invalidIp(String ip, AuthMenuChildDto child) {
-        return !CheckIpRange.isValidRange(child.getAccessStartIp(), child.getAccessEndIp(), ip);
-    }
+//    private boolean invalidIp(String ip, AuthMenuChildDto child) {
+//        return !CheckIpRange.isValidRange(child.getAccessStartIp(), child.getAccessEndIp(), ip);
+//    }
 }

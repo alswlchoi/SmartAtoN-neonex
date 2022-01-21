@@ -4,14 +4,58 @@
 
 <mapper namespace="com.hankook.pg.content.auth.dao.AuthManageDao">
     <select id="getAuthList" parameterType="com.hankook.pg.content.auth.vo.AuthVO" resultType="com.hankook.pg.content.auth.vo.AuthVO">
+    <include refid="COMMON.sqlPagingTop" />
         SELECT
-        	*
-        FROM PG_AUTH
-        WHERE 1=1
-        <if test='authCode != null and authCode!="" '>
-        	AND AUTH_CODE LIKE CONCAT('%',#{authCode},'%')
-        </if>
-        ORDER BY AUTH_ORDER
+			PA.AUTH_CODE,
+			PA.AUTH_NM,
+			PA.AUTH_LEVEL,
+			PA.AUTH_ORDER,
+			PA.AUTH_DEFAULT_URL,
+			/*PM.M_NAME AUTH_DEFAULT_URL_NM*/
+			(SELECT A.M_NAME
+			FROM (SELECT
+					PM.M_URL,
+					PM.M_NAME,
+					ROW_NUMBER() OVER(PARTITION by PM.M_URL) RNUM
+				FROM PG_MENU PM
+				WHERE 1=1
+					AND PM.M_LEVEL !=1) A
+			WHERE A.RNUM = 1
+			AND A.M_URL = PA.AUTH_DEFAULT_URL) AS AUTH_DEFAULT_URL_NM
+		FROM PG_AUTH PA
+		WHERE 1=1
+	        <if test='authCode != null and authCode!=""'>
+	        	AND PA.AUTH_CODE LIKE CONCAT('%',#{authCode},'%')
+	        </if>
+        ORDER BY PA.AUTH_CODE
+    <include refid="COMMON.sqlPagingBottom" />
+    </select>
+    <select id="getAuthListCnt" parameterType="com.hankook.pg.content.auth.vo.AuthVO" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+        SELECT
+			PA.AUTH_CODE,
+			PA.AUTH_NM,
+			PA.AUTH_LEVEL,
+			PA.AUTH_ORDER,
+			PA.AUTH_DEFAULT_URL,
+			/*PM.M_NAME AUTH_DEFAULT_URL_NM*/
+			(SELECT A.M_NAME
+			FROM (SELECT
+					PM.M_URL,
+					PM.M_NAME,
+					ROW_NUMBER() OVER(PARTITION by PM.M_URL) RNUM
+				FROM PG_MENU PM
+				WHERE 1=1
+					AND PM.M_LEVEL !=1) A
+			WHERE A.RNUM = 1
+			AND A.M_URL = PA.AUTH_DEFAULT_URL) AS AUTH_DEFAULT_URL_NM
+		FROM PG_AUTH PA
+		WHERE 1=1
+	        <if test='authCode != null and authCode!=""'>
+	        	AND PA.AUTH_CODE LIKE CONCAT('%',#{authCode},'%')
+	        </if>
+        ORDER BY PA.AUTH_CODE
+    <include refid="COMMON.sqlCountBottom" />
     </select>
     <insert id="insertAuth" parameterType="com.hankook.pg.content.auth.vo.AuthVO">
 		INSERT INTO PG_AUTH
@@ -19,13 +63,29 @@
 			AUTH_CODE,
 			AUTH_NM,
 			AUTH_LEVEL,
-			AUTH_ORDER
+			AUTH_ORDER,
+			AUTH_DEFAULT_URL
 		)
 		VALUES(
 			#{authCode},
 			#{authNm},
-			#{authLevel},
-			#{authOrder}
+			1,
+			1,
+			#{authDefaultUrl}
 		)
     </insert>
+    <update id="updateAuth" parameterType="com.hankook.pg.content.auth.vo.AuthVO">
+    UPDATE PG_AUTH
+    SET
+    AUTH_DEFAULT_URL = #{authDefaultUrl}
+    WHERE AUTH_CODE = #{authCode}
+    </update>
+    <delete id="deleteAuth">
+    DELETE FROM PG_AUTH
+    WHERE AUTH_CODE=#{authCode}
+    </delete>
+    <delete id="deleteMenuMapping">
+    DELETE FROM PG_MENU_MAPPING
+    WHERE AUTH_CODE=#{authCode}
+    </delete>
 </mapper>

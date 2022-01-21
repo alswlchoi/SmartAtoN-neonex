@@ -1,0 +1,1548 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.trReserve.dao.TrReserveDao">
+    <select id="getMaxReserveCode" parameterType="String" resultType="String">
+		SELECT
+			IFNULL(MAX(TC_RESERV_CODE), '')
+		FROM PG_TEST_SCHDULE
+		WHERE TC_RESERV_CODE LIKE CONCAT(#{tcReservCode},'%')
+    </select>
+    
+    <select id="getTcDays" parameterType="Integer" resultType="String">
+		SELECT CONCAT(TC_DAY, '#' ,TC_DAY2) FROM PG_TEST_SCHDULE WHERE TC_SEQ=#{tcSeq}
+    </select>
+
+    <select id="getMaxCarCode" parameterType="String" resultType="String">
+		SELECT
+			IFNULL(MAX(C_CODE), '')
+		FROM PG_CAR
+    </select>
+
+    <select id="getTrReserveList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+		  SELECT
+			PTR.TR_SEQ,
+			PTR.TC_REQUEST_NUMBER,
+			PTR.TR_TRACK_TYPE,
+			PTR.TR_TRACK_CODE,
+			PTR.TR_LEVEL,
+			PTR.TR_PRICE,
+			GROUP_CONCAT(DISTINCT TR_TRACK_NICKNAME ORDER BY TR_TRACK_CODE separator '#') as TR_TRACK_NICKNAME,
+			PTS.TC_SEQ,
+			PTS.TC_DAY,
+			PTS.TC_DAY2,
+			PTS.TC_RESERV_CODE,
+			PTS.COMP_CODE,
+			IFNULL(PC.COMP_LICENSE,'') COMP_LICENSE,
+			IFNULL(PC.BLACK_LIST,'N') BLACK_LIST,
+			PTS.COMP_NAME,
+			PTS.TC_PURPOSE,
+			PTS.TC_AGREEMENT,
+			PTS.TC_APPROVAL,
+			PTS.TC_STEP,
+			PTS.TC_MEMO,
+			PTS.TC_REG_USER,
+			PTS.TC_REG_DT,
+			PTS.TC_MOD_USER,
+			PTS.TC_MOD_DT
+		FROM PG_TRACK_RESERV PTR INNER JOIN PG_TEST_SCHDULE PTS
+		ON PTR.TC_SEQ=PTS.TC_SEQ AND PTR.TC_DAY=PTS.TC_DAY
+		LEFT JOIN PG_COMPANY PC
+		ON PTS.COMP_CODE=PC.COMP_CODE
+		WHERE 1=1
+		<if test="tcStDt!=null and tcEdDt!=null">
+		AND (
+				(
+					PTS.TC_DAY &lt;= #{tcStDt} AND PTS.TC_DAY2 &gt;= #{tcStDt}
+				)
+				OR
+				(
+					PTS.TC_DAY &lt;= #{tcEdDt} AND PTS.TC_DAY2 &gt;=#{tcEdDt}
+				)
+				OR
+				(
+					PTS.TC_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+				)
+				OR (
+					PTS.TC_DAY2 BETWEEN #{tcStDt} AND #{tcEdDt}
+				)
+			)
+		</if>
+		<if test="compName!=null and compName!=''">
+			AND (
+				PTS.COMP_CODE LIKE CONCAT('%',#{compName},'%') OR
+				PTS.COMP_NAME LIKE CONCAT('%',#{compName},'%') OR
+				PC.COMP_LICENSE LIKE CONCAT('%',#{compName},'%') OR
+				PTS.TC_RESERV_CODE LIKE CONCAT('%',#{compName},'%')
+			)
+		</if>
+		 <if test='tcApproval == "1,2"'>
+            AND PTS.TC_APPROVAL IN ('1', '2')
+         </if>
+		 <if test='tcApproval == "0,3"'>
+            AND PTS.TC_APPROVAL IN ('0', '3')
+         </if>
+         <if test='tcApproval != "1,2" and tcApproval != "0,3"'>
+           	AND PTS.TC_APPROVAL = #{tcApproval}
+         </if>
+         <if test='trTrackCode!=null and trTrackCode!=""'>
+           	AND PTR.TR_TRACK_CODE = #{trTrackCode}
+         </if>
+		<if test='trTrackType != null and trTrackType !=""'>
+			<if test='trTrackType == "s"'>
+				AND TR_TRACK_TYPE='TYP00'
+			</if>
+			<if test='trTrackType == "m"'>
+				AND TR_TRACK_TYPE='TYP01'
+			</if>
+		</if>
+		<if test='tcStep != null and tcStep !=""'>
+			<if test='tcStep == "1,2"'>
+				AND TC_STEP IN ('00001','00002')
+			</if>
+			<if test='tcStep == "0"'>
+				AND TC_STEP='00000'
+			</if>
+			<if test='tcStep == "1"'>
+				AND TC_STEP='00001'
+			</if>
+			<if test='tcStep == "2"'>
+				AND TC_STEP='00002'
+			</if>
+		</if>
+		<if test='compType != null and compType !=""'>
+			<if test='compType == "h"'>
+				AND PTS.COMP_CODE='THINT'
+			</if>
+			<if test='compType == "b"'>
+				AND PTS.COMP_CODE!='THINT'
+			</if>
+		</if>
+		GROUP BY TC_RESERV_CODE, TC_REG_DT, PTR.TC_SEQ, TR_TRACK_TYPE, PTR.TC_DAY
+		<trim prefix="ORDER BY" prefixOverrides=" " suffixOverrides=",">
+			<if test='(orderName1==null or orderName1 == "")
+					and (orderName2==null or orderName2 == "")
+					and (orderName3==null or orderName3 == "")
+					and (orderName4==null or orderName4 == "")
+					and (orderName5==null or orderName5 == "")'>
+					TC_SEQ DESC,
+			</if>
+			<if test='orderName1 !=null and orderName1 != ""'>
+				<if test='orderKind1 !=null and orderKind1 != ""'>
+					<if test='orderKind1 == "DESC"'>
+						TC_DAY DESC,
+					</if>
+					<if test='orderKind1 != "DESC"'>
+						TC_DAY ASC,
+					</if>
+				</if>
+			</if>
+			<if test='orderName2 !=null and orderName2 != ""'>
+				<if test='orderKind2 !=null and orderKind2 != ""'>
+					<if test='orderKind2 == "DESC"'>
+						TC_DAY2 DESC,
+					</if>
+					<if test='orderKind2 != "DESC"'>
+						TC_DAY2 ASC,
+					</if>
+				</if>
+			</if>
+			<if test='orderName3 != null and orderName3 != ""'>
+				<if test='orderKind3 != null and orderKind3 != ""'>
+					<if test='orderKind3 == "DESC"'>
+						TC_REG_DT DESC,
+					</if>
+					<if test='orderKind3 != "DESC"'>
+						TC_REG_DT ASC,
+					</if>
+				</if>
+			</if>
+			<if test='orderName5 != null and orderName5 != ""'>
+				<if test='orderKind5 != null and orderKind5 != ""'>
+					<if test='orderKind5 == "DESC"'>
+						TR_TRACK_TYPE DESC,
+					</if>
+					<if test='orderKind5 != "DESC"'>
+						TR_TRACK_TYPE ASC,
+					</if>
+				</if>
+			</if>
+		</trim>
+   		LIMIT #{startRowNum} ,#{pageSize}
+    </select>
+
+    <select id="selectTrReserve" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+	  SELECT PTS.TC_DAY,
+	  PTS.TC_DAY2,
+	  PTS.TC_APPROVAL,
+	  PTR.TR_TRACK_TYPE,
+	  GROUP_CONCAT(PTR.TR_TRACK_NAME separator '#') TR_TRACK_NAME,
+	  PTS.COMP_NAME
+	  FROM PG_TRACK_RESERV PTR
+	  INNER JOIN PG_TEST_SCHDULE PTS ON PTR.TC_SEQ=PTS.TC_SEQ
+	  WHERE 1=1
+	<if test="tcApproval != null and tcApproval != ''">
+	  AND PTS.TC_APPROVAL = #{tcApproval}
+	</if>
+	<if test="tcDay != null and tcDay != ''">
+	  AND TC_DAY &gt;= #{tcDay}
+	</if>
+	ORDER BY TC_DAY,TC_DAY2
+	</select>
+
+    <select id="selectTrCalendar" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+		SELECT
+			PTR.TR_TRACK_TYPE,
+			PTR.TR_TRACK_NAME,
+			PTR.TR_TRACK_NICKNAME,
+			PTR.TR_PACKAGE_NAME,
+			PTR.TR_PACKAGE_CODE,
+			PTS.TC_APPROVAL,
+			PTS.COMP_NAME,
+			PTS.COMP_CODE
+		FROM PG_TEST_SCHDULE PTS
+		INNER JOIN PG_TRACK_RESERV PTR
+		ON PTS.TC_SEQ=PTR.TC_SEQ
+		WHERE PTR.TC_DAY=#{tcDay}
+		AND (TC_STEP='00000' OR TC_STEP='00001' OR TC_STEP='00002') 
+		<if test='trTrackType != null and trTrackType !=""'>
+			<if test='trTrackType == "s"'>
+				AND TR_TRACK_TYPE='TYP00'
+			</if>
+			<if test='trTrackType == "m"'>
+				AND TR_TRACK_TYPE='TYP01'
+			</if>
+		</if>
+		<if test='compType != null and compType !=""'>
+			<if test='compType == "h"'>
+				AND PTS.COMP_CODE='THINT'
+			</if>
+			<if test='compType == "b"'>
+				AND PTS.COMP_CODE != 'THINT'
+			</if>
+		</if>
+		<if test='trTrackCode != null and trTrackCode !=""'>
+			AND TR_TRACK_CODE=#{trTrackCode }
+		</if>
+		<if test="tcApproval == null or tcApproval == ''">
+			AND PTS.TC_APPROVAL IN ('0','3')
+		</if>
+		<if test="tcApproval != null and tcApproval != ''">
+		  AND PTS.TC_APPROVAL = #{tcApproval}
+		</if>
+		ORDER BY PTS.TC_APPROVAL ASC, PTS.TC_SEQ DESC, TR_TRACK_CODE
+		LIMIT 0, 5
+	</select>
+
+	<select id="selectTrCalendarCount" parameterType="String" resultType="String">
+		SELECT
+			CONCAT('(',
+			IFNULL(SUM(CASE WHEN TC_APPROVAL='0' THEN CNT END), 0),
+			'/',
+			IFNULL(SUM(CASE WHEN TC_APPROVAL='3' THEN CNT END), 0),
+			')') AS STRCNT
+		FROM (
+			SELECT TC_APPROVAL, COUNT(TC_APPROVAL) CNT FROM (
+				SELECT PTS.TC_APPROVAL, PTS.TC_SEQ, MAX(PTM.TC_DAY) AS TC_DAY
+				FROM PG_TEST_SCHDULE PTS
+				INNER JOIN PG_RESOURCE_MAPPING PTM ON PTS.TC_SEQ = PTM.TC_SEQ
+				WHERE 1=1
+		 		AND PTM.TC_DAY = #{tcDay}
+				AND TC_APPROVAL IN ('0', '3')
+				AND (TC_STEP='00000' OR TC_STEP='00001' OR TC_STEP='00002')
+				GROUP BY PTS.TC_SEQ
+			) A
+			GROUP BY TC_APPROVAL
+		) B
+	</select>
+	
+    <select id="getReservedCompanyInArea" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+        SELECT COUNT(1) FROM PG_TEST_SCHDULE PTS 
+		WHERE COMP_CODE=#{compCode}
+		<if test="tcSeq!=null and tcSeq!=null">
+			AND TC_SEQ != #{tcSeq}
+		</if>
+		AND (TC_APPROVAL='0' OR (TC_APPROVAL='3' AND TC_STEP IN ('00000','00001')))
+		AND (
+			(
+				PTS.TC_DAY &lt;= #{tcStDt} AND PTS.TC_DAY2 &gt;= #{tcStDt}
+			)
+			OR
+			(
+				PTS.TC_DAY &lt;= #{tcEdDt} AND PTS.TC_DAY2 &gt;=#{tcEdDt}
+			)
+			OR
+			(
+				PTS.TC_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+			)
+			OR (
+				PTS.TC_DAY2 BETWEEN #{tcStDt} AND #{tcEdDt}
+			)
+		)
+    </select>
+
+	<select id="chkSchedule" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+	  SELECT COUNT(1)
+	  FROM PG_TEST_SCHDULE
+	  WHERE 1=1
+	  <if test="tcStDt!=null and tcEdDt!=null">
+		AND (
+			(
+				PTS.TC_DAY &lt;= #{tcStDt} AND PTS.TC_DAY2 &gt;= #{tcStDt}
+			)
+			OR
+			(
+				PTS.TC_DAY &lt;= #{tcEdDt} AND PTS.TC_DAY2 &gt;=#{tcEdDt}
+			)
+			OR
+			(
+				PTS.TC_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+			)
+			OR (
+				PTS.TC_DAY2 BETWEEN #{tcStDt} AND #{tcEdDt}
+			)
+		)
+	</if>
+	</select>
+
+    <select id="dayoffYn" parameterType="String" resultType="Integer">
+		SELECT COUNT(*) FROM PG_DAY_OFF WHERE DO_KIND='F' AND
+		#{tcDay} BETWEEN DO_ST_DAY AND DO_ED_DAY
+    </select>
+
+    <select id="dayoffList" parameterType="String" resultType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto">
+		SELECT DO_ST_DAY, DO_ED_DAY FROM PG_DAY_OFF WHERE DO_KIND=#{doKind} ORDER BY DO_ST_DAY, DO_ED_DAY
+    </select>
+
+    <select id="getTcDayWeekday" parameterType="String" resultType="String">
+		SELECT WD_DAY FROM PG_WEEK_DAY
+			WHERE
+				WD_CON='1'
+				AND WD_KIND=#{wdKind}
+				AND #{tcDay} BETWEEN WD_ST_DT AND WD_ED_DT ORDER BY WD_SEQ DESC LIMIT 1
+    </select>
+
+    <select id="getTrMaxPrice" parameterType="Integer" resultType="Integer">
+	    SELECT T_PRICE FROM PG_TRACK WHERE T_ID IN (
+			SELECT TR_TRACK_CODE fROM PG_TRACK_RESERV WHERE TC_SEQ=#{tcSeq}
+		)
+		ORDER BY T_PRICE DESC
+		LIMIT 1
+	</select>
+
+    <select id="findTrReserveCount" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+    	SELECT COUNT(1) FROM (
+	        SELECT
+				PTS.TC_DAY
+			FROM PG_TRACK_RESERV PTR INNER JOIN PG_TEST_SCHDULE PTS
+			ON PTR.TC_SEQ=PTS.TC_SEQ AND PTR.TC_DAY=PTS.TC_DAY
+			LEFT JOIN PG_COMPANY PC
+			ON PTS.COMP_CODE=PC.COMP_CODE
+			WHERE 1=1
+			<if test="tcStDt!=null and tcEdDt!=null">
+			AND (
+					(
+						PTS.TC_DAY &lt;= #{tcStDt} AND PTS.TC_DAY2 &gt;= #{tcStDt}
+					)
+					OR
+					(
+						PTS.TC_DAY &lt;= #{tcEdDt} AND PTS.TC_DAY2 &gt;=#{tcEdDt}
+					)
+					OR
+					(
+						PTS.TC_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+					)
+					OR (
+						PTS.TC_DAY2 BETWEEN #{tcStDt} AND #{tcEdDt}
+					)
+				)
+			</if>
+			<if test="compName!=null and compName!=''">
+				AND (
+					PTS.COMP_CODE LIKE CONCAT('%',#{compName},'%') OR
+					PTS.COMP_NAME LIKE CONCAT('%',#{compName},'%') OR
+					PC.COMP_LICENSE LIKE CONCAT('%',#{compName},'%') OR
+					PTS.TC_RESERV_CODE LIKE CONCAT('%',#{compName},'%')
+				)
+			</if>
+			 <if test='tcApproval == "1,2"'>
+	            AND PTS.TC_APPROVAL IN ('1', '2')
+	         </if>
+			 <if test='tcApproval == "0,3"'>
+	            AND PTS.TC_APPROVAL IN ('0', '3')
+	         </if>
+	         <if test='tcApproval != "1,2" and tcApproval != "0,3"'>
+	           	AND PTS.TC_APPROVAL = #{tcApproval}
+	         </if>
+	         <if test='trTrackCode!=null and trTrackCode!=""'>
+	           	AND PTR.TR_TRACK_CODE = #{trTrackCode}
+	         </if>
+			<if test='trTrackType != null and trTrackType !=""'>
+				<if test='trTrackType == "s"'>
+					AND TR_TRACK_TYPE='TYP00'
+				</if>
+				<if test='trTrackType == "m"'>
+					AND TR_TRACK_TYPE='TYP01'
+				</if>
+			</if>
+			<if test='tcStep != null and tcStep !=""'>
+				<if test='tcStep == "1,2"'>
+					AND TC_STEP IN ('00001','00002')
+				</if>
+				<if test='tcStep == "0"'>
+					AND TC_STEP='00000'
+				</if>
+				<if test='tcStep == "1"'>
+					AND TC_STEP='00001'
+				</if>
+				<if test='tcStep == "2"'>
+					AND TC_STEP='00002'
+				</if>
+			</if>
+			<if test='compType != null and compType !=""'>
+				<if test='compType == "h"'>
+					AND PTS.COMP_CODE='THINT'
+				</if>
+				<if test='compType == "b"'>
+					AND PTS.COMP_CODE != 'THINT'
+				</if>
+			</if>
+			<if test='trTrackCode != null and trTrackCode !=""'>
+				AND TR_TRACK_CODE=#{trTrackCode }
+			</if>
+	         GROUP BY TC_RESERV_CODE, PTR.TC_SEQ, TR_TRACK_TYPE, PTR.TC_DAY
+         ) A
+    </select>
+
+    <select id="getReservedTime" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+         SELECT
+			TR_TRACK_TYPE,
+			TR_TRACK_CODE,
+			TR_RESERV_ST_HOUR,
+			TR_RESERV_ED_HOUR
+		FROM PG_TRACK_RESERV
+		WHERE TC_DAY=#{tcDay}
+		ORDER BY TR_TRACK_CODE ASC
+    </select>
+
+    <select id="getCompCodeduplCheck" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM PG_TEST_SCHDULE PTS
+		WHERE PTS.TC_SEQ=#{tcSeq}
+    </select>
+
+    <select id="getAccountYn" parameterType="String" resultType="Integer">
+       SELECT COUNT(*) FROM PG_PAY WHERE P_RESERV_CODE = #{pReservCode}
+    </select>
+
+    <select id="getTrReserveDetail" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        SELECT
+        	PTS.TC_SEQ,
+        	PTS.TC_DAY,
+        	PTS.TC_DAY2,
+        	PTS.TC_RESERV_CODE,
+        	PTS.TC_REQUEST_NUMBER,
+        	PTS.COMP_CODE,
+        	PTS.COMP_NAME,
+        	PC.BLACK_LIST,
+        	PTS.TC_PURPOSE,
+        	PTS.TC_AGREEMENT,
+        	PTS.TC_APPROVAL,
+        	PTS.TC_STEP,
+        	PTS.TC_MEMO,
+        	PTS.TC_REG_USER,
+        	PTS.TC_REG_DT,
+        	PTS.TC_MOD_USER,
+        	PTS.TC_MOD_DT
+		FROM PG_TEST_SCHDULE PTS LEFT JOIN PG_COMPANY PC
+		ON PTS.COMP_CODE=PC.COMP_CODE
+		WHERE PTS.TC_SEQ=#{tcSeq}
+    </select>
+
+	<select id="getTrTrackList" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+		SELECT
+			(SELECT T_MAX FROM PG_TRACK PT WHERE T_ID=PTR.TR_TRACK_CODE) as T_MAX,
+			TC_DAY,
+			TC_REQUEST_NUMBER,
+			TR_TRACK_TYPE,
+			TR_TRACK_NAME,
+			TR_TRACK_NICKNAME,
+			TR_TRACK_CODE,
+			TR_LEVEL as TR_LEVEL,
+			TR_PRICE as TR_PRICE
+		FROM PG_TRACK_RESERV PTR WHERE TC_SEQ=#{tcSeq}
+		ORDER BY TR_TRACK_CODE ASC
+	</select>
+
+	<select id="getTrHintTrackList" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+		SELECT
+			TC_DAY,
+			TR_TRACK_TYPE,
+			GROUP_CONCAT(DISTINCT TR_TRACK_NICKNAME ORDER BY TR_PACKAGE_CODE separator '&lt;br /&gt;') AS TR_TRACK_NICKNAME,
+			TR_TRACK_CODE
+		FROM PG_TRACK_RESERV PTR WHERE TC_SEQ=#{tcSeq}
+		GROUP BY TC_DAY
+		ORDER BY TR_TRACK_NAME ASC
+	</select>
+
+	<select id="getTrCarList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.car.dto.CarDto">
+		SELECT RM_SEQ,
+			PRM.TC_SEQ,
+			PRM.TC_DAY,
+			RM_TYPE,
+			PRM.C_CODE,
+			C_NUMBER,
+			C_TYPE,
+			C_NAME,
+			C_COLOR,
+			C_VENDER,
+			R_ID,
+			RM_LEVEL,
+			RM_R_YN,
+			RM_W_YN,
+			RM_IN_OUT,
+			RM_REG_DT
+		FROM PG_RESOURCE_MAPPING PRM
+		INNER JOIN PG_CAR PC ON PRM.C_CODE=PC.C_CODE
+		WHERE
+			RM_TYPE='C'
+			AND PRM.TC_SEQ=#{tcSeq}
+			AND PRM.TC_DAY=#{tcDay}
+	</select>
+
+	<select id="getTrHintCarList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.car.dto.CarDto">
+		SELECT RM_SEQ,
+			PRM.TC_SEQ,
+			PRM.TC_DAY,
+			RM_TYPE,
+			PRM.C_CODE,
+			VHCL_RGSNO AS C_NUMBER,
+			'N' AS C_TYPE,
+			VHCL_NAME AS C_NAME,
+			VHCL_CLR AS C_COLOR,
+			VHCL_MAKER AS C_VENDER,
+			R_ID,
+			RM_LEVEL,
+			RM_R_YN,
+			RM_W_YN,
+			RM_IN_OUT,
+			RM_REG_DT
+		FROM PG_RESOURCE_MAPPING PRM
+		INNER JOIN PG_HINT_CAR PC ON PRM.C_CODE=PC.VHCL_CODE
+		WHERE
+			TC_SEQ=#{tcSeq}
+	</select>
+
+    <insert id="insertTestSchedule" useGeneratedKeys="true" keyProperty="tcSeq" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+       INSERT INTO PG_TEST_SCHDULE
+		(TC_DAY, TC_DAY2, COMP_CODE, COMP_NAME, TC_PURPOSE, TC_AGREEMENT, TC_APPROVAL, TC_STEP, TC_MEMO, TC_REG_USER, TC_RESERV_CODE, TC_REQUEST_NUMBER, TC_REG_DT)
+		VALUES(#{tcDay}, #{tcDay2}, #{compCode}, #{compName}, #{tcPurpose}, #{tcAgreement}, #{tcApproval}, #{tcStep}, #{tcMemo}, #{tcRegUser}, #{tcReservCode}, #{tcRequestNumber}, #{tcRegDt})
+    </insert>
+
+    <insert id="insertTrReserve" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+       INSERT INTO PG_TRACK_RESERV
+		(TC_SEQ, TC_DAY, TR_TRACK_CODE, TC_REQUEST_NUMBER, TR_TRACK_TYPE, TR_LEVEL, TR_PRICE, TR_PRICE_ADD, TR_PRICE_SOLO, TR_TRACK_NAME, TR_TRACK_NICKNAME, TR_RESERV_ST_HOUR, TR_RESERV_ED_HOUR)
+		VALUES(#{tcSeq}, #{tcDay}, #{trTrackCode}, #{tcRequestNumber}, #{trTrackType}, #{trLevel}, #{trPrice}, #{trPriceAdd}, #{trPriceSolo}, #{trTrackName}, #{trTrackNickName}, #{trReservStHour}, #{trReservEdHour})
+    </insert>
+
+    <insert id="addtrackInfoToReservedInfo" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+       INSERT INTO PG_TRACK_RESERV
+		(TC_SEQ, TC_DAY, TC_REQUEST_NUMBER, TR_TRACK_TYPE, TR_TRACK_NAME, TR_TRACK_CODE, TR_LEVEL, TR_PRICE, TR_RESERV_ST_HOUR, TR_RESERV_ED_HOUR, TR_TRACK_NICKNAME, TR_PRICE_ADD, TR_PRICE_SOLO)
+		SELECT TC_SEQ, TC_DAY, TC_REQUEST_NUMBER, TR_TRACK_TYPE, #{trTrackName}, #{trTrackCode}, #{trLevel}, #{trPrice}, TR_RESERV_ST_HOUR, TR_RESERV_ED_HOUR, #{trTrackNickName}, #{trPriceAdd}, #{trPriceSolo}
+		FROM PG_TRACK_RESERV
+		WHERE TC_SEQ=#{tcSeq} AND TR_TRACK_CODE=#{trTrackCodeCopy}
+    </insert>
+
+    <select id="getRfidGnrLog1Row" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
+    	SELECT
+	    	PRG_NO,
+	    	INSERT_FLUG,
+	    	IN_TIME,
+	    	OUT_TIME,
+	    	IN_OUT,
+	    	TC_DAY,
+	    	TC_RESERV_CODE,
+	    	COMP_NAME,
+	    	C_CODE,
+	    	D_SEQ,
+	    	D_NAME,
+	    	D_LEVEL,
+	    	W_CH,
+	    	CAR_RFID_ID
+		FROM PG_RFID_GENERAL
+		WHERE PRG_NO=${prgNo}
+    </select>
+
+    <select id="getRfidLog1Row" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
+    	SELECT
+	    	RL_SEQ,
+	    	TC_DAY,
+	    	T_ID,
+	    	IN_TIME,
+	    	OUT_TIME,
+	    	CAR_TAG_ID,
+	    	TC_RESERV_CODE
+    	FROM PG_RFID_LOG
+    	WHERE RL_SEQ=#{rlSeq}
+    </select>
+
+    <insert id="addRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
+       INSERT INTO PG_RFID_LOG
+		(INSERT_FLUG, TC_DAY, T_ID, 
+		<if test='outTime != null and outTime !=""'>
+		OUT_TIME, 
+		</if>
+		IN_TIME, TAG_ID, CAR_TAG_ID, `TYPE`, TC_RESERV_CODE, DIFF_TIME)
+		VALUES(#{insertFlug}, #{tcDay}, #{tId}, 
+		<if test='outTime != null and outTime !=""'>
+			#{outTime}, 
+		</if>
+		#{inTime}, #{tagId}, #{carTagId}, #{type}, #{tcReservCode}, #{diffTime})
+
+    </insert>
+
+    <update id="updateRfidGnrLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
+        UPDATE PG_RFID_GENERAL SET
+        	IN_TIME=#{inTime},
+        	OUT_TIME=#{outTime}
+		WHERE PRG_NO=#{prgNo}
+    </update>
+
+    <update id="updateRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
+        UPDATE PG_RFID_LOG SET
+        	IN_TIME=#{inTime},
+        	OUT_TIME=#{outTime},
+        	DIFF_TIME=#{diffTime}
+		WHERE RL_SEQ=#{rlSeq}
+    </update>
+
+    <insert id="insertCar" parameterType="com.hankook.pg.content.admin.car.dto.CarDto">
+    INSERT INTO PG_CAR (C_CODE, TC_SEQ, TC_DAY, C_NUMBER, C_TYPE, C_NAME, C_COLOR, C_VENDER)
+	VALUES(#{cCode}, #{tcSeq}, #{tcDay}, #{cNumber}, #{cType}, #{cName}, #{cColor}, #{cVender})
+
+    </insert>
+
+    <select id="getTrackReserv" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+    	SELECT
+    	TR_SEQ,
+    	TC_SEQ,
+    	TC_DAY,
+    	TC_REQUEST_NUMBER,
+    	TR_TRACK_TYPE,
+    	TR_TRACK_NAME,
+    	TR_TRACK_NICKNAME,
+    	TR_TRACK_CODE,
+    	TR_LEVEL,
+    	TR_PRICE,
+    	TR_PRICE_ADD,
+    	TR_PRICE_SOLO,
+    	TR_RESERV_ST_HOUR,
+    	TR_RESERV_ED_HOUR
+		FROM PG_TRACK_RESERV
+		WHERE TC_SEQ=#{tcSeq}
+		<if test='tcDay != null and tcDay != ""'>
+			AND TC_DAY=#{tcDay}
+		</if>
+    </select>
+
+    <select id="getResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ResourceMappingDto">
+        SELECT RM_SEQ,
+        TC_SEQ,
+        TC_DAY,
+        RM_TYPE,
+        D_SEQ,
+        C_CODE,
+        R_ID,
+        RM_LEVEL,
+        W_ID,
+        D_NAME,
+		RM_R_YN,
+		RM_W_YN,
+		RM_IN_OUT,
+		N_DCCP_YN,
+		RM_REG_DT,
+		RM_R_MOD_DT,
+		RM_W_MOD_DT,
+		RM_W_CH
+		FROM PG_RESOURCE_MAPPING
+		WHERE TC_SEQ=#{tcSeq}
+		<if test='tcDay != null and tcDay != ""'>
+			AND TC_DAY=#{tcDay}
+		</if>
+    </select>
+    
+    <select id="getResourceMappingOnlyDriver" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.driver.dto.DriverDto">
+        SELECT
+        	TC_DAY,
+	        PD.D_NAME,
+	        D_BIRTH,
+	        D_PHONE
+	    FROM
+	    	PG_RESOURCE_MAPPING PRM INNER JOIN
+	    	PG_DRIVER PD
+		ON PRM.D_SEQ = PD.D_SEQ
+		WHERE TC_SEQ=#{tcSeq}
+		AND RM_TYPE='D'
+		<if test='tcDay != null and tcDay != ""'>
+			AND TC_DAY=#{tcDay}
+		</if>
+    </select>
+
+	<select id="selectTcReservCode" parameterType="Integer" resultType="String">
+		SELECT TC_RESERV_CODE FROM PG_TEST_SCHDULE WHERE TC_SEQ=#{tcSeq}
+	</select>
+
+	<select id="selectCountRfidLogWithoutInOutTime" parameterType="String" resultType="Integer">
+	SELECT COUNT(1) FROM PG_RFID_LOG
+	WHERE TC_RESERV_CODE = #{tcReservCode}
+	AND (IN_TIME IS NULL OR OUT_TIME IS NULL)
+	</select>
+
+	<select id="selectCountRfidGeneralLogWithoutInOutTime" parameterType="String" resultType="Integer">
+	SELECT COUNT(1) FROM PG_RFID_GENERAL
+	WHERE TC_RESERV_CODE = #{tcReservCode}
+	AND (IN_TIME IS NULL OR OUT_TIME IS NULL)
+	</select>
+	
+    <insert id="insertResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+       INSERT INTO PG_RESOURCE_MAPPING
+		(TC_SEQ, TC_DAY, RM_LEVEL, D_SEQ, C_CODE, D_NAME, RM_TYPE, RM_IN_OUT, N_DCCP_YN, RM_REG_DT)
+		VALUES(#{tcSeq}, #{tcDay}, #{rmLevel}, #{dSeq}, #{cCode}, #{dName}, #{rmType}, 'O', 'N', #{rmRegDt})
+    </insert>
+
+    <insert id="insertTrackReservMap" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+       INSERT INTO PG_TRACK_RESERV
+		(TC_SEQ, TC_DAY, TR_TRACK_CODE, TC_REQUEST_NUMBER, TR_TRACK_TYPE, TR_LEVEL, TR_PRICE, TR_PRICE_ADD, TR_PRICE_SOLO, TR_TRACK_NAME, TR_TRACK_NICKNAME, TR_RESERV_ST_HOUR, TR_RESERV_ED_HOUR)
+		VALUES
+	    <foreach collection="list" item="item" separator=",">
+	        (#{item.tcSeq}, #{item.tcDay}, #{item.trTrackCode}, #{item.tcRequestNumber}, #{item.trTrackType}, #{item.trLevel}, #{item.trPrice}, #{item.trPriceAdd}, #{item.trPriceSolo}, #{item.trTrackName}, #{item.trTrackNickName}, #{item.trReservStHour}, #{item.trReservEdHour})
+	    </foreach>
+	</insert>
+
+    <insert id="insertResourceMappingMap" parameterType="com.hankook.pg.content.admin.trReserve.dto.ResourceMappingDto">
+	    INSERT INTO PG_RESOURCE_MAPPING
+		(TC_SEQ, TC_DAY, RM_LEVEL, D_SEQ, C_CODE, D_NAME, RM_TYPE, RM_IN_OUT, N_DCCP_YN, RM_REG_DT, RM_W_CH)
+		VALUES
+	    <foreach collection="list" item="item" separator=",">
+	        (#{item.tcSeq}, #{item.tcDay}, #{item.rmLevel}, #{item.dSeq}, #{item.cCode}, #{item.dName}, #{item.rmType}, 'O', 'N', #{item.rmRegDt}, #{item.rmWCh})
+	    </foreach>
+	</insert>
+
+    <update id="updateTrackReserv" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_TRACK_RESERV SET
+        	TC_DAY=#{tcDay}
+		WHERE TC_SEQ=#{tcSeq}
+    </update>
+
+    <update id="updateResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_RESOURCE_MAPPING SET
+        	TC_DAY=#{tcDay}
+		WHERE TC_SEQ=#{tcSeq}
+    </update>
+
+    <update id="updateApproval" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_TEST_SCHDULE SET
+	        <if test='tcApproval != null and tcApproval != ""'>
+        	TC_APPROVAL=#{tcApproval},
+        	</if>
+	        <if test='tcStep != null and tcStep != ""'>
+        	TC_STEP=#{tcStep},
+        	</if>
+        	TC_MEMO=#{tcMemo},
+        	TC_MOD_DT=#{tcModDt},
+        	TC_MOD_USER=#{tcModUser}
+		WHERE TC_SEQ=#{tcSeq}
+    </update>
+    
+    <select id="getCountSameDayOtherTrackReserve" parameterType="com.hankook.pg.content.admin.trReserve.dto.EaiHkDto" resultType="Integer">
+    SELECT
+    	COUNT(1)
+    FROM
+    	PG_RESOURCE_MAPPING PRM INNER JOIN 
+    	PG_TEST_SCHDULE PTS 
+	ON PRM.TC_SEQ = PTS.TC_SEQ
+	WHERE
+		PTS.TC_APPROVAL='3'
+		AND PRM.TC_SEQ!=#{tcSeq}
+		AND	PRM.TC_DAY=#{tcDay}
+		AND COMP_CODE=#{compCode}
+    </select>
+    
+    <update id="insertAccounts" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrPayDto">
+        INSERT INTO PG_PAY
+		(COMP_CODE, P_PAY, P_TYPE, P_RESERV_CODE, P_DAY, P_REASON, T_ID, P_USE_TIME, P_DISCOUNT)
+		VALUES(#{compCode}, #{pPay}, #{pType}, #{pReservCode}, #{pDay}, #{pReason}, #{tId}, #{pUseTime}, #{pDiscount})
+    </update>
+
+    <update id="updateMember" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_MEMBER
+			SET
+				MEM_PHONE=#{memPhone},
+				MEM_EMAIL=#{memEmail},
+				MEM_DEPT=#{memDept},
+				MEM_COMP_PHONE=#{memCompPhone}
+			WHERE MEM_ID=#{memId}
+
+    </update>
+
+    <update id="updateTestSchedule" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_TEST_SCHDULE SET
+        	TC_DAY=#{tcDay},
+        	TC_DAY2=#{tcDay2},
+        	COMP_NAME=#{compName},
+        	TC_PURPOSE=#{tcPurpose},
+        	TC_AGREEMENT=#{tcAgreement},
+        	TC_APPROVAL=#{tcApproval},
+        	TC_STEP=#{tcStep},
+        	TC_MEMO=#{tcMemo},
+        	TC_RESERV_CODE=#{tcReservCode},
+        	TC_MOD_USER=#{tcModUser},
+        	TC_MOD_DT=#{tcModDt}
+		WHERE TC_SEQ=#{tcSeq}
+    </update>
+
+
+    <delete id = "deleteTrackReserv" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_TRACK_RESERV WHERE TC_SEQ=#{tcSeq}
+    </delete>
+
+    <delete id = "deleteTrReserve1" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_TRACK_RESERV WHERE TC_SEQ=#{tcSeq} AND TC_DAY = #{tempDay}
+    </delete>
+
+    <delete id = "deleteResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_RESOURCE_MAPPING WHERE TC_SEQ=#{tcSeq}
+    </delete>
+
+    <delete id = "deleteTrMappingInfo1" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_RESOURCE_MAPPING WHERE TC_SEQ=#{tcSeq} AND TC_DAY = #{tempDay}
+    </delete>
+
+    <delete id = "deleteTireManagement" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_TIRE_MANAGEMENT WHERE TC_SEQ=#{tcSeq}
+    </delete>
+
+    <delete id = "deleteTestSchedule" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        DELETE FROM PG_TEST_SCHDULE WHERE TC_SEQ=#{tcSeq}
+    </delete>
+
+    <delete id = "updateSituTestSchedule" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        UPDATE PG_TEST_SCHDULE SET TC_APPROVAL=#{tcApproval}, TC_MOD_USER=#{tcModUser}, TC_MOD_DT=#{tcModDt} WHERE TC_SEQ=#{tcSeq}
+    </delete>
+
+	<select id="getTrackListAll" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+	     SELECT
+	     	T_ID,
+	     	T_NAME,
+	     	T_MAX,
+	     	T_LEVEL,
+		    T_PRICE,
+		    IN_IP,
+		    OUT_IP,
+		    T_PRICE_ADD,
+		    T_SOLO,
+		    T_NICKNAME
+	     FROM PG_TRACK WHERE T_DEL_YN='N'
+	     ORDER BY T_ID ASC
+    </select>
+
+	<select id="SelectEntranceFee" resultType="Integer">
+		SELECT T_PRICE FROM PG_TRACK WHERE T_ID='T000'
+	</select>
+	
+	<select id="getTrackList" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+	     SELECT
+	     	T_ID,
+	     	T_NAME,
+	     	T_MAX,
+	     	T_LEVEL,
+		    T_PRICE,
+		    IN_IP,
+		    OUT_IP,
+		    T_PRICE_ADD,
+		    T_SOLO,
+		    T_NICKNAME
+	     FROM PG_TRACK WHERE T_DEL_YN='N'
+	     <if test="tUseYn!=null and tUseYn='Y'">
+	     	AND T_USE_YN!='N'
+	     </if>
+	     ORDER BY T_ID ASC
+    </select>
+
+	<select id="getCurrentReserveCnt" parameterType="String" resultType="Integer">
+	     SELECT COUNT(*) FROM
+		PG_TEST_SCHDULE PTS	INNER JOIN
+		PG_TRACK_RESERV PTR
+		ON PTS.TC_SEQ=PTR.TC_SEQ
+		WHERE
+		PTS.TC_APPROVAL IN (0, 3)
+		AND PTR.TC_DAY=#{tcDay}
+		AND TR_TRACK_CODE=#{trTrackCode}
+    </select>
+
+	<select id="getTrackInfo" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+	     SELECT
+	     	T_ID,
+	     	T_NAME,
+	     	T_MAX,
+	     	T_LEVEL,
+		    T_PRICE,
+		    IN_IP,
+		    OUT_IP,
+		    T_PRICE_ADD,
+		    T_SOLO,
+		    T_NICKNAME
+	     FROM PG_TRACK WHERE T_ID=#{trTrackCode}
+    </select>
+
+    <select id="getTestScheduleEqualsTcSeq" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        SELECT
+			PTR.TC_SEQ,
+			TC_RESERV_CODE,
+			TC_REG_DT,
+			TC_REG_USER,
+			PTS.COMP_CODE,
+			PTS.TC_PURPOSE,
+			PTS.TC_AGREEMENT,
+			PTS.TC_STEP,
+			PTS.COMP_NAME,
+			PTS.TC_APPROVAL,
+			PTR.TR_PRICE ,
+			GROUP_CONCAT(TR_TRACK_NAME separator '#') TR_TRACK_NAME,
+			PTR.TC_DAY
+		FROM
+		PG_TEST_SCHDULE PTS INNER JOIN PG_TRACK_RESERV PTR
+		ON PTS.TC_SEQ=PTR.TC_SEQ
+		WHERE PTR.TC_SEQ=#{tcSeq}
+		GROUP BY TC_RESERV_CODE, TC_REG_DT, PTR.TC_SEQ, TR_TRACK_TYPE, PTR.TC_DAY
+    </select>
+
+    <select id="getTestScheduleEqualsTcSeq1Row" parameterType="Integer" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+        SELECT
+			PTR.TC_SEQ, 
+			TC_RESERV_CODE,
+			PTS.COMP_CODE,
+			PTS.TC_STEP,
+			PTS.COMP_NAME,
+			PTS.TC_APPROVAL,
+			PTS.TC_PURPOSE,
+			TC_REG_DT,
+			GROUP_CONCAT(DISTINCT PTR.TC_DAY ORDER BY PTR.TC_DAY ASC SEPARATOR '#' ) TC_DAY,
+			GROUP_CONCAT(DISTINCT TR_TRACK_NAME ORDER BY TR_TRACK_CODE separator '#') TR_TRACK_NAME,
+			GROUP_CONCAT(DISTINCT TR_TRACK_TYPE SEPARATOR '#') TR_TRACK_TYPE 
+		FROM PG_TEST_SCHDULE PTS INNER JOIN PG_TRACK_RESERV PTR 
+		ON PTS.TC_SEQ=PTR.TC_SEQ 
+		WHERE PTR.TC_SEQ=#{tcSeq}
+    </select>
+
+    <select id="getTrMyResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ResourceMappingDto">
+        SELECT
+        	RM_SEQ,
+        	TC_SEQ,
+        	TC_DAY,
+        	RM_TYPE,
+        	PRM.D_SEQ,
+        	R_ID,
+        	RM_LEVEL,
+        	W_ID,
+        	PRM.D_NAME,
+        	PD.D_EDU,
+        	RM_IN_OUT,
+        	RM_REG_DT
+		FROM PG_RESOURCE_MAPPING PRM
+		INNER JOIN PG_DRIVER PD
+		ON PRM.D_SEQ=PD.D_SEQ
+		WHERE
+		TC_SEQ=#{tcSeq}
+		AND TC_DAY=#{tcDay}
+		AND RM_TYPE='D'
+    </select>
+
+    <select id="getCountReserveTrack" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+	    SELECT COUNT(1) FROM PG_TRACK_RESERV
+		WHERE TC_SEQ = #{tcSeq}
+		AND TR_TRACK_CODE = #{trTrackCode}
+	</select>
+
+    <select id="getCountRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto" resultType="Integer">
+	    SELECT COUNT(1) FROM PG_RFID_LOG
+		WHERE
+		TC_RESERV_CODE=#{tcReservCode}
+		AND CAR_TAG_ID = #{carTagId}
+		AND T_ID = #{tId}
+		<if test='inTime != null and inTime !="" and outTime != null and outTime != ""'>
+			AND
+			(
+				(
+					STRCMP(#{inTime}, IN_TIME) &lt;=0 AND STRCMP(#{outTime}, OUT_TIME)&gt;=0
+				)
+			OR
+				(
+					#{inTime} BETWEEN IN_TIME AND OUT_TIME
+						OR
+					#{outTime} BETWEEN IN_TIME AND OUT_TIME
+				)
+			)
+		</if>
+		<if test='(inTime != null and inTime !="") and (outTime == null or outTime == "")'>
+			AND
+			(
+				#{inTime} BETWEEN IN_TIME AND OUT_TIME
+			)
+		</if>
+		<if test='rlSeq != null and rlSeq != null'>
+			AND RL_SEQ != #{rlSeq}
+		</if>
+	</select>
+
+    <select id="getMaxDriverTagIdForRfidLog" parameterType="Integer" resultType="String">
+	    SELECT MAX(R_ID) FROM PG_RESOURCE_MAPPING
+		WHERE
+		TC_SEQ=#{tcSeq}
+		AND RM_TYPE='D'
+		AND R_ID IS NOT NULL
+		ORDER BY RM_LEVEL
+	</select>
+
+    <select id="getReserveTrackMax" parameterType="Integer" resultType="String">
+	    SELECT MAX(TR_TRACK_CODE) FROM PG_TRACK_RESERV ptr WHERE TC_SEQ=#{tcSeq}
+	</select>
+
+    <select id="getTrHintResourceMapping" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ResourceMappingDto">
+         SELECT
+        	RM_SEQ,
+        	TC_SEQ,
+        	TC_DAY,
+        	RM_TYPE,
+        	PRM.D_SEQ,
+        	R_ID,
+        	RM_LEVEL,
+        	W_ID,
+        	PRM.D_NAME,
+        	'Y' AS D_EDU,
+        	RM_IN_OUT,
+        	RM_REG_DT
+		FROM PG_RESOURCE_MAPPING PRM
+		INNER JOIN PG_HINT_DRIVER PD
+		ON PRM.D_SEQ=PD.EMPLOYEE_NO
+		WHERE
+		TC_SEQ=#{tcSeq}
+		AND RM_TYPE='D'
+    </select>
+
+    <select id="getTrRfidGeneralLog" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
+		SELECT PRG_NO, INSERT_FLUG, IN_TIME, OUT_TIME, IN_OUT, TC_DAY, TC_RESERV_CODE, COMP_NAME, C_CODE, D_SEQ, D_NAME, D_LEVEL, W_CH, CAR_RFID_ID
+		FROM PG_RFID_GENERAL
+		WHERE
+		TC_RESERV_CODE=#{tcReservCode}
+		ORDER BY PRG_NO ASC
+     </select>
+    
+    <select id="getTrRfidLog" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
+		SELECT
+			RL_SEQ,
+			PRL.T_ID,
+			PT.T_NAME,
+			PT.T_NICKNAME,
+			IN_TIME,
+			OUT_TIME,
+			TAG_ID,
+			CAR_TAG_ID,
+			TYPE,
+			TC_RESERV_CODE,
+			DIFF_TIME
+			FROM PG_RFID_LOG PRL
+			INNER JOIN PG_TRACK PT
+			ON PRL.T_ID=PT.T_ID
+		WHERE
+		TC_RESERV_CODE=#{tcReservCode}
+		ORDER BY RL_SEQ
+    </select>
+
+    <select id="getKindSM" parameterType="Integer" resultType="String">
+		SELECT TR_TRACK_TYPE FROM PG_TRACK_RESERV WHERE TC_SEQ=#{tcSeq}
+		LIMIT 1
+    </select>
+
+	<select id="getWeekday" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+	    SELECT
+	    	WD_SEQ,
+	    	WD_ED_HOUR,
+	    	WD_ST_HOUR,
+	    	WD_DAY,
+	    	WD_ED_DT,
+	    	WD_ST_DT,
+	    	WD_KIND,
+	    	WD_CAN_ST_HOUR,
+	    	WD_CAN_ED_HOUR,
+	    	WD_CON
+	    FROM PG_WEEK_DAY
+	    WHERE WD_CON='1' AND WD_KIND=#{compType} AND #{tcDay} BETWEEN WD_ST_DT AND WD_ED_DT
+	    ORDER BY WD_SEQ DESC
+    </select>
+
+	<select id="getWeekdayList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+	  SELECT WD_SEQ,
+    	WD_ED_HOUR,
+    	WD_ST_HOUR,
+    	WD_DAY,
+    	WD_ED_DT,
+    	WD_ST_DT,
+    	WD_KIND,
+    	WD_CAN_ST_HOUR,
+    	WD_CAN_ED_HOUR,
+    	WD_CON
+    	FROM PG_WEEK_DAY PWD
+	  WHERE
+	  	PWD.WD_CON = '1'
+	  	AND PWD.WD_KIND = #{compType}
+	  	AND #{tcDay} &gt;=WD_ST_DT AND WD_ED_DT &gt;=#{tcDay}
+	</select>
+
+	<select id="chkDayOff" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="Integer">
+	  SELECT COUNT(1)
+	  FROM PG_DAY_OFF
+	  WHERE 1=1
+	  AND DO_KIND = 'T'
+	  AND DO_ST_DAY &lt; #{wssEdDay}
+	  AND DO_ED_DAY &gt; #{wssStDay}
+	</select>
+
+    <select id="getShopReservedList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+    	SELECT WS_CODE, WSS_ST_DAY, WSS_ED_DAY FROM PG_SHOP_SCHDULE PSS
+		WHERE 1=1
+	 	AND PSS.WSS_APPROVAL IN ('Y', 'N')
+	 	AND PSS.WS_CODE=#{searchKind}
+		<if test='tcStDt != null and tcStDt != "" and tcEdDt != null and tcEdDt != ""'>
+			AND
+			(
+				(
+					PSS.WSS_ST_DAY &lt;= #{tcStDt} AND PSS.WSS_ED_DAY &gt;= #{tcStDt}
+				)
+				OR
+				(
+					PSS.WSS_ST_DAY &lt;= #{tcEdDt} AND PSS.WSS_ED_DAY &gt;=#{tcEdDt}
+				)
+				OR
+				(
+					PSS.WSS_ST_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+				)
+				OR (
+					PSS.WSS_ED_DAY BETWEEN #{tcStDt} AND #{tcEdDt}
+				)
+			)
+		</if>
+	ORDER BY WS_CODE, WSS_ST_DAY,WSS_ED_DAY
+    </select>
+
+    <select id="getUserShopReserve" parameterType="String" resultType="Integer">
+          SELECT COUNT(1) FROM
+			PG_SHOP_SCHDULE PSS
+		WHERE
+			WSS_APPROVAL IN ('Y','N','D')
+			AND WS_CODE=#{wsCode }
+			AND #{tcDay } BETWEEN WSS_ST_DAY AND WSS_ED_DAY
+    </select>
+
+    <select id="getDcCount" parameterType="String" resultType="String">
+        SELECT DC_COUNT FROM PG_DISCOUNT
+        	WHERE COMP_CODE = #{compCode }
+    </select>
+
+    <select id="getMemberInfo" parameterType="String" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        SELECT * FROM PG_MEMBER WHERE MEM_ID=#{memId }
+    </select>
+
+
+    <!-- 영훈 쿼리문  -->
+    <!-- 샵 쿼리문 -->
+    <select id="getList" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+	  <include refid="COMMON.sqlPagingTop" />
+	  SELECT ROW_NUMBER() OVER(ORDER BY PSS.WSS_SEQ) as NUM,
+	  		 PSS.WSS_RESERV_CODE ,
+	  		 PSS.WSS_REG_DT ,
+	  		 PSS.WSS_ST_DAY ,
+	  		 PSS.WSS_ED_DAY ,
+	  		 PC.COMP_NAME ,
+	  		 PC.BLACK_LIST ,
+	  		 PS.WS_NAME ,
+	  		 PSS.WSS_APPROVAL ,
+	  		 PSS.WSS_MOD_DT
+	  FROM 	 PG_SHOP_SCHDULE PSS
+	  		 LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+			 LEFT OUTER JOIN PG_COMPANY PC ON PSS.COMP_CODE = PC.COMP_CODE
+	  WHERE  PSS.WSS_APPROVAL IN ('D' , 'C')
+	<!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
+	<if test="text != null and text != ''">
+      AND (
+      PSS.WSS_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+      OR PC.COMP_LICENSE LIKE CONCAT('%',#{text},'%')
+      OR PC.COMP_NAME LIKE CONCAT('%',#{text},'%')
+      )
+    </if>
+    <if test="(wssApproval != null and wssApproval != '') or (wssApproval4 != null and wssApproval4 != '')">
+    	AND(
+    	PSS.WSS_APPROVAL IN (#{wssApproval} , #{wssApproval4})
+    	)
+    </if>
+	<!--  -->
+	<if test="wssStDay != null and wssStDay != '' and wssEdDay != null and wssEdDay != ''">
+      AND (
+      PSS.WSS_ST_DAY BETWEEN #{wssStDay} AND #{wssEdDay}
+      OR PSS.WSS_ED_DAY BETWEEN #{wssStDay} AND #{wssEdDay}
+      OR (PSS.WSS_ST_DAY <![CDATA[<=]]> #{wssStDay} AND PSS.WSS_ED_DAY >= #{wssEdDay} )
+      )
+    </if>
+    <!-- 정렬 쿼리 -->
+    <trim prefix="ORDER BY" prefixOverrides=" " suffixOverrides=",">
+      <if test='orderName1 !=null and orderName1 != ""'>
+        <if test='orderKind1 !=null and orderKind1 != ""'>
+          <if test='orderKind1 == "DESC"'>
+            PSS.WSS_REG_DT DESC,
+          </if>
+          <if test='orderKind1 != "DESC"'>
+            PSS.WSS_REG_DT ASC,
+          </if>
+        </if>
+      </if>
+      <if test='orderName2 !=null and orderName2 != ""'>
+        <if test='orderKind2 !=null and orderKind2 != ""'>
+          <if test='orderKind2 == "DESC"'>
+            PSS.WSS_ED_DAY DESC,
+          </if>
+          <if test='orderKind2 != "DESC"'>
+            PSS.WSS_ED_DAY ASC,
+          </if>
+        </if>
+      </if>
+    </trim>
+	 <include refid="COMMON.sqlPagingBottom" />
+	</select>
+
+    <select id="getListCnt" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="int">
+	  <include refid="COMMON.sqlCountTop" />
+	  SELECT ROW_NUMBER() OVER(ORDER BY PSS.WSS_SEQ) as NUM,
+	  		 PSS.WSS_RESERV_CODE ,
+	  		 PSS.WSS_REG_DT ,
+	  		 PSS.WSS_ST_DAY ,
+	  		 PSS.WSS_ED_DAY ,
+	  		 PC.COMP_NAME ,
+	  		 PC.BLACK_LIST ,
+	  		 PS.WS_NAME ,
+	  		 PSS.WSS_APPROVAL ,
+	  		 PSS.WSS_MOD_DT
+	  FROM 	 PG_SHOP_SCHDULE PSS
+	  		 LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+			 LEFT OUTER JOIN PG_COMPANY PC ON PSS.COMP_CODE = PC.COMP_CODE
+	  WHERE  PSS.WSS_APPROVAL IN ('Y' , 'C')
+	<!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
+	<if test="text != null and text != ''">
+      AND (
+      PSS.WSS_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+      OR PC.COMP_LICENSE LIKE CONCAT('%',#{text},'%')
+      OR PC.COMP_NAME LIKE CONCAT('%',#{text},'%')
+      )
+    </if>
+    <if test="(wssApproval != null and wssApproval != '') or (wssApproval4 != null and wssApproval4 != '')">
+    	AND(
+    	PSS.WSS_APPROVAL IN (#{wssApproval} , #{wssApproval4})
+    	)
+    </if>
+	<!--  -->
+	<if test="wssStDay != null and wssStDay != '' and wssEdDay != null and wssEdDay != ''">
+      AND (
+      PSS.WSS_ST_DAY BETWEEN #{wssStDay} AND #{wssEdDay}
+      OR PSS.WSS_ED_DAY BETWEEN #{wssStDay} AND #{wssEdDay}
+      OR (PSS.WSS_ST_DAY <![CDATA[<=]]> #{wssStDay} AND PSS.WSS_ED_DAY >= #{wssEdDay} )
+      )
+    </if>
+    <!-- 정렬 쿼리 -->
+    <trim prefix="ORDER BY" prefixOverrides=" " suffixOverrides=",">
+      <if test='orderName1 !=null and orderName1 != ""'>
+        <if test='orderKind1 !=null and orderKind1 != ""'>
+          <if test='orderKind1 == "DESC"'>
+            PSS.WSS_REG_DT DESC,
+          </if>
+          <if test='orderKind1 != "DESC"'>
+            PSS.WSS_REG_DT ASC,
+          </if>
+        </if>
+      </if>
+      <if test='orderName2 !=null and orderName2 != ""'>
+        <if test='orderKind2 !=null and orderKind2 != ""'>
+          <if test='orderKind2 == "DESC"'>
+            PSS.WSS_ED_DAY DESC,
+          </if>
+          <if test='orderKind2 != "DESC"'>
+            PSS.WSS_ED_DAY ASC,
+          </if>
+        </if>
+      </if>
+    </trim>
+	 <include refid="COMMON.sqlCountBottom" />
+	</select>
+
+    <!-- 샵 디테일 -->
+    <select id="detailList" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+	  SELECT PSS.WSS_RESERV_CODE ,
+	  		 PSS.WSS_MOD_DT ,
+	  		 PSS.WSS_ST_DAY ,
+	  		 PSS.WSS_ED_DAY ,
+		     PC.COMP_NAME ,
+		     PC.BLACK_LIST ,
+		     PS.WS_NAME ,
+		     PSS.WSS_APPROVAL ,
+		     PC.COMP_REG_DT ,
+		     PC.COMP_ACCT_NAME ,
+		     PC.COMP_ACCT_PHONE ,
+		     PC.COMP_ACCT_EMAIL ,
+		     PC.COMP_ACCT_DEPT ,
+		     PM.MEM_NAME ,
+		     PM.MEM_DEPT ,
+		     PM.MEM_EMAIL ,
+		     PM.MEM_PHONE ,
+		     PC.COMP_LICENSE , PSS.WS_PRICE , PD.DC_COUNT
+	  FROM 	 PG_SHOP_SCHDULE PSS
+			 LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+			 LEFT OUTER JOIN PG_COMPANY PC ON PSS.COMP_CODE = PC.COMP_CODE
+			 LEFT OUTER JOIN PG_MEMBER PM ON PSS.COMP_CODE = PM.COMP_CODE
+	 		 LEFT OUTER JOIN PG_DISCOUNT PD ON PSS.COMP_CODE = PD.COMP_CODE
+	  WHERE  PSS.WSS_RESERV_CODE = #{wssReservCode}
+	  GROUP BY PSS.WSS_RESERV_CODE
+	</select>
+
+	<select id="accountList" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="com.hankook.pg.content.admin.trReserve.dto.TrReserveDto">
+		<include refid="COMMON.sqlPagingTop" />
+		 SELECT ROW_NUMBER() OVER(ORDER BY PTS.TC_SEQ) as NUM,
+		  		 PTS.TC_RESERV_CODE, PTS.TC_REG_DT, PTS.TC_DAY ,
+		  		 PTS.TC_DAY2 , PTR.TR_TRACK_TYPE ,
+		  		 GROUP_CONCAT(T.T_NICKNAME separator '<![CDATA[</br>]]>') TR_TRACK_NAME,
+		   		 PTS.COMP_NAME ,  PTS.TC_APPROVAL , PTS.TC_MOD_DT ,PTS.TC_STEP , PC.BLACK_LIST 
+		  FROM   PG_TEST_SCHDULE PTS
+		   		 LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+		   		 AND PTS.TC_DAY = PTR.TC_DAY
+		   		 LEFT OUTER JOIN PG_TRACK T ON T.T_ID = PTR.TR_TRACK_CODE
+		   		 LEFT OUTER JOIN PG_COMPANY PC ON PTS.COMP_CODE = PC.COMP_CODE
+		  WHERE  (
+		  			(PTS.TC_APPROVAL = 3 AND PTS.TC_STEP = '00003')
+		  			OR
+		  			PTS.TC_APPROVAL = 2
+		  		 ) AND PTS.TC_RESERV_CODE LIKE CONCAT ('%','B','%')
+		  <!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
+		 <if test="text != null and text != ''">
+		     AND (
+		     PTS.TC_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+		     OR PC.COMP_LICENSE LIKE CONCAT('%',#{text},'%')
+		     OR PC.COMP_NAME LIKE CONCAT('%',#{text},'%')
+		      )
+		 </if>
+		  <if test="(tcApproval != null and tcApproval != '') or (tcApproval1 != null and tcApproval1 != '')">
+    	  	AND(
+		        PTS.TC_APPROVAL IN (#{tcApproval} , #{tcApproval1})
+		      )
+    	  </if>
+	     <if test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
+		      AND (
+		      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+		      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
+		      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+		      )
+    	 </if>
+    	  GROUP BY PTS.TC_RESERV_CODE , PTS.TC_REG_DT, PTS.TC_DAY ,
+		  		   PTS.TC_DAY2 , PTR.TR_TRACK_TYPE ,
+			       PTS.COMP_NAME , PTS.TC_APPROVAL , PTS.TC_MOD_DT
+    	 <!-- 정렬 쿼리 -->
+	    <trim prefix="ORDER BY" prefixOverrides=" " suffixOverrides=",">
+	      <if test='orderName1 !=null and orderName1 != ""'>
+	        <if test='orderKind1 !=null and orderKind1 != ""'>
+	          <if test='orderKind1 == "DESC"'>
+	            PTS.TC_REG_DT DESC,
+	          </if>
+	          <if test='orderKind1 != "DESC"'>
+	            PTS.TC_REG_DT ASC,
+	          </if>
+	        </if>
+	      </if>
+	      <if test='orderName2 !=null and orderName2 != ""'>
+	        <if test='orderKind2 !=null and orderKind2 != ""'>
+	          <if test='orderKind2 == "DESC"'>
+	            PTS.TC_DAY2 DESC,
+	          </if>
+	          <if test='orderKind2 != "DESC"'>
+	            PTS.TC_DAY2 ASC,
+	          </if>
+	        </if>
+	      </if>
+	    </trim>
+		<include refid="COMMON.sqlPagingBottom" />
+	</select>
+
+	<select id="getShopList" resultType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+		SELECT
+			WS_CODE,
+			WS_USE_YN,
+			WS_PRICE,
+			WS_NAME
+		FROM PG_SHOP WHERE WS_USE_YN='Y' AND WS_DEL_YN='N'
+	</select>
+
+	<select id="accountCnt" parameterType="com.hankook.pg.content.admin.trReserve.dto.SearchTrReserveDto" resultType="int">
+	   <include refid="COMMON.sqlCountTop" />
+	   SELECT ROW_NUMBER() OVER(ORDER BY PTS.TC_SEQ) as NUM,
+		  		 PTS.TC_RESERV_CODE, PTS.TC_REG_DT, PTS.TC_DAY ,
+		  		 PTS.TC_DAY2 , PTR.TR_TRACK_TYPE ,
+		  		 GROUP_CONCAT(T.T_NICKNAME separator '<![CDATA[</br>]]>') TR_TRACK_NAME,
+		   		 PTS.COMP_NAME ,  PTS.TC_APPROVAL , PTS.TC_MOD_DT ,PTS.TC_STEP , PC.BLACK_LIST 
+		  FROM   PG_TEST_SCHDULE PTS
+		   		 LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+		   		 AND PTS.TC_DAY = PTR.TC_DAY
+		   		 LEFT OUTER JOIN PG_TRACK T ON T.T_ID = PTR.TR_TRACK_CODE
+		   		 LEFT OUTER JOIN PG_COMPANY PC ON PTS.COMP_CODE = PC.COMP_CODE
+		  WHERE  (
+		  			(PTS.TC_APPROVAL = 3 AND PTS.TC_STEP = '00003')
+		  			OR
+		  			PTS.TC_APPROVAL = 2
+		  		 ) AND PTS.TC_RESERV_CODE LIKE CONCAT ('%','B','%')
+		  <!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
+		  <if test="text != null and text != ''">
+		      AND (
+		      PTS.TC_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+		      OR PC.COMP_LICENSE LIKE CONCAT('%',#{text},'%')
+		      OR PC.COMP_NAME LIKE CONCAT('%',#{text},'%')
+		      )
+		  </if>
+		  <if test="(tcApproval != null and tcApproval != '') or (tcApproval1 != null and tcApproval1 != '')">
+    	  		AND(
+		        PTS.TC_APPROVAL IN (#{tcApproval} , #{tcApproval1})
+		      )
+    	  </if>
+	     <if test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
+		      AND (
+		      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+		      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
+		      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+		      )
+    	 </if>
+    	   GROUP BY PTS.TC_RESERV_CODE , PTS.TC_REG_DT, PTS.TC_DAY ,
+		  		   PTS.TC_DAY2 , PTR.TR_TRACK_TYPE ,
+			       PTS.COMP_NAME , PTS.TC_APPROVAL , PTS.TC_MOD_DT
+    	 <!-- 정렬 쿼리 -->
+	    <trim prefix="ORDER BY" prefixOverrides=" " suffixOverrides=",">
+	      <if test='orderName1 !=null and orderName1 != ""'>
+	        <if test='orderKind1 !=null and orderKind1 != ""'>
+	          <if test='orderKind1 == "DESC"'>
+	            PTS.TC_REG_DT DESC,
+	          </if>
+	          <if test='orderKind1 != "DESC"'>
+	            PTS.TC_REG_DT ASC,
+	          </if>
+	        </if>
+	      </if>
+	      <if test='orderName2 !=null and orderName2 != ""'>
+	        <if test='orderKind2 !=null and orderKind2 != ""'>
+	          <if test='orderKind2 == "DESC"'>
+	            PTS.TC_DAY2 DESC,
+	          </if>
+	          <if test='orderKind2 != "DESC"'>
+	            PTS.TC_DAY2 ASC,
+	          </if>
+	        </if>
+	      </if>
+	    </trim>
+	  <include refid="COMMON.sqlCountBottom" />
+	</select>
+
+	<select id="accountDetaillist" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		SELECT PTS.TC_RESERV_CODE , PTS.TC_REG_DT , PTS.TC_DAY , PTS.TC_DAY2 ,
+	   		   PTR.TR_TRACK_TYPE , PTS.TC_PURPOSE ,
+	    	   GROUP_CONCAT(PT.T_NICKNAME separator '#') TR_TRACK_NAME ,
+	     	   PTS.COMP_NAME , PTS.TC_APPROVAL , PTS.TC_MOD_DT ,
+	   		   PM.MEM_NAME , PM.MEM_DEPT , PM.MEM_EMAIL , PM.MEM_PHONE ,
+	   		   PC.COMP_NAME , PC.COMP_LICENSE , PC.COMP_ACCT_NAME , PC.COMP_ACCT_DEPT ,
+	   		   PC.COMP_ACCT_EMAIL , PC.COMP_ACCT_PHONE, PTS.COMP_CODE , PC.BLACK_LIST ,PTS.TC_SEQ
+		FROM PG_TEST_SCHDULE PTS
+			  LEFT OUTER JOIN PG_TRACK_RESERV PTR ON PTS.TC_SEQ = PTR.TC_SEQ AND PTS.TC_DAY = PTR.TC_DAY
+			  LEFT OUTER JOIN PG_TRACK PT ON PTR.TR_TRACK_CODE = PT.T_ID
+			  LEFT OUTER JOIN PG_MEMBER PM ON PTS.COMP_CODE = PM.COMP_CODE
+			  LEFT OUTER JOIN PG_COMPANY PC ON PTS.COMP_CODE = PC.COMP_CODE
+		WHERE PTS.TC_RESERV_CODE = #{tcReservCode}
+		GROUP BY PTS.TC_RESERV_CODE , PTS.TC_REG_DT, PTS.TC_DAY ,
+		  	  PTS.TC_DAY2 , PTR.TR_TRACK_TYPE ,
+		 	  PTS.COMP_NAME , PTS.TC_APPROVAL , PTS.TC_MOD_DT
+
+	</select>
+
+
+	<select id="testInfo" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		SELECT 	PC.C_NUMBER , PC.C_NAME , PC.C_COLOR , PC.C_VENDER
+		FROM PG_RESOURCE_MAPPING PRM
+			    RIGHT JOIN PG_CAR PC ON PRM.C_CODE = PC.C_CODE
+		where PRM.TC_SEQ = #{tcSeq} and PRM.TC_DAY= #{tcDay} and PRM.RM_TYPE = 'C'
+	</select>
+
+
+	<select id="test_Info" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		select PRM.D_NAME
+		from PG_RESOURCE_MAPPING PRM
+			 left join PG_CAR PC on PRM.C_CODE = PC.C_CODE
+			 left join PG_DRIVER PD on PRM.D_SEQ = PD.D_SEQ
+		where PRM.TC_SEQ = #{tcSeq} and PRM.TC_DAY= #{tcDay} and PRM.RM_TYPE = 'D'
+	</select>
+
+	<!-- 차량 RFID 정보 -->
+	<select id="carInfo" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		SELECT PRL.CAR_TAG_ID , PRL.IN_TIME , PRL.OUT_TIME , PT.T_NAME ,
+			   PRL.DIFF_TIME AS HOURS
+		FROM PG_RFID_LOG PRL
+			 LEFT OUTER JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
+		WHERE PRL.TC_RESERV_CODE = #{tcReservCode}
+	</select>
+
+	<!-- 시험로 정산 쿼리 -->
+	<select id="chargeInfo" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		SELECT PP.T_ID , PP.P_PAY , PP.P_PRODUCT_PAY , PP.P_USE_TIME ,
+			   PP.P_APPLY_TIME , PP.P_RESERV_CODE, PT.T_NAME ,
+			   IF(PP.P_DISCOUNT IS NULL || PP.P_DISCOUNT='', '0' , PP.P_DISCOUNT) AS P_DISCOUNT,
+			   (PP.P_PAY * 0.1) AS PRICE
+		FROM PG_PAY PP
+			 LEFT JOIN PG_TRACK PT ON PP.T_ID = PT.T_ID
+			 LEFT JOIN PG_TEST_SCHDULE PTS ON PTS.TC_RESERV_CODE = PP.P_RESERV_CODE
+		WHERE PP.P_RESERV_CODE = #{pReservCode}
+		ORDER BY PP.P_DAY,PP.P_SEQ
+	</select>
+
+	<!--부대시설 정산 쿼리  -->
+	<select id="shopInfo" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto">
+		SELECT PP.T_ID , PP.P_PAY , PP.P_PRODUCT_PAY , PP.P_USE_TIME ,
+			   PP.P_APPLY_TIME , PP.P_RESERV_CODE ,
+			   IF(PP.P_DISCOUNT IS NULL || PP.P_DISCOUNT='', '0' , PP.P_DISCOUNT) AS P_DISCOUNT,
+			   (PP.P_PAY * 0.1) AS PRICE
+		FROM PG_PAY PP
+			 LEFT JOIN PG_TRACK PT ON PP.T_ID = PT.T_ID
+			 LEFT JOIN PG_TEST_SCHDULE PTS ON PTS.TC_RESERV_CODE = PP.P_RESERV_CODE
+		WHERE PP.P_RESERV_CODE = #{wssReservCode}
+		ORDER BY PP.P_DAY,PP.P_SEQ
+	</select>
+
+	<!-- 정산관리 디테일에 실제사용일  -->
+	<select id="realday" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="String">
+		SELECT GROUP_CONCAT(DISTINCT PTR.TC_DAY ORDER BY PTR.TC_DAY SEPARATOR '/' ) AS DAY 		
+		FROM PG_TEST_SCHDULE PTS
+			LEFT JOIN PG_TRACK_RESERV PTR ON PTS.TC_REQUEST_NUMBER = PTR.TC_REQUEST_NUMBER 
+		WHERE PTS.TC_RESERV_CODE = #{tcReservCode}
+	</select>
+	
+	<!-- 정산관리 디테일 실제사용일 부대시설  -->
+	<select id="realdate" parameterType="com.hankook.pg.content.admin.trReserve.dto.ChargeDto" resultType="String">
+		SELECT WSS_RESERV_DAY 
+		FROM PG_SHOP_SCHDULE
+		WHERE WSS_RESERV_CODE = #{wssReservCode}
+	</select>
+	
+	<insert id="insertEaiHk" parameterType="com.hankook.pg.content.admin.trReserve.dto.EaiHkDto">
+	    INSERT INTO PG_EAI_HK_IF
+		(COMP_NAME, COMP_LICENSE, COMP_CEO, COMP_PHONE, COMP_COND, COMD_KIND, COMP_FAX, COMP_ADDR, COMP_POST_NO, COMP_ATTR_DETAIL, MEM_NAME, MEM_BIRTH, MEM_PHONE, IN_DATE, CREATE_DATE, CREATE_USER, IF_STATUS)
+		VALUES(#{compName},#{compLicense},#{compCeo},#{compPhone},#{compCond},#{comdKind},#{compFax},#{compAddr},#{compPostNo},#{compAttrDetail},#{memName},#{memBirth},#{memPhone},#{inDate},#{createDate},#{createUser},#{ifStatus})
+    </insert>
+</mapper>

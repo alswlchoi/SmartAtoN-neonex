@@ -11,9 +11,9 @@ public interface MemHistoryDao {
 
   List<MemHistoryVo> getHistory();
 
-  void insertHistory(MemHistoryVo memHistoryVo);
+  int insertHistory(MemHistoryVo memHistoryVo);
 
-  void updateHistory(MemHistoryVo memHistoryVo);
+  int updateHistory(MemHistoryVo memHistoryVo);
 
-  void deleteHistory(MemHistoryVo memHistoryVo);
+  int deleteHistory(MemHistoryVo memHistoryVo);
 }

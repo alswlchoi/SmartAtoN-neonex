@@ -1,8 +1,14 @@
 package com.hankook.pg.content.code.controller;
 
 import com.hankook.pg.content.code.service.CodeService;
-import com.hankook.pg.content.code.vo.CodeVo;
+import com.hankook.pg.content.code.vo.CodeContentVo;
+import com.hankook.pg.share.Paging;
+import com.hankook.pg.share.Search;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,42 +20,66 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RestController
-@RequestMapping("/system/code")
+@RequestMapping("/admin/code")
 public class CodeController {
 
-  @Autowired
-  CodeService codeService;
+	@Autowired
+	private CodeService codeService;
 
-  @RequestMapping(value = "", method = RequestMethod.GET)
-  public ModelAndView getCode() throws Exception {
-    log.info("코드");
-    ModelAndView mv = new ModelAndView("/code/code");
+	@RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView getCode() throws Exception {
+		log.info("코드");
+		ModelAndView mv = new ModelAndView("/admin/code/code");
+		CodeContentVo codeContentVo = new CodeContentVo();
+		List<CodeContentVo> list = codeService.selectList(codeContentVo);
+		//Map<String,> map = codeService.seletList(codeContentVo);
+		System.out.println("============");
+		list.forEach(System.out::println);
+		mv.addObject("codeList", list);
+		return mv;
+	}
 
-    return mv;
-  }
+	@PostMapping("/list")
+	public Map<String, Object> codeList(@RequestBody CodeContentVo codeContentVo) throws Exception {
+		Map<String, Object> result = new HashMap<String, Object>();
+		System.out.println("code list");
+		String[] arrOrderCoulmn = {"num asc"};
+		codeContentVo.setArrOrderColumn(arrOrderCoulmn);
+		//System.out.println(codeContentVo);
+		//리스트를 10개 조회
+		List<CodeContentVo> list = codeService.selectCodeList(codeContentVo);
+		//토탈 카운트
+		int cnt = codeService.getCodeCnt(codeContentVo);
+		result.put("list", list);
+		//페이징 처리
+		Search search = new Search();
+		search.setPageNo(codeContentVo.getPageNo());
+		search.setPageSize(10);
+		Paging paging = new Paging(search,cnt);
+		result.put("paging", paging);
+		result.put("totalCnt", cnt);
+		return result;
 
-  @PostMapping(value = "/list")
-  public List<CodeVo> codeList(@RequestBody CodeVo codeVo) throws Exception {
-    System.out.println("code list");
-    List<CodeVo> list = codeService.selectCodeList(codeVo);
-    return list;
-  }
+	}
 
-  @RequestMapping(value = "/insert")
-  public void insertCode(@RequestBody CodeVo codeVo) throws Exception {
-    System.out.println("insert code");
-    codeService.insertCode(codeVo);
-  }
+	@PostMapping("/insert")
+	public int insertCode(@RequestBody CodeContentVo codeContentVo) throws Exception {
+		System.out.println("insert code");
+		int cnt = codeService.insertCode(codeContentVo);
+		return cnt;
+	}
 
-  @RequestMapping(value = "/update", method = RequestMethod.PUT)
-  public void updateCode(@RequestBody CodeVo codeVo) throws Exception {
-    System.out.println("update code");
-    codeService.updateCode(codeVo);
-  }
+	@PostMapping("/update")
+	public int updateCode(@RequestBody CodeContentVo codeContentVo) throws Exception {
+		System.out.println("update code" + codeContentVo);
+		int cnt = codeService.updateCode(codeContentVo);
+		return cnt;
+	}
 
-  @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-  public void deleteCode(@RequestBody CodeVo codeVo) throws Exception {
-    System.out.println("delete code");
-    codeService.deleteCode(codeVo);
-  }
+	@PostMapping("/delete")
+	public int deleteCode(@RequestBody CodeContentVo codeContentVo) throws Exception {
+		System.out.println("delete code");
+		int cnt = codeService.deleteCode(codeContentVo);
+		return cnt;
+	}
 }

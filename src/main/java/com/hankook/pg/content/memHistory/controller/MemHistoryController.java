@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @RestController
-@RequestMapping("/system/memHistory")
+@RequestMapping("/memHistory")
 public class MemHistoryController {
 
   @Autowired
@@ -23,7 +23,7 @@ public class MemHistoryController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   public ModelAndView getHistory() throws Exception {
     log.info("로그인 이력");
-    ModelAndView mv = new ModelAndView("/system/memHistory/memHistory");
+    ModelAndView mv = new ModelAndView("/memHistory/memHistory");
 
     return mv;
   }
@@ -36,20 +36,23 @@ public class MemHistoryController {
   }
 
   @RequestMapping(value = "/insert")
-  public void insertHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
+  public int insertHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
     System.out.println("insert history");
-    memHistoryService.insertHistory(memHistoryVo);
+    int result = memHistoryService.insertHistory(memHistoryVo);
+    return result;
   }
 
   @RequestMapping(value = "/update", method = RequestMethod.PUT)
-  public void updateHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
+  public int updateHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
     System.out.println("update history");
-    memHistoryService.updateHistory(memHistoryVo);
+    int result = memHistoryService.updateHistory(memHistoryVo);
+    return result;
   }
 
   @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-  public void deleteHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
+  public int deleteHistory(@RequestBody MemHistoryVo memHistoryVo) throws Exception {
     System.out.println("delete history");
-    memHistoryService.deleteHistory(memHistoryVo);
+    int result = memHistoryService.deleteHistory(memHistoryVo);
+    return result;
   }
 }

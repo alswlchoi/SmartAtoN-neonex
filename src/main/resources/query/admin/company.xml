@@ -1,0 +1,255 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.company.dao.CompanyDao">
+	<sql id="COMPANY_LIST">
+		SELECT 
+        	PC.COMP_CODE,
+        	PC.COMP_LICENSE,
+        	PC.COMP_PHONE,
+        	PC.COMP_FAX,
+        	PC.COMP_KIND,
+        	PC.COMP_ADDR,
+        	PC.COMP_POST_NO,
+        	PC.COMP_ADDR_DETAIL,
+        	PC.COMP_NAME,
+        	PC.COMP_COND,
+        	PC.COMP_ACCT_NAME,
+        	PC.COMP_ACCT_PHONE,
+        	PC.COMP_ACCT_DEPT,
+        	PC.COMP_ACCT_EMAIL,
+        	PC.BLACK_LIST,
+        	PC.COMP_MEMO,
+        	PC.COMP_REG_USER,
+        	PC.COMP_REG_DT,
+        	MEM_ID,
+        	MEM_NAME,
+        	MEM_PWD,
+        	MEM_PHONE,
+        	MEM_EMAIL,
+        	MEM_USER_TYPE,
+        	MEM_USE_YN,
+        	MEM_BIRTH,
+        	MEM_DEPT,
+        	MEM_PURPOSE,
+        	AUTH_CODE,
+        	MEM_ADDR,
+        	MEM_POST_NO,
+        	MEM_ADDR_DETAIL,
+        	MEM_APPROVAL,
+        	MEM_AGREEMENT,
+        	MEM_REG_DT,
+        	MEM_MOD_DT,
+        	MEM_REG_USER,
+        	MEM_MOD_USER
+		FROM PG_COMPANY PC INNER JOIN PG_MEMBER PM
+		ON PC.COMP_CODE = PM.COMP_CODE
+	</sql>
+    <select id="getMaxCompCode" resultType="String">
+	     SELECT COMP_CODE FROM PG_COMPANY
+			ORDER BY COMP_CODE DESC
+			LIMIT 1
+    </select>
+    
+    <select id="getCompanyList" parameterType="com.hankook.pg.content.admin.company.dto.SearchCompanyDto" resultType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+	     <include refid="COMPANY_LIST" />
+			WHERE 1=1
+	         <if test="compRegStDt!=null and compRegEdDt!=null">
+	         	AND SUBSTRING(PC.COMP_REG_DT, 1, 8) BETWEEN #{compRegStDt} AND #{compRegEdDt} 
+	         </if> 
+			<if test='compName!=null and compName!=""'>
+	         	AND
+	         		(
+	         			COMP_NAME LIKE CONCAT('%',#{compName},'%') OR
+	         			PC.COMP_LICENSE LIKE CONCAT('%',#{compName},'%') OR
+	         			MEM_NAME = #{MemName}
+	         		)
+			</if> 
+	         <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(memApproval)">
+	         	 <if test='memApproval.equals("Y")'>
+	         		AND MEM_APPROVAL='Y'
+	         	 </if>
+	         	 <if test='memApproval.equals("N")'>
+	         		AND MEM_APPROVAL IN ('N','R')
+	         	 </if>
+	         </if> 
+         	 <if test='blackList!=null and blackList.equals("B")'>
+         		AND BLACK_LIST='Y'
+         	 </if>
+			ORDER BY PC.COMP_CODE DESC
+	   		LIMIT #{startRowNum} ,#{pageSize}
+    </select>
+    
+    <select id="findCompanyCount" parameterType="com.hankook.pg.content.admin.company.dto.SearchCompanyDto" resultType="Integer">
+         SELECT COUNT(*)
+         FROM PG_COMPANY PC INNER JOIN PG_MEMBER PM
+		ON PC.COMP_CODE = PM.COMP_CODE WHERE 1=1
+         <if test="compRegStDt!=null and compRegEdDt!=null">
+         	AND SUBSTRING(PC.COMP_REG_DT, 1, 8) BETWEEN #{compRegStDt} AND #{compRegEdDt} 
+         </if> 
+		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(compName)">
+         	AND
+         		(
+         			COMP_NAME LIKE CONCAT('%',#{compName},'%') OR
+         			PC.COMP_LICENSE LIKE CONCAT('%',#{compName},'%') OR
+         			MEM_NAME LIKE CONCAT('%',#{compName},'%')
+         		)
+         </if> 
+         <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(memApproval)">
+         	 <if test='memApproval.equals("Y")'>
+         		AND MEM_APPROVAL='Y'
+         	 </if>
+         	 <if test='memApproval.equals("N")'>
+         		AND MEM_APPROVAL IN ('N','R')
+         	 </if>
+         </if> 
+       	 <if test='blackList!=null and blackList.equals("B")'>
+       		AND BLACK_LIST='Y'
+       	 </if>
+    </select>
+    
+ 	<select id="countCompany" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto" resultType="Integer">
+        SELECT  COUNT(*) FROM PG_COMPANY
+        WHERE COMP_CODE = #{compCode}
+    </select>
+    
+    <select id="getCompCodeduplCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM PG_COMPANY
+		WHERE COMP_CODE=#{compCode}
+    </select>
+    
+    <select id="getCompanyDetail" parameterType="String" resultType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+         <include refid="COMPANY_LIST" />
+		WHERE PC.COMP_CODE=#{compCode }
+    </select>    
+    
+    <select id="getDcCount" parameterType="String" resultType="String">
+		SELECT DC_COUNT
+		FROM PG_DISCOUNT
+		WHERE COMP_CODE=#{compCode}
+    </select>
+
+    <select id="getFileLicense" parameterType="BigDecimal" resultType="com.hankook.pg.content.admin.driver.dto.UpfilesDto">
+         SELECT
+         	F_SEQ,
+         	F_TYPE,
+         	F_GROUP,
+         	F_NAME,
+         	F_URL,
+         	F_REG_DT
+         FROM FILE_MANAGEMENT
+         WHERE
+         	F_TYPE='c'
+         	AND F_GROUP=#{fSeq }
+    </select>
+    
+    <insert id="insertCompany" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+       INSERT INTO PG_COMPANY (
+	        COMP_CODE,
+			COMP_LICENSE,
+			COMP_PHONE,
+			COMP_FAX,
+			COMP_KIND,
+			COMP_ADDR,
+			COMP_POST_NO,
+			COMP_ADDR_DETAIL,
+			COMP_NAME,
+			COMP_COND,
+			COMP_ACCT_NAME,
+			COMP_ACCT_PHONE,
+			BLACK_LIST,
+			COMP_MEMO,
+			COMP_REG_USER,
+			COMP_REG_DT
+		)
+		VALUES(
+			#{compCode},
+			#{compLicense},
+			#{compPhone},
+			#{compFax},
+			#{compKind},
+			#{compAddr},
+			#{compPostNo},
+			#{compAddrDetail},
+			#{compName},
+			#{compCond},
+			#{compAcctName},
+			#{compAcctPhone},
+			'0',
+			#{compMemo},
+			#{compRegUser},
+			#{compRegDt}
+			)
+
+    </insert>
+    
+    <insert id="insertDiscount" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+    	INSERT INTO 
+    		PG_DISCOUNT (
+    			COMP_CODE,
+    			DC_COUNT,
+    			DC_NAME,
+    			DC_REG_USER,
+    			DC_REG_DT,
+    			DC_MOD_USER,
+    			DC_MOD_DT
+    		) VALUES (
+				#{compCode},
+				#{dcCount},
+				#{dcName},
+				#{dcRegUser},
+				#{dcRegDt},
+				#{dcModUser},
+				#{dcModDt}
+			) ON DUPLICATE KEY
+		UPDATE
+			DC_COUNT=#{dcCount},
+			DC_NAME=#{dcName},
+			DC_MOD_USER=#{dcModUser},
+			DC_MOD_DT=#{dcModDt}
+    </insert>
+    
+    <insert id="deleteDiscount" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+       DELETE FROM PG_DISCOUNT WHERE COMP_CODE=#{compCode}
+    </insert>
+    
+    <update id="updateCompany" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+        UPDATE PG_COMPANY SET
+			COMP_LICENSE=#{compLicense},
+			COMP_PHONE=#{compPhone},
+			COMP_FAX=#{compFax},
+			COMP_KIND=#{compKind},
+			COMP_ADDR=#{compAddr},
+			COMP_POST_NO=#{compPostNo},
+			COMP_ADDR_DETAIL=#{compAddrDetail},
+			COMP_NAME=#{compName},
+			COMP_COND=#{compCond},
+			COMP_ACCT_NAME=#{compAcctName},
+			COMP_ACCT_DEPT=#{compAcctDept},
+			COMP_ACCT_EMail=#{compAcctEmail},
+			COMP_ACCT_PHONE=#{compAcctPhone},
+			BLACK_LIST=#{blackList},
+			COMP_MEMO=#{compMemo}
+		WHERE COMP_CODE=#{compCode}
+    </update>
+    
+    <update id="changeApproval" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+        UPDATE PG_MEMBER SET
+        	AUTH_CODE='A002',
+			MEM_APPROVAL=#{memApproval}
+		WHERE COMP_CODE=#{compCode}
+    </update>
+    
+    <update id="companyBlackList" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+        UPDATE PG_COMPANY SET
+			BLACK_LIST=#{blackList}
+		WHERE COMP_CODE=#{compCode}
+    </update>
+    
+    <delete id = "deleteCompany" parameterType="com.hankook.pg.content.admin.company.dto.CompanyDto">
+        DELETE FROM PG_COMPANY
+        WHERE COMP_CODE=#{compCode}
+    </delete>
+</mapper>

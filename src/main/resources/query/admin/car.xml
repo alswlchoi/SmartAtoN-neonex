@@ -1,0 +1,66 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.car.dao.CarDao">
+	<sql id="CAR_LIST">
+		SELECT 
+        	C_CODE,
+        	C_NUMBER,
+        	C_TYPE,
+        	C_NAME,
+        	C_COLOR,
+        	COMP_CODE
+		FROM PG_CAR
+	</sql>
+    <select id="getCarList" parameterType="com.hankook.pg.content.admin.car.dto.SearchCarDto" resultType="com.hankook.pg.content.admin.car.dto.CarDto">
+	     <include refid="CAR_LIST" />
+			C_E 1=1
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(cNumber)">
+	         	AND C_NUMBER LIKE CONCAT('%',#{cNumber},'%')
+	         </if> 
+			ORDER BY C_DE DESC
+	   		LIMIT #{startRowNum} ,#{pageSize}
+    </select>
+    
+    <select id="findCarCount" parameterType="com.hankook.pg.content.admin.car.dto.SearchCarDto" resultType="Integer">
+         SELECT COUNT(*)
+         FROM PG_CAR WHERE 1=1
+         <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(cNumber)">
+         	AND C_NUMBER LIKE CONCAT('%',#{cNumber},'%')
+         </if> 
+    </select>
+    
+    <select id="getCompCodeduplCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM PG_CAR
+		WHERE C_CODE=#{cCode}
+    </select>
+    
+    <select id="getCarDetail" parameterType="String" resultType="com.hankook.pg.content.admin.car.dto.CarDto">
+         <include refid="CAR_LIST" />
+		WHERE C_CODE=#{cCode}
+    </select>    
+    
+    <insert id="insertCar" parameterType="com.hankook.pg.content.admin.car.dto.CarDto">
+       INSERT INTO PG_CAR
+		(C_NUMBER, C_TYPE, C_CODE, C_NAME, C_COLOR, COMP_CODE)
+		VALUES(#{cNumber}, #{cType}, #{cCode}, #{cName}, #{cColor}, #{compCode})
+
+    </insert>
+    
+    <update id="updateCar" parameterType="com.hankook.pg.content.admin.car.dto.CarDto">
+        UPDATE PG_CAR SET
+        	C_NUMBER=#{cNumber},
+        	C_TYPE=#{cType},
+        	C_CODE=#{cCode},
+        	C_NAME=#{cName},
+        	C_COLOR=#{cColor}
+		WHERE C_CODE=#{cCode}
+    </update>
+    
+    <delete id = "deleteCar" parameterType="Integer">
+        DELETE FROM PG_CAR
+        WHERE C_CODE=#{cCode}
+    </delete>
+</mapper>

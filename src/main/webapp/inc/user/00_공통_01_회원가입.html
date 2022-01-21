@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>::: [한국타이어] Technoring :::</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" type="text/css" href="./css/default.css">
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link rel="stylesheet" type="text/css" href="./css/layout.css">
+    <link rel="stylesheet" type="text/css" href="./css/daterangepicker.css"><!-- daterangepicker style -->
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css"><!-- jquery-ui style -->
+
+    <!-- 스크립트 -->
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/navi.js"></script> <!-- navigation -->
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/moment.min.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/daterangepicker.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/jquery-ui.js"></script> <!-- jquery-ui -->
+</head>
+
+
+<body>
+    <!-- u_skip -->
+    <div id="u_skip">
+        <a href="#container">본문 바로가기</a></li>
+    </div>
+    <!-- //u_skip -->
+
+    <!-- wrapper -->
+    <div id="wrapper">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <div class="gnb_wrap">
+                <h1 class="logo"><a href="#"><img src="./images/BI_Technoring.png" alt="Technoring" /></a></h1>
+                <div class="user_session">
+                    <!-- 로그인 전 -->
+                    <a class="join" href="#" title="회원가입"></a><a class="login" href="#" title="로그인"></a>
+                    <!-- //로그인 전 -->
+                    <!-- 로그인 후 -->
+                    <!-- <span class="user">홍길동 (ADMIN)</span><a class="logout" href="#" title="로그아웃"></a> -->
+                    <!-- //로그인 후 -->
+                </div>
+            </div>
+            <!-- navigation -->
+            <div class="navi1">
+                <div class="navi1Ul_wrap">
+                    <ul class="navi1Ul">
+                        <li class="">
+                            <a href="#" class="oneD" target="_self">시험주행장</a>
+                            <div class="twoD">
+                                <a href="#" class="" target="_self">테크노링 소개</a>
+                                <a href="#" class="" target="_self">트랙 소개</a>
+                                <a href="#" class="" target="_self">부대시설 안내</a>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="#" class="oneD" target="_self">예약</a>
+                            <div class="twoD">
+                                <a href="#" class="" target="_self">시험로</a>
+                                <a href="#" class="" target="_self">부대시설</a>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="#" class="oneD" target="_self">고객지원</a>
+                            <div class="twoD">
+                                <a href="#" class="" target="_self">공지사항</a>
+                                <a href="#" class="" target="_self">자료실</a>
+                            </div>
+                        </li>
+                        <li class="">
+                            <a href="#" class="oneD" target="_self">마이페이지</a>
+                            <div class="twoD">
+                                <a href="#" class="" target="_self">예약 및 이용내역</a>
+                                <a href="#" class="" target="_self">정산관리</a>
+                                <a href="#" class="" target="_self">회원정보</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- //navigation -->
+        </div>
+        <!-- //header_wrap -->
+        <!-- container -->
+        <div id="container">
+            <!-- visual -->
+            <div class="visual_sub common"></div>
+            <!-- //visual -->
+            <!-- content -->
+            <div class="content">
+                <!-- breadcrumb -->
+                <div class="breadcrumb"><span class="breadcrumb_icon"></span><span>회원가입</span></div>
+                <!-- //breadcrumb -->
+                <!-- title -->
+                <h2 class="title">회원가입</h2>
+                <!-- //title -->
+                <!-- tab -->
+                <div class="wrap_tab w1200">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openTab(event, 'tab1')" id="defaultOpen">가입안내</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab2')">회원가입</button>
+                    </div>
+                    <div class="wrap_tabcontent">
+                        <!-- tab1 -->
+                        <div id="tab1" class="tabcontent">
+                            <div class="box_txt01">타이어와 자동차 기술을 개발하는 관련 부품 업체 및 연구기관 대상으로<br /><span>테크노링 서비스를
+                                    제공</span>합니다.</div>
+                            <h3 class="stitle m-t-70">회원가입 대상 <span>: 타이어 및 차량 관련 부품 업체 및 연구기관</span></h3>
+                            <h3 class="stitle m-t-20">회원가입 절차</h3>
+                            <div class="tac m-t-20"><img src="./images/img_joinguide01.png" alt="" /></div>
+                            <h3 class="stitle m-t-80">회원가입 준비사항 및 유의사항</h3>
+                            <ul class="info_text01 m-t-12">
+                                <li>- 준비사항 : 회사명, 사업자 등록번호, 회사 주소, 사용할 아이디 및 비밀번호 정보, 담당자 및 회계 담당자 정보</li>
+                                <li>- 신청하신 담당자 이메일주소로 승인 완료 시 공지 되므로, 이메일주소를 정확하게 입력해 주세요. (관리자에 의해 검토 후 승인 완료 된
+                                    회원사에 한하여 이메일로 공지 됩니다.)</li>
+                                <li>- 사업자 등록증 사본은 회원가입 시 혹은 승인 완료 후 마이페이지 에서 제출 하실 수 있습니다. </li>
+                                <li>- 회원사 당 1개의 서비스 계정이 됩니다. (기업당 여러 개 아이디 발급 불가)</li>
+                            </ul>
+                            <!-- button -->
+                            <section class="tac m-t-50">
+                                <!-- <button type="button" class="btn btn_gray m-r-11">이전</button> -->
+                                <button type="button" class="btn btn_default">회원가입</button>
+                            </section>
+                            <!-- //button -->
+                        </div>
+                        <!-- //tab1 -->
+                        <!-- tab2 -->
+                        <div id="tab2" class="tabcontent">
+                            <div class="terms_wrap m-t-20">
+                                <div class="terms_all">
+                                    <div class="form_group check_icon-b m-t-20">
+                                        <div class="check_inline">
+                                            <label class="check_default">
+                                                <input type="checkbox" name="" value="">
+                                                <span class="check_icon-b"></span>모두 동의합니다.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- accordion -->
+                                <div class="wrap_accordion m-t-23">
+                                    <button class="accordion">
+                                        <div class="form_group check_icon-b">
+                                            <div class="check_inline">
+                                                <label class="check_default">
+                                                    <input type="checkbox" name="" value="" checked="">
+                                                    <span class="check_icon-b"></span>(필수) 서비스 이용 약관 동의</label>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <div class="accordion_panel">
+                                        서비스 이용 약관 내용
+                                    </div>
+                                    <button class="accordion">
+                                        <div class="form_group check_icon-b">
+                                            <div class="check_inline">
+                                                <label class="check_default">
+                                                    <input type="checkbox" name="" value="">
+                                                    <span class="check_icon-b"></span>(필수) 개인정보 수집 및 이용</label>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <div class="accordion_panel">
+                                        개인정보 수집 및 이용 내용
+                                    </div>
+                                    <button class="accordion">
+                                        <div class="form_group check_icon-b">
+                                            <div class="check_inline">
+                                                <label class="check_default">
+                                                    <input type="checkbox" name="" value="">
+                                                    <span class="check_icon-b"></span>(필수) 보안 서약 관련 이용안내 동의</label>
+                                            </div>
+                                        </div>
+                                    </button>
+                                    <div class="accordion_panel">
+                                        보안 서약 관련 이용안내 동의 내용
+                                    </div>
+                                </div>
+                                <!-- //accordion -->
+                            </div>
+                            <!-- button -->
+                            <section class="tac m-t-50">
+                                <!-- <button type="button" class="btn btn_gray m-r-11">이전</button> -->
+                                <button type="button" class="btn btn_default">확인</button>
+                            </section>
+                            <!-- //button -->
+                        </div>
+                        <!-- //tab2 -->
+                    </div>
+                </div>
+                <!-- //tab -->
+            </div>
+            <!-- //content -->
+        </div>
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <section>
+                <span><img src="./images/ci_hankook.png" alt="한국타이어" /></span>
+                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.<a href="00_공통_06_개인정보 처리방침.html" target="_blank" title="개인정보 처리방침">개인정보 처리방침</a></p>
+            </section>
+        </div>
+        <!-- //footer -->
+    </div>
+    <!-- //wrapper -->
+
+    <!-- tab -->
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+    <!-- //tab -->
+
+    <!-- 아코디언 -->
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

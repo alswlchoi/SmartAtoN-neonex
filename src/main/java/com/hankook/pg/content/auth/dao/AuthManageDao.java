@@ -19,4 +19,8 @@ public interface AuthManageDao {
 
 	int deleteAuth(AuthVO authVo) throws SQLException;
 
+	void deleteMenuMapping(AuthVO authVo) throws SQLException;
+
+	int getAuthListCnt(AuthVO authVo) throws SQLException;
+
 }

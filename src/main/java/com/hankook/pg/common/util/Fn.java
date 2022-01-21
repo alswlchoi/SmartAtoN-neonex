@@ -8,8 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -32,11 +30,8 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Fn {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Fn.class);
+
 	private static String DEFAULT_ENCODING = "UTF-8";
 	
 	/*********************(형변환 : to)****************************/
@@ -50,7 +45,7 @@ public class Fn {
 		if(value!=null && value.length()>0){
 			try{
 				to_int = Integer.parseInt(replaceAll(value, ",", ""));
-			}catch(java.lang.NumberFormatException e){
+			}catch(NumberFormatException e){
 				to_int = 0;
 			}catch(Exception e){
 				to_int = 0;
@@ -245,7 +240,7 @@ public class Fn {
 		if(value!=null && value.length()>0){
 			try{
 				to_double = Double.parseDouble(replaceAll(value, ",", ""));
-			}catch(java.lang.NumberFormatException e){
+			}catch(NumberFormatException e){
 				to_double = 0;
 			}catch(Exception e){
 				to_double = 0;
@@ -360,10 +355,10 @@ public class Fn {
 				   
 				   for(int i=str.length()-1,i2=0;i>=0;i--,i2++){ 
 					   	temp= Integer.parseInt(str.charAt(i)+"");			        
-					   	chk = ((i2%4) == 0)?i2/4:0; 
-					   	result =  ((temp==1 && i2>0 && chk==0)?"":han[temp]) + ((temp==0)?"":dan2[i2%4]) + dan1[chk] + result ;      
+					   	chk = i2%4 == 0?i2/4:0;
+					   	result =  temp==1 && i2>0 && chk==0?"":han[temp] + (temp==0?"":dan2[i2%4]) + dan1[chk] + result ;
 				   } 
-			  }catch(java.lang.NumberFormatException e){
+			  }catch(NumberFormatException e){
 				  result="";
 			  }catch(Exception e){
 				  result="";
@@ -385,7 +380,7 @@ public class Fn {
      
      *************************************************************/
 	public static String toString(String value){
-		return (value==null || value.trim().equals("") || value.equals("null"))? "" : value;
+		return value==null || value.trim().equals("") || value.equals("null")? "" : value;
 	}
 	public static String toStringHtml(String value){
 		return htmlSpecialChars(toString(value));
@@ -704,10 +699,8 @@ public class Fn {
 			String[] org_arr = toStr_array(org_str, add_symbol);
 			List<String> strList = new ArrayList<String>();
 			for(String org : org_arr){
-				if(org.length()>0){
-					if(!org.equals(add_str)){				
-						strList.add(org);
-					}
+				if(org.length()>0 && !org.equals(add_str)){
+					strList.add(org);
 				}
 			}
 			strList.add(add_str);
@@ -737,10 +730,8 @@ public class Fn {
 			String[] org_arr = toStr_array(org_str, add_symbol);
 			List<String> strList = new ArrayList<String>();
 			for(String org : org_arr){
-				if(org.length()>0){
-					if(!org.equals(sub_str)){
-						strList.add(org);
-					}
+				if(org.length()>0 && !org.equals(sub_str)){
+					strList.add(org);
 				}
 			}
 			if(strList.size()>0){
@@ -1040,10 +1031,8 @@ public class Fn {
 			Enumeration paramNames = request.getParameterNames();
 			while(paramNames.hasMoreElements()){
 				String param_nm = paramNames.nextElement().toString();
-				if(!isEqualValue(exclude_param, ",", param_nm)){
-					if(toString(request,param_nm).length()>0){ 
-						hidden.append("<input type=\"hidden\" name=\""+param_nm+"\" value=\""+htmlSpecialChars(toString(request,param_nm))+"\" />\n");
-					}
+				if(!isEqualValue(exclude_param, ",", param_nm) && toString(request,param_nm).length()>0){
+					hidden.append("<input type=\"hidden\" name=\""+param_nm+"\" value=\""+htmlSpecialChars(toString(request,param_nm))+"\" />\n");
 				}
 			}
 			return hidden.toString();
@@ -1294,21 +1283,19 @@ public class Fn {
      *************************************************************/
 	public static String toStringCharSetEncodeParam(HttpServletRequest request, String value, String send_server_charset){
 		String param_value = "";
-		if(request!=null && value!=null && send_server_charset!=null){
-			if(request.getMethod().equals("GET")){
-				for(String param_temp : toString(request.getQueryString()).split("&")){
-					String[] key_value = param_temp.split("=");
-					if(key_value[0].equals(value)){
-						try {
-							param_value = java.net.URLDecoder.decode(toString(key_value[1]), send_server_charset);
-						} catch (UnsupportedEncodingException uee) {
-							param_value = "";
-						}catch( Exception e){
-							param_value = "";
-						}
-						break;
-					}			
-				}
+		if(request!=null && value!=null && send_server_charset!=null && request.getMethod().equals("GET")){
+			for(String param_temp : toString(request.getQueryString()).split("&")){
+				String[] key_value = param_temp.split("=");
+				if(key_value[0].equals(value)){
+					try {
+						param_value = URLDecoder.decode(toString(key_value[1]), send_server_charset);
+					} catch (UnsupportedEncodingException uee) {
+						param_value = "";
+					}catch( Exception e){
+						param_value = "";
+					}
+					break;
+				}			
 			}
 		}
 		return param_value;
@@ -1438,7 +1425,7 @@ public class Fn {
      *************************************************************/
     public static Timestamp toTimestamp(String value, String type) {
 		try {
-			return new java.sql.Timestamp(new SimpleDateFormat(type).parse(value).getTime());
+			return new Timestamp(new SimpleDateFormat(type).parse(value).getTime());
 		} catch (NullPointerException npe) {
 			return null;
 		} catch (IllegalArgumentException iae) { 
@@ -2607,7 +2594,7 @@ public class Fn {
     public static int getWeek(int year, int month, int day){
     	Calendar cal = Calendar.getInstance();
     	cal.set(year, month-1, day);
-    	return cal.get(java.util.Calendar.DAY_OF_WEEK);
+    	return cal.get(Calendar.DAY_OF_WEEK);
     }
     public static int getWeek(String ymd){
     	String[] ymd_array = toStr_array(ymd, "-", 3);
@@ -2649,8 +2636,8 @@ public class Fn {
      
      *************************************************************/
     public static int getYear(){
-    	java.util.Calendar cal = java.util.Calendar.getInstance(); 
-    	return cal.get(java.util.Calendar.YEAR);
+    	Calendar cal = Calendar.getInstance();
+    	return cal.get(Calendar.YEAR);
     }
     
     /*************************************************************
@@ -2659,8 +2646,8 @@ public class Fn {
      
      *************************************************************/
     public static int getMonth(){
-    	java.util.Calendar cal = java.util.Calendar.getInstance(); 
-    	return cal.get(java.util.Calendar.MONTH)+1;
+    	Calendar cal = Calendar.getInstance();
+    	return cal.get(Calendar.MONTH)+1;
     }
     
     /*************************************************************
@@ -2669,8 +2656,8 @@ public class Fn {
      
      *************************************************************/
     public static int getDay(){
-    	java.util.Calendar cal = java.util.Calendar.getInstance(); 
-    	return cal.get(java.util.Calendar.DATE);
+    	Calendar cal = Calendar.getInstance();
+    	return cal.get(Calendar.DATE);
     }
  
     /*************************************************************
@@ -2805,10 +2792,10 @@ public class Fn {
      
      *************************************************************/
     public static int getSubDays(Date date){
-    	return date==null ? 0 : getSubDays(toDateFormat(new java.util.Date(), "yyyy-MM-dd"), toDateFormat(date, "yyyy-MM-dd"));
+    	return date==null ? 0 : getSubDays(toDateFormat(new Date(), "yyyy-MM-dd"), toDateFormat(date, "yyyy-MM-dd"));
     }
     public static int getSubDays(String ymd){
-    	return ymd==null ? 0 : getSubDays(toDateFormat(new java.util.Date(), "yyyy-MM-dd"), ymd);
+    	return ymd==null ? 0 : getSubDays(toDateFormat(new Date(), "yyyy-MM-dd"), ymd);
     }
     /*************************************************************
      * 특정 날짜간 차 hours
@@ -2833,59 +2820,14 @@ public class Fn {
     	}catch(Exception e){
     		return 0;
     	}
-    }
-   
-	/*************************************************************
-     * image 크기 {가로, 세로}
-     * @since 1.0
-     
-     *************************************************************/
-	public static int[] getImgSize(String src) throws java.io.IOException{
-		int[] size = new int[2];
-		if(src!=null){		
-			java.io.FileInputStream srcls = null;			
-			try{
-				srcls = new java.io.FileInputStream(src);
-				java.awt.image.BufferedImage srcImg = javax.imageio.ImageIO.read(srcls);
-				if(srcImg!=null){
-					// 원본 이미지의 폭과 높이
-					size[0] = srcImg.getWidth();
-					size[1] = srcImg.getHeight();
-				}
-			}catch(IOException ioe){
-				size[0] = 0;
-				size[1] = 0;
-			}catch(Exception e){
-				size[0] = 0;
-				size[1] = 0;
-			}finally{
-				if(srcls!=null)try{srcls.close();}catch(java.io.IOException ex){LOGGER.debug("IOException : int[] getImgSize(String src){src:"+src+"} " + ex.getMessage());}
-			}
-		}
-		return size;
-	}    
-	/*************************************************************
-     * image 크기 리사이즈 {가로, 세로}
-     * @since 1.0
-     
-     *************************************************************/
-	public static int[] getImgReSize(int[] img_max, String img_context) throws java.io.IOException{
-		return getImgReSize(img_max[0], img_max[1], img_context);
-	}
-	public static int[] getImgReSize(int img_max_wsz, int img_max_hsz, String img_context) throws java.io.IOException{
-		int[] img_sz = {img_max_wsz,img_max_hsz};
-		if(img_context!=null && img_context.length()>0){
-			img_sz = getImgSize(img_context);
-		}
-		return getImgReSize(img_max_wsz, img_max_hsz, img_sz[0], img_sz[1]) ;
-	}	
-	public static int[] getImgReSize(int img_max_wsz, int img_max_hsz, int[] img_sz) throws java.io.IOException{
+    }	
+	public static int[] getImgReSize(int img_max_wsz, int img_max_hsz, int[] img_sz) throws IOException{
 		return getImgReSize(img_max_wsz, img_max_hsz, img_sz[0], img_sz[1]);
 	}
-	public static int[] getImgReSize(int[] img_max, int[] img_sz) throws java.io.IOException{
+	public static int[] getImgReSize(int[] img_max, int[] img_sz) throws IOException{
 		return getImgReSize(img_max[0], img_max[1], img_sz[0], img_sz[1]);
 	}
-	public static int[] getImgReSize(int img_max_wsz, int img_max_hsz, int img_wsz, int img_hsz) throws java.io.IOException{
+	public static int[] getImgReSize(int img_max_wsz, int img_max_hsz, int img_wsz, int img_hsz) throws IOException{
 
 		double resize_w = img_wsz;
 		double resize_h = img_hsz;
@@ -3130,7 +3072,9 @@ public class Fn {
     	if(!('A' <= value.charAt(0) && value.charAt(0) <= 'Z'))
     		return false;
     	for(int i=1; i<value.length(); i++){
-    		if(!(('A' <= value.charAt(i) && value.charAt(i) <= 'Z') || ('0' <= value.charAt(i) && value.charAt(i) <= '9') || (value.charAt(i)=='_')))
+    		if(!('A' <= value.charAt(i) && value.charAt(i) <= 'Z'||
+					'0' <= value.charAt(i) && value.charAt(i) <= '9'
+					|| value.charAt(i)=='_'))
     			return false;
     	}
     	return true;
@@ -3568,28 +3512,7 @@ public class Fn {
 	public static String popupScript(String uri, String subject, int width, int height, int topPos, int leftPos, String scrollbars, String resizable){
     	return "window.open("+("this.href".equals(uri)?"this.href":"\""+uri+"\"")+",\""+subject+"\",\"width="+width+",height="+height+",top="+topPos+",left="+leftPos+",scrollbars="+(scrollbars==null || scrollbars.length()==0 ? "auto": scrollbars)+",resizable="+(resizable==null || resizable.length()==0 ? "no": resizable)+"\");";
 	}
-    /*************************************************************
-     * MD5 암호화
-     * @since 1.0
-     
-     *************************************************************/
-	public static String makeMD5(String str) {
-		StringBuffer sb = new StringBuffer();
-		try{
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(str.getBytes());
-			byte[] md5Code = md.digest();			
-			for(int i=0; i<md5Code.length; i++ ){
-				String md5Char = String.format("%02x",0xff&(char)md5Code[i]);
-				sb.append(md5Char);
-			}
-		}catch(NoSuchAlgorithmException ex){
-			LOGGER.debug("IOException : String makeMD5(String str){str:"+str+"} " + ex.getMessage());
-		}catch(Exception ex){
-			LOGGER.debug("Exception : String makeMD5(String str){str:"+str+"} " + ex.getMessage());
-		}	
-		return sb.toString();
-	}
+	
 	/*************************************************************
      * 문자열 교체
      * @since 1.0
@@ -3732,10 +3655,8 @@ public class Fn {
 			if(sorceMap.size()>0){
 				for(String key : sorceMap.keySet()){
 					boolean isCopy = true;
-					if(ojbect_type_str!=null && ojbect_type_str.length()>0 ){
-						if(sorceMap.get(key)==null || !(("," + ojbect_type_str + "," ).indexOf(","+sorceMap.get(key).getClass().getCanonicalName()+",") >-1)){
-							isCopy = false;
-						}
+					if(ojbect_type_str!=null && ojbect_type_str.length()>0&&(sorceMap.get(key)==null || !(("," + ojbect_type_str + "," ).indexOf(","+sorceMap.get(key).getClass().getCanonicalName()+",") >-1)) ){
+						isCopy = false;
 					}					
 					if(isCopy){
 						returnMap.put(key, sorceMap.get(key));
@@ -3862,6 +3783,19 @@ public class Fn {
 		return buffer.toString();
 	}
 
+	/*************************************************************************
+	* @제목		: 특수문자 역변환
+	* @since	: 2021-09-25
+	*************************************************************************/	
+	public static String scriptFilterDec(String value) {
+        if (value == null) {
+            return null;
+        }   
+        
+        String rtnVal = value.replaceAll("&amp;", "\\&").replaceAll("&amp;nbsp;", " ").replaceAll("&#35;", "\\#").replaceAll("&lt;", "\\<").replaceAll("&gt;", "\\>").replaceAll("&quot;", "\"").replaceAll("&#39;", "\\").replaceAll("&#37;", "\\%").replaceAll("&#40;", "\\(").replaceAll("&#41;", "\\)").replaceAll("&#43;", "\\+").replaceAll("&#47;", "\\/").replaceAll("&#46;", "\\.");
+        return rtnVal;
+    }
+	
 	/*************************************************************************
 	* @제목		: 스마트폰 확인
 	* @since	: 2017-09-04

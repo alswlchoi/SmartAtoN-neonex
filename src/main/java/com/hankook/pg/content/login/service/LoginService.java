@@ -2,7 +2,7 @@ package com.hankook.pg.content.login.service;
 
 import com.hankook.pg.content.login.dao.LoginDao;
 import com.hankook.pg.content.login.dto.MenuDto;
-import com.hankook.pg.content.security.config.UserMenuList;
+import com.hankook.pg.security.config.UserMenuList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -33,14 +33,24 @@ public class LoginService {
         LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = new LinkedHashMap<>();
         List<MenuDto> menuList = loginDao.getMenuList();
         totalUserMenuList.setMenuList(new ArrayList<>());
+        System.out.println("메뉴"+totalUserMenuList);
 
         menuList.forEach(menuDto -> {
             totalUserMenuList.getMenuList().add(menuDto);
             List<ConfigAttribute> configAttributeList = new ArrayList<>();
-
-            configAttributeList.add(new SecurityConfig("ROLE_"+menuDto.getAuthCode()));
-            result.put(new AntPathRequestMatcher(menuDto.getMUrl()),configAttributeList);
+            String roleAuthCode = "ROLE_" + menuDto.getAuthCode();
+            if(menuDto.getMUrl()!=null) {
+            	if(result.containsKey(new AntPathRequestMatcher(menuDto.getMUrl()))) {
+            		configAttributeList.addAll(result.get(new AntPathRequestMatcher(menuDto.getMUrl())));
+            		configAttributeList.add(new SecurityConfig(roleAuthCode.equals("ROLE_A000") ? "ROLE_ANONYMOUS" : "ROLE_" + menuDto.getAuthCode()));
+            	}else {
+            		configAttributeList.add(new SecurityConfig(roleAuthCode.equals("ROLE_A000") ? "ROLE_ANONYMOUS" : "ROLE_" + menuDto.getAuthCode()));
+            	}
+            	result.put(new AntPathRequestMatcher(menuDto.getMUrl()),configAttributeList);
+            }
         });
+
+        result.entrySet().forEach(System.out::println);
 
         return result;
     }

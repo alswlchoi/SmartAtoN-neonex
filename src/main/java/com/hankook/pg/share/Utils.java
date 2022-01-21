@@ -288,9 +288,20 @@ public class Utils {
         calendar1.setTime(date1);
         calendar2.setTime(date2);
 
-        int m1 = (calendar1.get(Calendar.YEAR) * 12) + (calendar1.get(Calendar.MONTH) + 1);
-        int m2 = (calendar2.get(Calendar.YEAR) * 12) + (calendar2.get(Calendar.MONTH) + 1);
+        int m1 = calendar1.get(Calendar.YEAR) * 12 + calendar1.get(Calendar.MONTH) + 1;
+        int m2 = calendar2.get(Calendar.YEAR) * 12 + calendar2.get(Calendar.MONTH) + 1;
         return m2 - m1 + 1;
     }
 
+
+    /**
+     * 아이디 마스킹 처리
+     *
+     * @param origin    아이디 원본 문자열
+     * @return          te** < test
+     */
+    public static String maskId(String origin) {
+    	String result = origin.replaceAll("(?<=.{2}).","*");
+        return result;
+    }
 }

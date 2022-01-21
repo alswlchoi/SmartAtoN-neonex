@@ -14,11 +14,9 @@ public class Validity {
 		if(value!=null && value.length()>0){
 			try{
 				to_int = Integer.parseInt(value);
-			}catch(java.lang.NumberFormatException e){
-				to_int = 0;
 			}catch(Exception e){
 				to_int = 0;
-			}	
+			}
 		}		
 		return to_int;
 	}

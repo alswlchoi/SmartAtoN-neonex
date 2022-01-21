@@ -4,16 +4,21 @@
 
 <mapper namespace="com.hankook.pg.content.login.dao.LoginDao">
 	<select id="getMenuList" resultType="com.hankook.pg.content.login.dto.MenuDto">
-		SELECT PM.M_PARENT
+		SELECT PM.MENU_CODE
+			 ,PM.M_PARENT
 			 , PM.M_NAME
 			 , PM.M_URL
 			 , PA.AUTH_CODE
 			 , PM.M_USE_YN
+			 , PM.M_LEVEL
+			 ,(SELECT COUNT(*) FROM PG_MENU PM2 WHERE PM.MENU_CODE = PM2.M_PARENT AND PM2.M_LEVEL=2 AND PM2.M_USE_YN = 'Y') as M_SUB_TWO
+			 ,(SELECT COUNT(*) FROM PG_MENU PM3 WHERE PM.MENU_CODE = PM3.M_PARENT AND PM3.M_LEVEL=3 AND PM3.M_USE_YN = 'Y') as M_SUB_THREE
 		FROM PG_MENU PM
 				 JOIN PG_MENU_MAPPING P
 					  ON PM.MENU_CODE = P.MENU_CODE
 				 JOIN PG_AUTH PA
 				     ON PA.AUTH_CODE = P.AUTH_CODE
-		WHERE PM.M_USE_YN = 'Y';
+		WHERE PM.M_USE_YN = 'Y' <!-- and PA.AUTH_CODE ='A001' -->
+		ORDER BY PA.AUTH_CODE,PM.M_PARENT,PM.M_ORDER
 	</select>
 </mapper>

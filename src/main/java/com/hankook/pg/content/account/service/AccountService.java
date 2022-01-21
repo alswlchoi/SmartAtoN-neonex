@@ -91,9 +91,9 @@ public class AccountService {
     @Transactional(rollbackFor = { Exception.class }, propagation = Propagation.REQUIRED)
     public boolean addAccount(AccountDto dto, boolean isSignUp) {
         int cnt = accountDao.insertAccount(dto.convertToEntity());
-        if (cnt > 0 && !"Y".equals(dto.getAgreYn())) {
+//        if (cnt > 0 && !"Y".equals(dto.getAgreYn())) {
             // 사업PM 권한 이상의 계정목록 조회
-            List<AccountEntity> managers = accountDao.findManagerAccounts();
+//            List<AccountEntity> managers = accountDao.findManagerAccounts();
             // 최고관리자 정보 추출
 //            AccountEntity admin = managers.stream()
 //                                        .filter(account -> AccountRole.ROLE_ADMIN.getRole().equals(account.getRole()))
@@ -108,7 +108,7 @@ public class AccountService {
 //                        .svcCode("SYS")
 //                        .build());
 //            });
-        }
+//        }
         return cnt > 0;
     }
 
@@ -229,7 +229,7 @@ public class AccountService {
 
             // 이메일로 임시 비밀번호 발급
             log.info("temporary password => {}", tempPwd);
-            AccountEntity admin = accountDao.findRootAccount();
+//            AccountEntity admin = accountDao.findRootAccount();
 //            emailService.sendEmail(NotificationCase.TEMP_PASSWORD, EmailDto.builder()
 //                    .rcver(entity.getName())
 //                    .rcverEmail(entity.getEmail())
@@ -265,7 +265,7 @@ public class AccountService {
 
     public boolean isDuplicatedId(String id) {
         AccountEntity entity = accountDao.findAccountById(id);
-        return (entity != null);
+        return entity != null;
     }
 
     public List<String> findAccountNotifications(String id) {

@@ -10,24 +10,23 @@
             W.*
         FROM (
                  SELECT
-                     (ROW_NUMBER() OVER()) AS RNUM, V.*
+                     (ROW_NUMBER() OVER(
+                     <if test="arrOrderColumn !=null">
+			        <foreach collection="arrOrderColumn" item="orderColumn" open="ORDER BY" separator=",">
+			            ${orderColumn}
+			        </foreach>
+			        </if>
+                     )) AS RNUM, V.*
                  FROM (
     </sql>
     <!--  공용 페이징 상단 -->
 
     <!--  공용 페이징 하단 -->
     <sql id="sqlPagingBottom">
-        ) OB
-        <if test="arrOrderColumn !=null">
-        <foreach collection="arrOrderColumn" item="orderColumn" open="ORDER BY" separator=",">
-            ${orderColumn}
-        </foreach>
-        </if>
         ) V
-        WHERE
-        ROWNUM <![CDATA[ <= ]]> ${@com.hankook.pg.share.PagingUtil@getEndRowNum(pageNo, pageSize)}
         ) W
-        WHERE W.RNUM <![CDATA[ >= ]]> ${@com.hankook.pg.share.PagingUtil@getStartRowNum(pageNo, pageSize)}
+        WHERE RNUM <![CDATA[ >= ]]> ${@com.hankook.pg.share.PagingUtil@getStartRowNum(pageNo, pageSize)}
+        AND RNUM <![CDATA[ <= ]]> ${@com.hankook.pg.share.PagingUtil@getEndRowNum(pageNo, pageSize)}
 
     </sql>
     <!--  공용 페이징 하단 -->
@@ -39,7 +38,7 @@
     </sql>
 
     <sql id="sqlCountBottom">
-        )
+        ) COMMONCNT
     </sql>
 
 

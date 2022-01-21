@@ -35,7 +35,7 @@ public class StringUtils {
 		 }
 	
 	public static String nvl2(String str, String defaultStr) {
-        return str == null ? defaultStr : (str == (null))?defaultStr: (str == "null") ?defaultStr:(str == "(null)") ?defaultStr:str ;
+        return str == null ? defaultStr : (str == null)?defaultStr: (str == "null") ?defaultStr:(str == "(null)") ?defaultStr:str ;
 	}
 	
 	
@@ -299,7 +299,7 @@ public class StringUtils {
 			curr = tmp;
 			//연속횟수가 설정한 값과 같다면 종료
 			//$ANALYSIS-IGNORE
-			if ( (flag = rptCnt == cmpCnt) ) {
+			if (flag = rptCnt == cmpCnt) {
 				break;
 			}
 		}
@@ -355,7 +355,7 @@ public class StringUtils {
 			int hangul_byte_num = encoding.equals("UTF-8") ? 3 : 2;
 
 			if(rawLength > len){
-				int aryLength = (rawLength / len) + (rawLength % len != 0 ? 1 : 0);
+				int aryLength = rawLength / len + (rawLength % len != 0 ? 1 : 0);
 				ary = new String[aryLength];
 
 				for(int i=0; i<aryLength; i++){

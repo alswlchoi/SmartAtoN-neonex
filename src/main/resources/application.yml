@@ -1,5 +1,3 @@
-
-
 server:
   attachment:
 #    path: /Users/ko/Downloads
@@ -11,6 +9,12 @@ server:
       enabled: false
   port: 8888
 
+hkt-mail:
+  host: "202.31.6.155"
+  port: 25
+  system:
+    account: "system@hankook.com"
+    pass: "qwe1234!@#"
 
 
 spring:
@@ -25,16 +29,55 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 100MB
+  thymeleaf:
+    prefix: classpath:template/
+    check-template-location: true
+    suffix: .html
+    mode: HTML
+    view-names: /thymeleaf/*
+    cache : false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 'gmail.com'
+    password: ''
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   datasource:
     hikari:
-      driver-class-name: "org.mariadb.jdbc.Driver"
-      jdbc-url: "jdbc:mariadb://106.248.228.114:33306/hankook"
-      username: "hankook_pg"
-      password: "hankook_pg"
-      maximum-pool-size: 100
-      pool-name: hankook-db-cp
-      max-lifetime: 60000
-      connection-test-query: "SELECT 1 FROM DUAL"
-      minimum-idle: 20
+      pg:
+        driver-class-name: "org.mariadb.jdbc.Driver"
+        jdbc-url: "jdbc:mariadb://106.248.228.114:33306/hankook"
+        username: "hankook_pg"
+        password: "hankook_pg"
+        maximum-pool-size: 100
+        pool-name: hankook-db-cp
+        max-lifetime: 60000
+        connection-test-query: "SELECT 1 FROM DUAL"
+        minimum-idle: 20
+      hint:
+        driver-class-name: "org.mariadb.jdbc.Driver"
+        jdbc-url: "jdbc:mariadb://192.168.11.161:33306/hint"
+        username: "hint"
+        password: "hint"
+        maximum-pool-size: 100
+        pool-name: hint-view-cp
+        max-lifetime: 60000
+        connection-test-query: "SELECT 1 FROM DUAL"
+        minimum-idle: 20
+
 redirect-url: "http://localhost/errors/error.html"
 
+
+file:
+  upload:
+    uri : "**/fileUpload/**"
+    location: C:/Users/cotls/git/hankook-web/src/main/resources/static/upfiles
+
+default:
+      password: "12345"

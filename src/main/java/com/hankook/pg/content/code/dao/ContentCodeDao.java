@@ -1,6 +1,6 @@
 package com.hankook.pg.content.code.dao;
 
-import com.hankook.pg.content.code.vo.CodeVo;
+import com.hankook.pg.content.code.vo.CodeContentVo;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -9,11 +9,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContentCodeDao {
 
-  List<CodeVo> getCode(CodeVo codeVo);
+  List<CodeContentVo> getCode(CodeContentVo codeContentVo);
+  
+  List<CodeContentVo> postCode(CodeContentVo codeContentVo);
 
-  void insertCode(CodeVo codeVo);
+  int insertCode(CodeContentVo codeContentVo);
 
-  void updateCode(CodeVo codeVo);
+  int updateCode(CodeContentVo codeContentVo);
 
-  void deleteCode(CodeVo codeVo);
+  int deleteCode(CodeContentVo codeContentVo);
+  
+  int getCodeCnt(CodeContentVo codeContentVo);
 }
