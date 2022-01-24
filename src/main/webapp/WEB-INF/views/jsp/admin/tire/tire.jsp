@@ -162,10 +162,12 @@ function searchCallback(data) {
                 html += '<tr class ="bg_blue">';
             }
 
-
-            html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
-            html += '   <td class="testDate '+tester.dseq+'2">'+ list[i].reqNo + '</td>';
-            html += '   <td>'+ list[i].setSize +'</td>';
+			console.log(list[i].reqNo);
+//             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
+//             html += '   <td>'+ list[i].reqNo + '</td>';
+            html += '   <td class="test'+list[i].reqNo+'1 , border-b-1">'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
+            html += '   <td class="test'+list[i].reqNo+'2 , border-b-1">'+ list[i].reqNo + '</td>';
+            html += '   <td class="border-l-1">'+ list[i].setSize +'</td>';
             html += '   <td>'+ list[i].tireSize.replaceAll(',' , '</br>') + '</td>';
             html += '   <td>'+ list[i].wheelSize.replaceAll(',', '</br>') + '</td>';
 
@@ -254,9 +256,9 @@ function searchCallback(data) {
     }
     if(type == "today") {
         $("#tireList").html(html);
-        for (var i in list.list) {
-            funRowspan(list.list[i].dseq);
-            funRowspan(list.list[i].dseq+"2");
+        for (var i in data.list) {
+            funRowspan("test"+data.list[i].reqNo+"1");
+            funRowspan("test"+data.list[i].reqNo+"2");
           }
         drawingPage(data.paging);
     }else {
