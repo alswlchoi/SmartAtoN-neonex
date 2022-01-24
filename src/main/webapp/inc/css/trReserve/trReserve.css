@@ -1,7 +1,0 @@
-@charset "utf-8";
-
-.selTime { background-color : red; }
-.canTime { background-color : white; }
-.notTime { background-color : gray; }
-
-.spDriver {width:50px; background-color:gray; margin-left:10px; margin-right:10px; }
