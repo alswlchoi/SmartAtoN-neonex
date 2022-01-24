@@ -164,7 +164,7 @@ function searchCallback(data) {
 
 
             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
-            html += '   <td>'+ list[i].reqNo + '</td>';
+            html += '   <td class="testDate '+tester.dseq+'2">'+ list[i].reqNo + '</td>';
             html += '   <td>'+ list[i].setSize +'</td>';
             html += '   <td>'+ list[i].tireSize.replaceAll(',' , '</br>') + '</td>';
             html += '   <td>'+ list[i].wheelSize.replaceAll(',', '</br>') + '</td>';
@@ -254,6 +254,10 @@ function searchCallback(data) {
     }
     if(type == "today") {
         $("#tireList").html(html);
+        for (var i in list.list) {
+            funRowspan(list.list[i].dseq);
+            funRowspan(list.list[i].dseq+"2");
+          }
         drawingPage(data.paging);
     }else {
         pagingDay = data.dayPaging;
@@ -262,6 +266,17 @@ function searchCallback(data) {
         drawingDayPage(data.paging);
     }
 }
+
+function funRowspan(className){
+    $("."+className).each(function(){
+      var rows = $("."+className);
+      if(rows.length > 1){
+        rows.eq(0).attr("rowspan", rows.length);//중복되는 첫번째 td에 rowspan값 세팅
+        rows.not(":eq(0)").remove();//중복되는 td를 삭제 } }); }
+      }
+    });
+  }
+
 
 function findRangeDay() {
     var startDay = $("#date-start").val().replaceAll("-","");
