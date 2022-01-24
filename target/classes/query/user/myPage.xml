@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.user.trReserve.dao.MyPageDao">
+<select id="getReserveList" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  <include refid="COMMON.sqlPagingTop" />
+  SELECT PSS.WSS_SEQ AS SEQ,
+         PSS.WSS_RESERV_CODE AS RESERV_CODE,
+         PSS.WSS_REG_DT AS REG_DT,
+         '부대시설' AS TYPE,
+         PS.WS_NAME AS NAME,
+         PSS.WSS_APPROVAL AS APPROVAL,
+         ''  AS STEP,
+         PSS.WSS_ST_DAY AS ST_DT,
+         PSS.WSS_ED_DAY AS ED_DT,
+         PSS.WSS_MEMO AS REASON
+  FROM PG_SHOP_SCHDULE PSS
+      LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+  WHERE PSS.WSS_REG_USER = #{regUser}
+  <choose>
+    <when test="sApproval != null and sApproval != ''">
+      AND WSS_APPROVAL = #{sApproval}
+    </when>
+    <otherwise>
+      AND WSS_APPROVAL in ('Y', 'N')
+    </otherwise>
+  </choose>
+  GROUP BY PSS.WSS_RESERV_CODE
+  UNION ALL
+  SELECT PTS.TC_SEQ AS SEQ,
+         PTS.TC_RESERV_CODE AS RESERV_CODE,
+         PTS.TC_REG_DT AS REG_DT,
+         CASE PTR.TR_TRACK_TYPE
+            WHEN 'TYP00' THEN "공동"
+            WHEN 'TYP01' THEN "단독"
+         END AS TYPE,
+         GROUP_CONCAT(DISTINCT TR_TRACK_NAME separator '<![CDATA[</br>]]>') AS NAME,
+         PTS.TC_APPROVAL AS APPROVAL,
+         PTS.TC_STEP AS STEP,
+         PTS.TC_DAY AS ST_DT,
+         PTS.TC_DAY2 AS ED_DT,
+         PTS.TC_MEMO AS REASON
+  FROM PG_TEST_SCHDULE PTS
+    LEFT OUTER JOIN PG_TRACK_RESERV PTR ON PTS.TC_SEQ=PTR.TC_SEQ
+  WHERE PTS.TC_REG_USER = #{regUser}
+  <choose>
+    <when test="tApproval != null and tApproval != ''">
+      AND (PTS.TC_STEP IN ('00000', '00001') AND PTS.TC_APPROVAL = #{tApproval})
+    </when>
+    <otherwise>
+      AND (PTS.TC_STEP IN ('00000', '00001') AND PTS.TC_APPROVAL IN ('0', '3'))
+    </otherwise>
+  </choose>
+  GROUP BY PTS.TC_RESERV_CODE
+  <include refid="COMMON.sqlPagingBottom" />
+</select>
+
+<select id="getReserveListCnt" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="_int">
+  <include refid="COMMON.sqlCountTop" />
+  SELECT PSS.WSS_SEQ AS SEQ
+  FROM PG_SHOP_SCHDULE PSS
+  LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+  WHERE PSS.WSS_REG_USER = #{regUser}
+  <choose>
+    <when test="sApproval != null and sApproval != ''">
+      AND WSS_APPROVAL = #{sApproval}
+    </when>
+    <otherwise>
+      AND WSS_APPROVAL in ('Y', 'N')
+    </otherwise>
+  </choose>
+  GROUP BY PSS.WSS_RESERV_CODE
+  UNION ALL
+  SELECT PTS.TC_SEQ AS SEQ
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_TRACK_RESERV PTR ON PTS.TC_SEQ=PTR.TC_SEQ
+  WHERE PTS.TC_REG_USER = #{regUser}
+  <choose>
+    <when test="tApproval != null and tApproval != ''">
+      AND (PTS.TC_STEP IN ('00000', '00001') AND PTS.TC_APPROVAL = #{tApproval})
+    </when>
+    <otherwise>
+      AND (PTS.TC_STEP IN ('00000', '00001') AND PTS.TC_APPROVAL IN ('0', '3'))
+    </otherwise>
+  </choose>
+  GROUP BY PTS.TC_RESERV_CODE
+  <include refid="COMMON.sqlCountBottom" />
+</select>
+
+<select id="getUseList" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  <include refid="COMMON.sqlPagingTop" />
+  SELECT PSS.WSS_SEQ AS SEQ,
+         PSS.WSS_RESERV_CODE AS RESERV_CODE,
+         PSS.WSS_REG_DT AS REG_DT,
+         '부대시설' AS TYPE,
+         PS.WS_NAME AS NAME,
+         PSS.WSS_APPROVAL AS APPROVAL,
+         ''  AS STEP,
+         PSS.WSS_ST_DAY AS ST_DT,
+         PSS.WSS_ED_DAY AS ED_DT,
+         PSS.WSS_MEMO AS REASON
+  FROM PG_SHOP_SCHDULE PSS
+  LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+  WHERE PSS.WSS_REG_USER = #{regUser}
+  <choose>
+    <when test='sApproval == "R"'>
+      AND WSS_APPROVAL in ('C', 'R')
+    </when>
+    <when test='sApproval == "D"'>
+      AND WSS_APPROVAL = #{sApproval}
+    </when>
+    <otherwise>
+      AND WSS_APPROVAL in ('C', 'R', 'D')
+    </otherwise>
+  </choose>
+  <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+    AND (
+    PSS.WSS_ST_DAY BETWEEN #{stDate} AND #{edDate}
+    OR PSS.WSS_ED_DAY BETWEEN #{stDate} AND #{edDate}
+    OR (PSS.WSS_ST_DAY <![CDATA[<=]]> #{stDate} AND PSS.WSS_ED_DAY >= #{edDate} )
+    )
+  </if>
+  GROUP BY PSS.WSS_RESERV_CODE
+  UNION ALL
+  SELECT PTS.TC_SEQ AS SEQ,
+         PTS.TC_RESERV_CODE AS RESERV_CODE,
+         PTS.TC_REG_DT AS REG_DT,
+         CASE PTR.TR_TRACK_TYPE
+            WHEN 'TYP00' THEN "공동"
+            WHEN 'TYP01' THEN "단독"
+         END AS TYPE,
+         GROUP_CONCAT(DISTINCT TR_TRACK_NAME separator '<![CDATA[</br>]]>') AS NAME,
+         PTS.TC_APPROVAL AS APPROVAL,
+         PTS.TC_STEP AS STEP,
+         PTS.TC_DAY AS ST_DT,
+         PTS.TC_DAY2 AS ED_DT,
+         PTS.TC_MEMO AS REASON
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_TRACK_RESERV PTR ON PTS.TC_SEQ=PTR.TC_SEQ
+  WHERE PTS.TC_REG_USER = #{regUser}
+  <choose>
+    <when test="tApproval == 3">
+      AND (PTS.TC_STEP in ('00002', '00003') and PTS.TC_APPROVAL = #{tApproval})
+    </when>
+    <when test="tApproval == 1">
+      AND (PTS.TC_APPROVAL IN ('1', '2'))
+    </when>
+    <otherwise>
+      AND (
+      (PTS.TC_STEP in ('00002', '00003') and PTS.TC_APPROVAL = '3')
+      OR
+      PTS.TC_APPROVAL IN ('1', '2')
+      )
+    </otherwise>
+  </choose>
+  <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+    AND (
+    PTS.TC_DAY BETWEEN #{stDate} AND #{edDate}
+    OR PTS.TC_DAY2 BETWEEN #{stDate} AND #{edDate}
+    OR (PTS.TC_DAY <![CDATA[<=]]> #{stDate} AND PTS.TC_DAY2 >= #{edDate} )
+    )
+  </if>
+  GROUP BY PTS.TC_RESERV_CODE
+  <include refid="COMMON.sqlPagingBottom" />
+</select>
+
+<select id="getUseListCnt" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="_int">
+  <include refid="COMMON.sqlCountTop" />
+  SELECT PSS.WSS_SEQ AS SEQ,
+  PSS.WSS_RESERV_CODE AS RESERV_CODE,
+  PSS.WSS_REG_DT AS REG_DT,
+  '부대시설' AS TYPE,
+  PS.WS_NAME AS NAME,
+  PSS.WSS_APPROVAL AS APPROVAL,
+  ''  AS STEP,
+  PSS.WSS_ST_DAY AS ST_DT,
+  PSS.WSS_ED_DAY AS ED_DT,
+  PSS.WSS_MEMO AS REASON
+  FROM PG_SHOP_SCHDULE PSS
+  LEFT OUTER JOIN PG_SHOP PS ON PSS.WS_CODE = PS.WS_CODE
+  WHERE PSS.WSS_REG_USER = #{regUser}
+  <choose>
+    <when test='sApproval == "R"'>
+      AND WSS_APPROVAL in ('C', 'R')
+    </when>
+    <when test='sApproval == "D"'>
+      AND WSS_APPROVAL = #{sApproval}
+    </when>
+    <otherwise>
+      AND WSS_APPROVAL in ('C', 'R', 'D')
+    </otherwise>
+  </choose>
+  <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+    AND (
+    PSS.WSS_ST_DAY BETWEEN #{stDate} AND #{edDate}
+    OR PSS.WSS_ED_DAY BETWEEN #{stDate} AND #{edDate}
+    OR (PSS.WSS_ST_DAY <![CDATA[<=]]> #{stDate} AND PSS.WSS_ED_DAY >= #{edDate} )
+    )
+  </if>
+  GROUP BY PSS.WSS_RESERV_CODE
+  UNION ALL
+  SELECT PTS.TC_SEQ AS SEQ,
+  PTS.TC_RESERV_CODE AS RESERV_CODE,
+  PTS.TC_REG_DT AS REG_DT,
+  CASE PTR.TR_TRACK_TYPE
+  WHEN 'TYP00' THEN "공동"
+  WHEN 'TYP01' THEN "단독"
+  END AS TYPE,
+  GROUP_CONCAT(DISTINCT TR_TRACK_NAME separator '<![CDATA[</br>]]>') AS NAME,
+  PTS.TC_APPROVAL AS APPROVAL,
+  PTS.TC_STEP AS STEP,
+  PTS.TC_DAY AS ST_DT,
+  PTS.TC_DAY2 AS ED_DT,
+  PTS.TC_MEMO AS REASON
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_TRACK_RESERV PTR ON PTS.TC_SEQ=PTR.TC_SEQ
+  WHERE PTS.TC_REG_USER = #{regUser}
+  <choose>
+    <when test="tApproval == 3">
+      AND (PTS.TC_STEP in ('00002', '00003') and PTS.TC_APPROVAL = #{tApproval})
+    </when>
+    <when test="tApproval == 1">
+      AND (PTS.TC_APPROVAL IN ('1', '2'))
+    </when>
+    <otherwise>
+      AND (
+      (PTS.TC_STEP in ('00002', '00003') and PTS.TC_APPROVAL = '3')
+      OR
+      PTS.TC_APPROVAL IN ('1', '2')
+      )
+    </otherwise>
+  </choose>
+  <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+    AND (
+    PTS.TC_DAY BETWEEN #{stDate} AND #{edDate}
+    OR PTS.TC_DAY2 BETWEEN #{stDate} AND #{edDate}
+    OR (PTS.TC_DAY <![CDATA[<=]]> #{stDate} AND PTS.TC_DAY2 >= #{edDate} )
+    )
+  </if>
+  GROUP BY PTS.TC_RESERV_CODE
+  <include refid="COMMON.sqlCountBottom" />
+</select>
+
+<select id="getShop" resultType="com.hankook.pg.content.admin.shop.vo.ShopVo">
+  SELECT WS_CODE,
+         WS_NAME,
+         WS_PRICE
+  FROM PG_SHOP
+  WHERE WS_DEL_YN != 'Y'
+</select>
+
+<select id="getFee" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+  SELECT ROW_NUMBER() over (order by T_ID asc) as num,
+         T_NAME,
+         T_NICKNAME,
+         T_PRICE,
+         T_PRICE_ADD,
+         T_SOLO
+  FROM PG_TRACK
+  WHERE T_DEL_YN != 'Y'
+  AND T_ID = 'T000'
+</select>
+
+<select id="getTrack" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+  SELECT ROW_NUMBER() over (order by T_ID asc) as num,
+         T_NAME,
+         T_NICKNAME,
+         T_PRICE,
+         T_PRICE_ADD,
+         T_SOLO
+  FROM PG_TRACK
+  WHERE T_DEL_YN != 'Y'
+  AND T_ID != 'T000'
+</select>
+
+<select id="getTrackDetail" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT PTS.TC_RESERV_CODE AS RESERVCODE,
+       PTS.TC_REG_DT AS REG_DT,
+       CASE PTR.TR_TRACK_TYPE
+           WHEN 'TYP00' THEN "공동"
+           WHEN 'TYP01' THEN "단독"
+           END AS TYPE,
+       GROUP_CONCAT(DISTINCT TR_TRACK_NAME separator '<![CDATA[</br>]]>') AS NAME,
+       PTS.TC_APPROVAL AS APPROVAL,
+       PTS.TC_STEP AS STEP,
+       PTS.TC_DAY AS ST_DT,
+       PTS.TC_DAY2 AS ED_DT,
+       PTS.TC_MEMO AS REASON,
+       PTS.TC_PURPOSE AS PURPOSE,
+       COUNT(DISTINCT PTR.TC_DAY) AS REALDATE,
+       GROUP_CONCAT(DISTINCT PTR.TC_DAY ORDER BY PTR.TC_DAY separator ',') WSS_RESERV_DAY,
+       PTS.COMP_CODE,
+       PC.COMP_NAME,
+       PC.BLACK_LIST,
+       PC.COMP_LICENSE,
+       PM.MEM_NAME,
+       PM.MEM_DEPT,
+       PM.MEM_PHONE,
+       PM.MEM_COMP_PHONE,
+       PM.MEM_EMAIL,
+       PC.COMP_ACCT_NAME,
+       PC.COMP_ACCT_DEPT,
+       PC.COMP_ACCT_EMAIL,
+       PC.COMP_ACCT_PHONE
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+  LEFT OUTER JOIN PG_COMPANY PC on PTS.COMP_CODE = PC.COMP_CODE
+  LEFT OUTER JOIN PG_MEMBER PM on PTS.TC_REG_USER = PM.MEM_ID
+  WHERE TC_RESERV_CODE = #{reservCode}
+</select>
+
+<select id="getShopDetail" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT PSS.WSS_SEQ AS SEQ,
+    PSS.WSS_RESERV_CODE AS RESERV_CODE,
+    LEFT(PSS.WSS_REG_DT, 8) AS REG_DT,
+    '부대시설' AS TYPE,
+    PS.WS_CODE,
+    PS.WS_NAME AS NAME,
+    PSS.WSS_APPROVAL AS APPROVAL,
+    ''  AS STEP,
+    PSS.WSS_ST_DAY AS ST_DT,
+    PSS.WSS_ED_DAY AS ED_DT,
+    PSS.WSS_MEMO AS REASON,
+    PSS.WSS_RESERV_DAY,
+    PSS.COMP_CODE,
+    PC.COMP_NAME,
+    PC.BLACK_LIST,
+    PC.COMP_LICENSE,
+    PM.MEM_NAME,
+    PM.MEM_DEPT,
+    PM.MEM_PHONE,
+    PM.MEM_COMP_PHONE,
+    PM.MEM_EMAIL,
+    PC.COMP_ACCT_NAME,
+    PC.COMP_ACCT_DEPT,
+    PC.COMP_ACCT_EMAIL,
+    PC.COMP_ACCT_PHONE,
+    ABS(DATEDIFF(PSS.WSS_ED_DAY, PSS.WSS_ST_DAY))+1 AS DIFF
+  FROM PG_SHOP_SCHDULE PSS
+     LEFT OUTER JOIN PG_COMPANY PC on PSS.COMP_CODE = PC.COMP_CODE
+     LEFT OUTER JOIN PG_SHOP PS on PSS.WS_CODE = PS.WS_CODE
+     LEFT OUTER JOIN PG_MEMBER PM on PSS.WSS_REG_USER = PM.MEM_ID
+  WHERE WSS_RESERV_CODE = #{reservCode}
+</select>
+
+<select id="getDriver" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT PTS.TC_RESERV_CODE,
+         PRM.D_SEQ,
+         PRM.D_NAME,
+         PD.D_LEVEL
+  FROM PG_TEST_SCHDULE PTS
+   LEFT OUTER JOIN PG_RESOURCE_MAPPING PRM on PTS.TC_SEQ = PRM.TC_SEQ
+   LEFT OUTER JOIN PG_DRIVER PD on PRM.D_SEQ = PD.D_SEQ
+  WHERE PTS.TC_RESERV_CODE = #{reservCode}
+  AND PRM.D_SEQ IS NOT NULL
+  GROUP BY PRM.D_SEQ, PRM.D_NAME
+</select>
+
+<select id="getCar" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT PTS.TC_RESERV_CODE,
+       PRM.C_CODE,
+       PC.C_NAME,
+       PC.C_COLOR,
+       PC.C_NUMBER
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_RESOURCE_MAPPING PRM on PTS.TC_SEQ = PRM.TC_SEQ
+  LEFT OUTER JOIN PG_CAR PC on PRM.C_CODE = PC.C_CODE
+  WHERE PTS.TC_RESERV_CODE = #{reservCode}
+  AND PRM.C_CODE IS NOT NULL
+  GROUP BY PC.C_NUMBER
+</select>
+
+<update id="cancelTrack" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  UPDATE PG_TEST_SCHDULE
+  SET TC_APPROVAL = '2',
+  TC_MOD_USER = #{regUser},
+  TC_MOD_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+  WHERE TC_RESERV_CODE = #{reservCode}
+</update>
+
+<update id="cancelShop" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  UPDATE PG_SHOP_SCHDULE
+  SET WSS_APPROVAL = 'C',
+  WSS_MOD_USER = #{regUser},
+  WSS_MOD_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+  WHERE WSS_RESERV_CODE = #{reservCode}
+</update>
+
+<select id="getTrackPrice" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT PT.T_ID,
+                PT.T_PRICE AS P_PRODUCT_PAY,
+                PTR.TR_TRACK_TYPE,
+                COUNT(DISTINCT PTR.TC_DAY) AS REAL_DATE
+  FROM PG_TEST_SCHDULE PTS
+       LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+       LEFT OUTER JOIN PG_TRACK PT on PTR.TR_TRACK_CODE = PT.T_ID
+  WHERE TC_RESERV_CODE = #{reservCode}
+  GROUP BY PTR.TR_TRACK_NAME
+  ORDER BY PT.T_PRICE DESC
+  LIMIT 1
+</select>
+
+<select id="getShopPrice" parameterType="String" resultType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  SELECT WS_CODE AS T_ID,
+         WS_PRICE AS P_PRODUCT_PAY,
+         WSS_RESERV_DAY
+  FROM (
+     SELECT PSS.WS_CODE,
+            PSS.WS_PRICE,
+            PSS.WSS_RESERV_DAY
+     FROM PG_SHOP_SCHDULE PSS
+     WHERE WSS_RESERV_CODE = #{reservCode}
+        ) Q
+</select>
+
+<select id="getDiscount" parameterType="String" resultType="String">
+    SELECT DC_COUNT
+    FROM PG_DISCOUNT
+    WHERE COMP_CODE = #{compCode}
+</select>
+
+<insert id="insertPay" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo">
+  INSERT INTO PG_PAY(
+    COMP_CODE
+    , P_PAY
+    , P_TYPE
+    , P_RESERV_CODE
+    , P_DAY
+    , T_ID
+    , P_USE_TIME
+    , P_DISCOUNT
+    , P_PRODUCT_PAY
+    , P_APPLY_TIME
+    , P_CANCEL_PERCENT
+    )
+    VALUES(
+    #{compCode}
+    , #{pPay}
+    , #{trTrackType}
+    , #{reservCode}
+    , DATE_FORMAT(SYSDATE(),'%Y%m%d')
+    , #{tId}
+    , 0
+    , #{discount}
+    , #{pProductPay}
+    , #{pApplyTime}
+    , #{pCancel}
+    )
+</insert>
+
+<select id="chkWeekDay" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="_int">
+  SELECT COUNT(*)
+  FROM PG_WEEK_DAY
+  WHERE WD_KIND = #{wsCode}
+  AND #{chkDt} BETWEEN WD_ST_DT AND WD_ED_DT
+</select>
+
+<select id="chkDayOff" parameterType="String" resultType="_int">
+  SELECT COUNT(*)
+  FROM PG_DAY_OFF
+  WHERE #{chkDt} BETWEEN DO_ST_DAY AND DO_ED_DAY
+</select>
+
+<select id="chkSchedule" parameterType="com.hankook.pg.content.user.trReserve.vo.MyPageVo" resultType="_int">
+  SELECT COUNT(*)
+  FROM PG_SHOP_SCHDULE
+  WHERE WS_CODE = #{wsCode}
+  AND #{chkDt} BETWEEN WSS_ST_DAY AND WSS_ED_DAY
+  AND WSS_APPROVAL not in ('C', 'R')
+</select>
+
+</mapper>

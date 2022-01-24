@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>::: [한국타이어] Technoring admin :::</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" type="text/css" href="./css/default.css">
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link rel="stylesheet" type="text/css" href="./css/layout.css">
+    <link rel="stylesheet" type="text/css" href="./css/daterangepicker.css"><!-- daterangepicker style -->
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css"><!-- jquery-ui style -->
+
+    <!-- 스크립트 -->
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/navi.js"></script> <!-- navigation -->
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/moment.min.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/daterangepicker.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/jquery-ui.js"></script> <!-- jquery-ui -->
+</head>
+
+
+<body>
+    <!-- u_skip -->
+    <div id="u_skip">
+        <a href="#container">본문 바로가기</a></li>
+    </div>
+    <!-- //u_skip -->
+
+    <!-- wrapper -->
+    <div id="wrapper">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <div class="gnb_wrap">
+                <h1 class="logo"><a href="#"><img src="./images/BI_Technoring.png" alt="Technoring" /></a></h1>
+                <div class="user_session">
+                    <!-- 로그인 후 -->
+                    <a class="btn_dashboard" href="#" title="대시보드"></a><a class="btn_main" href="#"
+                        title="메인화면"></a><span class="user"><a href="#">홍길동 (ADMIN)</a></span><a class="logout" href="#"
+                        title="로그아웃"></a>
+                    <!-- //로그인 후 -->
+                </div>
+            </div>
+            <!-- navigation -->
+            <div class="navi1">
+                <ul class="navi1Ul">
+                    <li class="on">
+                        <a href="#" class="oneD" target="_self"><span>시험자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">운전자 DCCP관리</a>
+                            <a href="#" class="" target="_self">시험자관리</a>
+                            <a href="#" class="" target="_self">평가자 및 평가차량 관리</a>
+                            <a href="#" class="" target="_self">타이어/휠 관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">Tire / Wheel management</a></li>
+                                    <li><a href="#" class="threeD" target="_self">Wheel data update</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>예약/정산관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">예약관리</a>
+                            <a href="#" class="" target="_self">정산관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시험관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">스케쥴관리</a>
+                            <a href="#" class="" target="_self">시험로 시험관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>회원사/자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">회원사관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">운전자관리</a></li>
+                                </ul>
+                            </a>
+                            <a href="#" class="" target="_self">자원관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">무전기 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">RFID 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">시설물 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">휴일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">전용운영일 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">부대시설전용운영일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">주유/세차관리</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>통계</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사별 시험이력</a>
+                            <a href="#" class="" target="_self">시험로별</a>
+                            <a href="#" class="" target="_self">기상노면현황</a>
+                            <a href="#" class="" target="_self">주유/세차현황</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>컨텐츠관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">공지사항</a>
+                            <a href="#" class="" target="_self">자료실</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시스템관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">메뉴 및 권한관리</a>
+                            <a href="#" class="" target="_self">관리자관리</a>
+                            <a href="#" class="" target="_self">비상상황코드 관리</a>
+                            <a href="#" class="" target="_self">시스템 코드 관리</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- //navigation -->
+        </div>
+        <!-- //header_wrap -->
+        <!-- container -->
+        <div id="container">
+            <!-- content -->
+            <div class="content">
+                <!-- breadcrumb -->
+                <div class="breadcrumb"><span class="breadcrumb_icon"></span><span>시험자원관리</span><span>타이어/휠 관리</span><span>Tire / Wheel management</span>
+                </div>
+                <!-- //breadcrumb -->
+                <!-- title -->
+                <h2 class="title">Tire / Wheel management</h2>
+                <!-- //title -->
+                <!-- search_wrap -->
+                <section class="search_wrap tar">
+                    <h3 class="stitle disib fl m-t-10">Today Test</h3>
+                    <div class="form_group w300">
+                        <input type="text" id="" class="form_control" placeholder="Request no / engineer / vehicle 입력"
+                            name="" />
+                    </div>
+                    <button type="button" class="btn-s btn_default">조회</button>
+                </section>
+                <!-- //search_wrap -->
+                <!-- table list -->
+                <section class="tbl_wrap_list m-t-10">
+                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                        <caption>테이블</caption>
+                        <colgroup>
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="130px" />
+                            <col width="" />
+                            <col width="" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="8" scope="col" class="border-b-1">Test Information</th>
+                                <th rowspan="2" scope="col">Tire<br />출고요청</th>
+                                <th rowspan="2" scope="col">Tire Location</th>
+                                <th rowspan="2" scope="col">Wheel Location</th>
+                                <th rowspan="2" scope="col">Lift</th>
+                                <th colspan="2" scope="col" class="border-b-1">Status</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Request No</th>
+                                <th scope="col">Set</th>
+                                <th scope="col">Tire Size</th>
+                                <th scope="col">Wheel Size</th>
+                                <th scope="col">Engineer</th>
+                                <th scope="col">Vehicle</th>
+                                <th scope="col">Return/Scrap</th>
+                                <th scope="col">Tire Assy</th>
+                                <th scope="col">Tire Disassy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>Complete</td>
+                                <td>출고완료</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>55512</td>
+                                <td>출고완료</td>
+                                <td><button type="button" class="btn-line-s btn_gray" data-layer="search">Search</button></td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>55512</td>
+                                <td>출고완료</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>55512</td>
+                                <td>출고완료</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>55512</td>
+                                <td>출고완료</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td><button type="button" class="btn-line-s btn_gray">OK</button></td>
+                            </tr>
+                            <!-- <tr class="tr_nodata">
+                <td colspan="13">등록된 정보가 없습니다.</td>
+            </tr> -->
+                        </tbody>
+                    </table>
+                </section>
+                <!-- //table list -->
+                <!-- Pagination -->
+                <section class="pagination m-t-30">
+                    <a class="btn_prev off" href="#">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                    <span class='wrap'>
+                        <a href='#' class='on'>1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <span class="more"></span>
+                        <a href="#">999</a>
+                    </span>
+                    <a class="btn_next" href="#">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </section>
+                <!-- //Pagination -->
+
+                <h3 class="stitle m-t-50">Tomorrow Test</h3>
+                <!-- table list -->
+                <section class="tbl_wrap_list m-t-15">
+                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                        <caption>테이블</caption>
+                        <colgroup>
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="130px" />
+                            <col width="" />
+                            <col width="" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="8" scope="col" class="border-b-1">Test Information</th>
+                                <th rowspan="2" scope="col">Tire<br />출고요청</th>
+                                <th rowspan="2" scope="col">Tire Location</th>
+                                <th rowspan="2" scope="col">Wheel Location</th>
+                                <th rowspan="2" scope="col">Lift</th>
+                                <th colspan="2" scope="col" class="border-b-1">Status</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Request No</th>
+                                <th scope="col">Set</th>
+                                <th scope="col">Tire Size</th>
+                                <th scope="col">Wheel Size</th>
+                                <th scope="col">Engineer</th>
+                                <th scope="col">Vehicle</th>
+                                <th scope="col">Return/Scrap</th>
+                                <th scope="col">Tire Assy</th>
+                                <th scope="col">Tire Disassy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td><button type="button" class="btn-line-s btn_gray">OK</button></td>
+                                <td>55512</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td><button type="button" class="btn-line-s btn_gray">OK</button></td>
+                                <td></td>
+                            </tr>
+                            <tr class="bg_red2">
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>Complete</td>
+                                <td>55512</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr class="bg_blue">
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>Complete</td>
+                                <td>55512</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>Complete</td>
+                                <td>55512</td>
+                                <td>W-A-3-2<br />(320D 7.0*17 53)</td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                            </tr>
+                            <tr>
+                                <td>2021.06.01</td>
+                                <td>21RE050112KR</td>
+                                <td>5</td>
+                                <td>225/45R17</td>
+                                <td>7.0*17</td>
+                                <td>홍길동</td>
+                                <td>320D G20</td>
+                                <td>Return</td>
+                                <td>Complete</td>
+                                <td>55512</td>
+                                <td><button type="button" class="btn-line-s btn_gray"
+                                        data-layer="search">Search</button></td>
+                                <td>
+                                    <div class="form_group">
+                                        <div class="select_group">
+                                            <select id="" title="select" class="form_control">
+                                                <option value="">1</option>
+                                                <option value="">2</option>
+                                                <option value="">3</option>
+                                                <option value="">4</option>
+                                                <option value="">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-line-s btn_gray">저장</button>
+                                </td>
+                                <td>Complete<br />(2021.07.26 08:40)</td>
+                                <td><button type="button" class="btn-line-s btn_gray">OK</button></td>
+                            </tr>
+                            <!-- <tr class="tr_nodata">
+                <td colspan="13">등록된 정보가 없습니다.</td>
+            </tr> -->
+                        </tbody>
+                    </table>
+                </section>
+                <!-- //table list -->
+                <!-- Pagination -->
+                <section class="pagination m-t-30">
+                    <a class="btn_prev off" href="#">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                    <span class='wrap'>
+                        <a href='#' class='on'>1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <span class="more"></span>
+                        <a href="#">999</a>
+                    </span>
+                    <a class="btn_next" href="#">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </section>
+                <!-- //Pagination -->
+            </div>
+            <!-- //content -->
+            <!-- quickmenu -->
+            <div class="quickmenu_wrap">
+                <section>
+                    <a href="#" class="test" title="시험로 시험관리">시험로<br />시험관리</a>
+                    <a href="#" class="gate" title="게이트 제어">게이트<br />제어</a>
+                    <a href="#" class="schedule" title="스케줄 관리">스케줄<br />관리</a>
+                </section>
+                <a href="#" class="top" title="위로 이동"></a>
+            </div>
+            <!-- //quickmenu -->
+        </div>
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <section>
+                <span><img src="./images/ci_hankook.png" alt="한국타이어" /></span>
+                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.</p>
+            </section>
+        </div>
+        <!-- //footer -->
+    </div>
+    <!-- //wrapper -->
+
+    <!-- popup_xl -->
+    <div class="ly_group">
+        <article class="layer_xl search">
+            <!-- # 타이틀 # -->
+            <h1>Wheel Location Search</h1>
+            <!-- # 컨텐츠 # -->
+            <div class="ly_con">
+                <!-- search_wrap -->
+                <section class="search_wrap">
+                    <div class="form_group w200">
+                        <input type="text" id="" class="form_control" placeholder="휠사이즈 입력" name="" />
+                    </div>
+                    <div class="form_group w200">
+                        <input type="text" id="" class="form_control" placeholder="OE Maker 입력" name="" />
+                    </div>
+                    <div class="form_group w200">
+                        <input type="text" id="" class="form_control" placeholder="Project 입력" name="" />
+                    </div>
+                    <button type="button" class="btn-s btn_gray">Reset</button>
+                    <button type="button" class="btn-s btn_default">Search</button>
+                </section>
+                <!-- //search_wrap -->
+                <!-- table list -->
+                <section class="tbl_wrap_list m-t-30">
+                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                        <caption>테이블</caption>
+                        <colgroup>
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                            <col width="" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">Select</th>
+                                <th scope="col">Barcode</th>
+                                <th scope="col">휠 사이즈</th>
+                                <th scope="col">OE Maker</th>
+                                <th scope="col">Project</th>
+                                <th scope="col">PCD(mm)</th>
+                                <th scope="col">Offset</th>
+                                <th scope="col">HOLE수(EA)</th>
+                                <th scope="col">HUB경(mm)</th>
+                                <th scope="col">지번</th>
+                                <th scope="col">지번명</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form_group single">
+                                        <div class="radio_inline">
+                                            <label class="radio_default single">
+                                                <input type="radio" name="radio01" value="">
+                                                <span class="radio_icon"></span></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10515154</td>
+                                <td>S7.5 X 20</td>
+                                <td>Hyundai (HMC)</td>
+                                <td>LX2</td>
+                                <td>114.3</td>
+                                <td>50</td>
+                                <td>5</td>
+                                <td>67.1</td>
+                                <td>WR1515</td>
+                                <td>A-4-5</td>
+                            </tr>
+                            <!-- <tr class="tr_nodata">
+                            <td colspan="11">등록된 정보가 없습니다.</td>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </section>
+                <!-- //table list -->
+                <!-- Pagination -->
+                <section class="pagination m-t-30">
+                    <a class="btn_prev off" href="#">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                    <span class='wrap'>
+                        <a href='#' class='on'>1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <span class="more"></span>
+                        <a href="#">999</a>
+                    </span>
+                    <a class="btn_next" href="#">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </section>
+                <!-- //Pagination -->
+
+            </div>
+            <!-- 버튼 -->
+            <div class="wrap_btn01">
+                <button type="button" class="btn-pop btn_gray lyClose m-r-6">취소</button>
+                <button type="button" class="btn-pop btn_default lyClose">확인</button>
+            </div>
+            <!-- # 닫기버튼 # -->
+            <button data-fn="lyClose">레이어닫기</button>
+        </article>
+    </div>
+    <!-- //popup_xl -->
+
+</body>
+
+</html>

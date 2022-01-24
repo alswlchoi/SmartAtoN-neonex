@@ -1,0 +1,67 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.dayoff.dao.DayoffDao">
+    
+    <select id="getDayoffList" parameterType="com.hankook.pg.content.admin.dayoff.dto.SearchDayoffDto" resultType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto">
+       SELECT DO_SEQ, DO_ST_DAY, DO_ED_DAY, DO_NAME, DO_KIND fROM PG_DAY_OFF
+        	WHERE 1=1
+		<if test="searchYear != null">
+	       	AND DO_ST_DAY LIKE CONCAT(#{searchYear},'%')
+	    </if>
+	    <if test="doKind != null and doKind != ''">
+	    	AND DO_KIND = #{doKind}
+		</if>
+		ORDER BY DO_ST_DAY DESC
+    </select>
+    
+    <select id="getDayoffCount" parameterType="com.hankook.pg.content.admin.dayoff.dto.SearchDayoffDto" resultType="Integer">
+         SELECT COUNT(*)
+         FROM PG_DAY_OFF
+         WHERE 1=1
+		<if test="searchYear != null">
+	       	AND DO_ST_DAY LIKE CONCAT(#{searchYear},'%')
+	    </if>
+	    <if test="doKind != null and doKind != ''">
+	    	AND DO_KIND = #{doKind}
+		</if>
+		ORDER BY DO_ST_DAY ASC
+    </select>    
+        
+    <select id="getDayoffDuplCheck" parameterType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM PG_DAY_OFF
+		WHERE
+			(
+				STRCMP(#{doStDay}, DO_ST_DAY) &lt;=0 AND STRCMP(#{doEdDay}, DO_ED_DAY)&gt;=0
+			)
+		OR 
+			(
+				#{doStDay} BETWEEN DO_ST_DAY AND DO_ED_DAY
+					OR 
+				#{doEdDay} BETWEEN DO_ST_DAY AND DO_ED_DAY
+			)
+    </select>
+    
+    <insert id="insertDayoff" parameterType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto">
+       INSERT INTO PG_DAY_OFF
+		(DO_ST_DAY, DO_ED_DAY, DO_NAME, DO_KIND)
+		VALUES(#{doStDay}, #{doEdDay}, #{doName}, #{doKind})
+    </insert>
+    
+    <insert id="updateDayoff" parameterType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto">
+       UPDATE PG_DAY_OFF
+		SET
+		DO_NAME=#{doName},
+		DO_ST_DAY=#{doStDay},
+		DO_ED_DAY=#{doEdDay},
+		DO_KIND=#{doKind}
+		WHERE DO_SEQ=#{doSeq}
+    </insert>
+    
+    <delete id="deleteDayoff" parameterType="com.hankook.pg.content.admin.dayoff.dto.DayoffDto">
+        DELETE FROM PG_DAY_OFF
+        WHERE DO_SEQ=#{doSeq}
+    </delete>    
+</mapper>

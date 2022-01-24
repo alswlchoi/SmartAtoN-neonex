@@ -1,0 +1,10 @@
+diff a/src/main/webapp/WEB-INF/views/jsp/admin/dayoff/dayoff.jsp b/src/main/webapp/WEB-INF/views/jsp/admin/dayoff/dayoff.jsp	(rejected hunks)
+@@ -21,7 +21,7 @@
+ 	    timePickerSeconds: true,                 // 초 노출 여부
+ 	    singleDatePicker: false                   // 하나의 달력 사용 여부
+ 	});
+-	
++
+ 	$("#newDay").daterangepicker({
+ 	    locale: {
+ 	    "separator": " ~ ",                     // 시작일시와 종료일시 구분자

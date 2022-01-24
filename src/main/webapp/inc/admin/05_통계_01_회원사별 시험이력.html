@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>::: [한국타이어] Technoring admin :::</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" type="text/css" href="./css/default.css">
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link rel="stylesheet" type="text/css" href="./css/layout.css">
+    <link rel="stylesheet" type="text/css" href="./css/daterangepicker.css"><!-- daterangepicker style -->
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css"><!-- jquery-ui style -->
+
+    <!-- 스크립트 -->
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/navi.js"></script> <!-- navigation -->
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/moment.min.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/daterangepicker.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/jquery-ui.js"></script> <!-- jquery-ui -->
+</head>
+
+
+<body>
+    <!-- u_skip -->
+    <div id="u_skip">
+        <a href="#container">본문 바로가기</a></li>
+    </div>
+    <!-- //u_skip -->
+
+    <!-- wrapper -->
+    <div id="wrapper">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <div class="gnb_wrap">
+                <h1 class="logo"><a href="#"><img src="./images/BI_Technoring.png" alt="Technoring" /></a></h1>
+                <div class="user_session">
+                    <!-- 로그인 후 -->
+                    <a class="btn_dashboard" href="#" title="대시보드"></a><a class="btn_main" href="#"
+                        title="메인화면"></a><span class="user"><a href="#">홍길동 (ADMIN)</a></span><a class="logout" href="#"
+                        title="로그아웃"></a>
+                    <!-- //로그인 후 -->
+                </div>
+            </div>
+            <!-- navigation -->
+            <div class="navi1">
+                <ul class="navi1Ul">
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시험자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">운전자 DCCP관리</a>
+                            <a href="#" class="" target="_self">시험자관리</a>
+                            <a href="#" class="" target="_self">평가자 및 평가차량 관리</a>
+                            <a href="#" class="" target="_self">타이어/휠 관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">Tire / Wheel management</a></li>
+                                    <li><a href="#" class="threeD" target="_self">Wheel data update</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>예약/정산관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">예약관리</a>
+                            <a href="#" class="" target="_self">정산관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시험관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">스케쥴관리</a>
+                            <a href="#" class="" target="_self">시험로 시험관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>회원사/자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">회원사관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">운전자관리</a></li>
+                                </ul>
+                            </a>
+                            <a href="#" class="" target="_self">자원관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">무전기 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">RFID 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">시설물 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">휴일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">전용운영일 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">부대시설전용운영일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">주유/세차관리</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="on">
+                        <a href="#" class="oneD" target="_self"><span>통계</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사별 시험이력</a>
+                            <a href="#" class="" target="_self">시험로별</a>
+                            <a href="#" class="" target="_self">기상노면현황</a>
+                            <a href="#" class="" target="_self">주유/세차현황</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>컨텐츠관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">공지사항</a>
+                            <a href="#" class="" target="_self">자료실</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시스템관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">메뉴 및 권한관리</a>
+                            <a href="#" class="" target="_self">관리자관리</a>
+                            <a href="#" class="" target="_self">비상상황코드 관리</a>
+                            <a href="#" class="" target="_self">시스템 코드 관리</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- //navigation -->
+        </div>
+        <!-- //header_wrap -->
+        <!-- container -->
+        <div id="container">
+            <!-- content -->
+            <div class="content">
+                <!-- breadcrumb -->
+                <div class="breadcrumb"><span class="breadcrumb_icon"></span><span>통계</span><span>회원사별 시험이력</span>
+                </div>
+                <!-- //breadcrumb -->
+                <!-- title -->
+                <h2 class="title">회원사별 시험이력</h2>
+                <!-- //title -->
+
+                <!-- tab -->
+                <div class="wrap_tab">
+                    <div class="tab">
+                        <button class="tablinks" onclick="openTab(event, 'tab1')" id="defaultOpen">시험로</button>
+                        <button class="tablinks" onclick="openTab(event, 'tab2')">부대시설</button>
+                    </div>
+                    <div class="wrap_tabcontent">
+                        <!-- tab1-시험로 -->
+                        <div id="tab1" class="tabcontent">
+                            <!-- search_wrap -->
+                            <section class="search_wrap">                                
+                                <div class="form_group m-r-10">
+                                    <div class="check_inline">
+                                        <span class="label">회원구분</span>
+                                        <label class="check_default">
+                                            <input type="checkbox" name="" value="">
+                                            <span class="check_icon"></span>B2B회원</label>
+                                        <label class="check_default">
+                                            <input type="checkbox" name="" value="">
+                                            <span class="check_icon"></span>내부평가</label>
+                                    </div>
+                                </div>
+                                <div class="form_group w230">
+                                    <input type="text" id="double" class="form_control dateicon datefromto"
+                                        placeholder="기간 선택" name="">
+                                </div>
+                                <div class="form_group w300">
+                                    <input type="text" id="" class="form_control" placeholder="기업명 입력"
+                                        name="" />
+                                </div>
+                                <button type="button" class="btn-s btn_default">조회</button>
+                            </section>
+                            <!-- //search_wrap -->
+                            <!-- table list -->
+                            <section class="tbl_wrap_list m-t-30">
+                                <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                                    <caption>테이블</caption>
+                                    <colgroup>
+                                        <col width="80px" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">번호</th>
+                                            <th scope="col">회원구분</th>
+                                            <th scope="col">일자</th>
+                                            <th scope="col">기업명</th>
+                                            <th scope="col">항목</th>
+                                            <th scope="col">소요시간(분)</th>
+                                            <th scope="col">정산금액(원)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>B2B회원</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td class="tal">고속주행로,범용로</td>
+                                            <td>240</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <!-- <tr class="tr_nodata">
+            <td colspan="7">등록된 정보가 없습니다.</td>
+        </tr> -->
+                                    </tbody>
+                                </table>
+                            </section>
+                            <!-- //table list -->
+                            <!-- Pagination -->
+                            <section class="pagination m-t-30">
+                                <a class="btn_prev off" href="#">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                                <span class='wrap'>
+                                    <a href='#' class='on'>1</a>
+                                    <a href="#">2</a>
+                                    <a href="#">3</a>
+                                    <span class="more"></span>
+                                    <a href="#">999</a>
+                                </span>
+                                <a class="btn_next" href="#">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <button type="button" class="btn btn_default">엑셀다운로드</button>
+                            </section>
+                            <!-- //Pagination -->
+                        </div>
+                        <!-- //tab1-시험로 -->
+                        <!-- tab2-부대시설 -->
+                        <div id="tab2" class="tabcontent">
+                            <!-- search_wrap -->
+                            <section class="search_wrap">
+                                <div class="form_group w230">
+                                    <input type="text" id="double" class="form_control dateicon datefromto"
+                                        placeholder="기간 선택" name="">
+                                </div>
+                                <div class="form_group w300">
+                                    <input type="text" id="" class="form_control" placeholder="기업명 입력"
+                                        name="" />
+                                </div>
+                                <button type="button" class="btn-s btn_default">조회</button>
+                            </section>
+                            <!-- //search_wrap -->
+                            <!-- table list -->
+                            <section class="tbl_wrap_list m-t-30">
+                                <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                                    <caption>테이블</caption>
+                                    <colgroup>
+                                        <col width="80px" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                        <col width="" />
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">번호</th>
+                                            <th scope="col">일자</th>
+                                            <th scope="col">기업명</th>
+                                            <th scope="col">항목</th>
+                                            <th scope="col">정산금액(원)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>10</td>
+                                            <td>2021.09.09</td>
+                                            <td>상신브레이크</td>
+                                            <td>워크샵A동</td>
+                                            <td class="tar">234,000</td>
+                                        </tr>
+                                        <!-- <tr class="tr_nodata">
+            <td colspan="5">등록된 정보가 없습니다.</td>
+        </tr> -->
+                                    </tbody>
+                                </table>
+                            </section>
+                            <!-- //table list -->
+                            <!-- Pagination -->
+                            <section class="pagination m-t-30">
+                                <a class="btn_prev off" href="#">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                                <span class='wrap'>
+                                    <a href='#' class='on'>1</a>
+                                    <a href="#">2</a>
+                                    <a href="#">3</a>
+                                    <span class="more"></span>
+                                    <a href="#">999</a>
+                                </span>
+                                <a class="btn_next" href="#">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                                <button type="button" class="btn btn_default">엑셀다운로드</button>
+                            </section>
+                            <!-- //Pagination -->
+                        </div>
+                        <!-- //tab2-부대시설 -->
+                    </div>
+                </div>
+                <!-- //tab -->
+            </div>
+            <!-- //content -->
+            <!-- quickmenu -->
+            <div class="quickmenu_wrap">
+                <section>
+                    <a href="#" class="test" title="시험로 시험관리">시험로<br />시험관리</a>
+                    <a href="#" class="gate" title="게이트 제어">게이트<br />제어</a>
+                    <a href="#" class="schedule" title="스케줄 관리">스케줄<br />관리</a>
+                </section>
+                <a href="#" class="top" title="위로 이동"></a>
+            </div>
+            <!-- //quickmenu -->
+        </div>
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <section>
+                <span><img src="./images/ci_hankook.png" alt="한국타이어" /></span>
+                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.</p>
+            </section>
+        </div>
+        <!-- //footer -->
+    </div>
+    <!-- //wrapper -->
+
+    <!-- tab -->
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+    <!-- //tab -->
+
+</body>
+
+</html>

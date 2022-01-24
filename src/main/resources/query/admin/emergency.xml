@@ -1,0 +1,53 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.emergency.dao.EmergencyDao">
+    <select id="getEmergencyList" parameterType="com.hankook.pg.content.emergency.vo.EmergencyVo" resultType="com.hankook.pg.content.emergency.vo.EmergencyVo">
+    <include refid="COMMON.sqlPagingTop" />
+	SELECT
+		EMERGENCY_CODE,
+		EMERGENCY_ID,
+		EMERGENCY_VALUE
+	FROM PG_EMERGENCY
+	ORDER BY EMERGENCY_CODE DESC
+    <include refid="COMMON.sqlPagingBottom" />
+    </select>
+    <select id="getEmergencyListCnt" parameterType="com.hankook.pg.content.emergency.vo.EmergencyVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+        SELECT
+		EMERGENCY_CODE,
+		EMERGENCY_ID,
+		EMERGENCY_VALUE
+	FROM PG_EMERGENCY
+    <include refid="COMMON.sqlCountBottom" />
+    </select>
+    <select id="getNext" resultType="string">
+select CONCAT('EM',LPAD(CAST(SUBSTRING(MAX(EMERGENCY_CODE),3) AS INTEGER)+1,4,'0')) AS EMERGENCY_CODE FROM PG_EMERGENCY
+    </select>
+
+     <insert id="insertEmergency" parameterType="com.hankook.pg.content.emergency.vo.EmergencyVo">
+		INSERT INTO PG_EMERGENCY
+		(
+			EMERGENCY_CODE,
+			EMERGENCY_ID,
+			EMERGENCY_VALUE
+		)
+		VALUES(
+			#{emergencyCode},
+			#{emergencyId},
+			#{emergencyValue}
+		)
+    </insert>
+    <delete id="deleteEmergency" parameterType="com.hankook.pg.content.emergency.vo.EmergencyVo">
+    DELETE FROM PG_EMERGENCY
+    WHERE EMERGENCY_CODE=#{emergencyCode}
+    </delete>
+    <update id="updateEmergency" parameterType="com.hankook.pg.content.emergency.vo.EmergencyVo">
+    UPDATE PG_EMERGENCY
+    SET
+    EMERGENCY_ID = #{emergencyId},
+    EMERGENCY_VALUE = #{emergencyValue}
+    WHERE EMERGENCY_CODE = #{emergencyCode}
+    </update>
+</mapper>

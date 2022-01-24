@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.shop.dao.ShopDao">
+<select id="selectShop" parameterType="com.hankook.pg.content.admin.shop.vo.ShopVo" resultType="com.hankook.pg.content.admin.shop.vo.ShopVo">
+SELECT ROW_NUMBER() OVER (ORDER BY WS_CODE) as NUM, WS_CODE, WS_USE_YN, WS_PRICE, WS_NAME
+FROM PG_SHOP
+WHERE WS_DEL_YN = 'N'
+<if test="user != null">
+  AND WS_USE_YN = 'Y'
+</if>
+ORDER BY NUM ASC
+</select>
+
+<select id="selectTrack" resultType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+SELECT ROW_NUMBER() OVER (ORDER BY T_ID) as NUM, T_ID, T_NAME, T_MAX, T_LEVEL, T_PRICE, IN_IP, OUT_IP, T_PRICE_ADD, T_SOLO, T_USE_YN, T_NICKNAME
+FROM PG_TRACK
+WHERE T_DEL_YN = 'N'
+ORDER BY NUM ASC
+</select>
+
+<insert id="insertShop" parameterType="com.hankook.pg.content.admin.shop.vo.ShopVo">
+  INSERT INTO PG_SHOP(
+    WS_CODE
+    , WS_USE_YN
+    , WS_PRICE
+    , WS_NAME
+    , WS_DEL_YN
+    )
+    VALUES(
+    #{wsCode}
+    ,#{wsUseYn}
+    ,#{wsPrice}
+    ,#{wsName}
+    ,'N'
+    )
+    ON DUPLICATE KEY
+    UPDATE
+    WS_USE_YN = #{wsUseYn}
+    , WS_PRICE = #{wsPrice}
+    , WS_NAME = #{wsName}
+</insert>
+
+<insert id="insertTrack" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+  INSERT INTO PG_TRACK(
+    T_ID
+    , T_NAME
+    , T_MAX
+    , T_LEVEL
+    , T_PRICE
+    , T_PRICE_ADD
+    , T_SOLO
+    , T_USE_YN
+    , T_NICKNAME
+    , T_DEL_YN
+    )
+    VALUES(
+    #{tId}
+    ,#{tName}
+    ,#{tMax}
+    ,#{tLevel}
+    ,#{tPrice}
+    ,#{tPriceAdd}
+    ,#{tSolo}
+    ,#{tUseYn}
+    ,#{tNickName}
+    ,'N'
+    )
+    ON DUPLICATE KEY
+    UPDATE
+    T_NAME = #{tName}
+    , T_MAX = #{tMax}
+    , T_LEVEL = #{tLevel}
+    , T_PRICE = #{tPrice}
+    , T_PRICE_ADD = #{tPriceAdd}
+    , T_SOLO = #{tSolo}
+    , T_USE_YN = #{tUseYn}
+    , T_NICKNAME = #{tNickName}
+</insert>
+
+<update id="deleteShop" parameterType="com.hankook.pg.content.admin.shop.vo.ShopVo">
+  UPDATE PG_SHOP
+    SET WS_DEL_YN = 'Y'
+    WHERE WS_CODE = #{wsCode}
+</update>
+
+<update id="deleteTrack" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+  UPDATE PG_TRACK
+    SET T_DEL_YN = 'Y'
+    WHERE T_ID = #{tId}
+</update>
+
+  <!--사용 안함-->
+<!--<delete id="deleteShop" parameterType="com.hankook.pg.content.admin.shop.vo.ShopVo">
+  DELETE FROM PG_SHOP
+  WHERE WS_CODE = #{wsCode}
+</delete>-->
+  <!--사용 안함-->
+<!--<delete id="deleteTrack" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrackDto">
+  DELETE FROM PG_TRACK
+  WHERE T_ID = #{tId}
+</delete>-->
+
+<select id="getMaxShop" resultType="String">
+  SELECT MAX(WS_CODE)
+  FROM PG_SHOP
+</select>
+
+<select id="getMaxTrack" resultType="String">
+  SELECT MAX(T_ID)
+  FROM PG_TRACK
+</select>
+
+<select id="getWeekDay" parameterType="com.hankook.pg.share.Search" resultType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  <include refid="COMMON.sqlPagingTop" />
+  SELECT ROW_NUMBER() OVER (ORDER BY PWD.WD_SEQ) as num
+  , PS.WS_NAME
+  , PWD.WD_KIND
+  , PWD.WD_ST_DT
+  , PWD.WD_ED_DT
+  , PWD.WD_CON
+  , PWD.WD_SEQ
+  FROM PG_WEEK_DAY PWD
+  LEFT OUTER JOIN PG_SHOP PS ON PWD.WD_KIND = PS.WS_CODE
+  WHERE PWD.WD_KIND LIKE CONCAT('S%')
+  ORDER BY num desc
+  <include refid="COMMON.sqlPagingBottom" />
+</select>
+
+<select id="getWeekDayCnt" parameterType="com.hankook.pg.share.Search" resultType="_int">
+  <include refid="COMMON.sqlCountTop" />
+  SELECT ROW_NUMBER() OVER (ORDER BY PWD.WD_SEQ) as NUM, PS.WS_NAME,
+       PWD.WD_KIND, PWD.WD_ST_DT, PWD.WD_ED_DT, PWD.WD_CON, PWD.WD_SEQ
+  FROM PG_WEEK_DAY PWD
+  LEFT OUTER JOIN PG_SHOP PS ON PWD.WD_KIND = PS.WS_CODE
+  WHERE PWD.WD_KIND LIKE CONCAT('S%')
+  ORDER BY NUM desc
+  <include refid="COMMON.sqlCountBottom" />
+</select>
+
+<select id="getWdDay" parameterType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto" resultType="String">
+  SELECT WD_DAY
+  FROM PG_WEEK_DAY
+  WHERE WD_KIND = 'b'
+  AND WD_ST_DT &lt;= #{wdEdDt}
+  AND WD_ED_DT &gt;= #{wdStDt}
+</select>
+
+<insert id="insertWeekDay" parameterType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  INSERT INTO PG_WEEK_DAY(
+    WD_MOD_USER
+    , WD_MOD_DT
+    , WD_REG_USER
+    , WD_REG_DT
+    , WD_ED_HOUR
+    , WD_ST_HOUR
+    , WD_DAY
+    , WD_ED_DT
+    , WD_ST_DT
+    , WD_KIND
+    , WD_CAN_ST_HOUR
+    , WD_CAN_ED_HOUR
+    , WD_CON
+    )
+    VALUES(
+    #{wdModUser}
+    ,#{wdModDt}
+    ,#{wdRegUser}
+    ,#{wdRegDt}
+    ,0
+    ,0
+    ,#{wdDay}
+    ,#{wdEdDt}
+    ,#{wdStDt}
+    ,#{wdKind}
+    ,0
+    ,0
+    ,#{wdCon}
+    )
+</insert>
+
+<update id="updateWeekDay" parameterType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  UPDATE PG_WEEK_DAY
+  SET WD_MOD_USER = #{wdModUser}
+    , WD_MOD_DT = #{wdModDt}
+    , WD_DAY = #{wdDay}
+    , WD_ED_DT = #{wdEdDt}
+    , WD_ST_DT = #{wdStDt}
+    , WD_CON = #{wdCon}
+  WHERE WD_SEQ = #{wdSeq}
+  AND WD_KIND = #{wdKind}
+</update>
+
+<delete id="deleteWeekDay" parameterType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  DELETE FROM PG_WEEK_DAY
+  WHERE WD_SEQ = #{wdSeq}
+</delete>
+
+<select id="getCode" parameterType="com.hankook.pg.content.code.vo.CodeContentVo" resultType="com.hankook.pg.content.code.vo.CodeContentVo">
+  SELECT ROW_NUMBER() OVER(ORDER BY C_TYPE,C_ORDER) AS num,
+  C_SEQ,
+  C_PARENT,
+  C_ID,
+  C_NAME,
+  C_VALUE,
+  C_TYPE,
+  C_ORDER
+  FROM COM_CODE
+  WHERE 1=1
+  <if test="cType != null and cType != ''">
+    AND C_TYPE LIKE CONCAT('%',#{cType},'%')
+  </if>
+  ORDER BY num
+</select>
+</mapper>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>::: [한국타이어] Technoring admin :::</title>
+
+    <!-- 스타일 시트 -->
+    <link rel="stylesheet" type="text/css" href="./css/default.css">
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/font.css">
+    <link rel="stylesheet" type="text/css" href="./css/layout.css">
+    <link rel="stylesheet" type="text/css" href="./css/daterangepicker.css"><!-- daterangepicker style -->
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css"><!-- jquery-ui style -->
+
+    <!-- 스크립트 -->
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/navi.js"></script> <!-- navigation -->
+    <script type="text/javascript" src="./js/common.js"></script>
+    <script type="text/javascript" src="./js/moment.min.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/daterangepicker.js"></script> <!-- daterangepicker -->
+    <script type="text/javascript" src="./js/jquery-ui.js"></script> <!-- jquery-ui -->
+</head>
+
+
+<body>
+    <!-- u_skip -->
+    <div id="u_skip">
+        <a href="#container">본문 바로가기</a></li>
+    </div>
+    <!-- //u_skip -->
+
+    <!-- wrapper -->
+    <div id="wrapper" class="controlBoard">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <div class="gnb_wrap">
+                <h1 class="logo"><a href="#"><img src="./images/BI_Technoring.png" alt="Technoring" /></a></h1>
+                <div class="user_session">
+                    <!-- 로그인 후 -->
+                    <a class="btn_dashboard" href="#" title="대시보드"></a><a class="btn_main" href="#"
+                        title="메인화면"></a><span class="user"><a href="#">홍길동 (ADMIN)</a></span><a class="logout" href="#"
+                        title="로그아웃"></a>
+                    <!-- //로그인 후 -->
+                </div>
+            </div>
+            <!-- navigation -->
+            <div class="navi1">
+                <ul class="navi1Ul">
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시험자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">운전자 DCCP관리</a>
+                            <a href="#" class="" target="_self">시험자관리</a>
+                            <a href="#" class="" target="_self">평가자 및 평가차량 관리</a>
+                            <a href="#" class="" target="_self">타이어/휠 관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">Tire / Wheel management</a></li>
+                                    <li><a href="#" class="threeD" target="_self">Wheel data update</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>예약/정산관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">예약관리</a>
+                            <a href="#" class="" target="_self">정산관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시험관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">스케쥴관리</a>
+                            <a href="#" class="" target="_self">시험로 시험관리</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>회원사/자원관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">회원사관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">운전자관리</a></li>
+                                </ul>
+                            </a>
+                            <a href="#" class="" target="_self">자원관리
+                                <ul class="threeD">
+                                    <li><a href="#" class="threeD" target="_self">무전기 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">RFID 자산관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">시설물 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">휴일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">전용운영일 관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">부대시설전용운영일관리</a></li>
+                                    <li><a href="#" class="threeD" target="_self">주유/세차관리</a></li>
+                                </ul>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>통계</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">회원사별 시험이력</a>
+                            <a href="#" class="" target="_self">시험로별</a>
+                            <a href="#" class="" target="_self">기상노면현황</a>
+                            <a href="#" class="" target="_self">주유/세차현황</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>컨텐츠관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">공지사항</a>
+                            <a href="#" class="" target="_self">자료실</a>
+                        </div>
+                    </li>
+                    <li class="">
+                        <a href="#" class="oneD" target="_self"><span>시스템관리</span></a>
+                        <div class="twoD">
+                            <a href="#" class="" target="_self">메뉴 및 권한관리</a>
+                            <a href="#" class="" target="_self">관리자관리</a>
+                            <a href="#" class="" target="_self">비상상황코드 관리</a>
+                            <a href="#" class="" target="_self">시스템 코드 관리</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- //navigation -->
+        </div>
+        <!-- //header_wrap -->
+        <!-- container -->
+        <div id="container">
+            <!-- content -->
+            <div class="content">
+                <!-- breadcrumb -->
+                <div class="breadcrumb"><span class="breadcrumb_icon"></span><span>통합관제시스템</span></div>
+                <!-- //breadcrumb -->
+                <!-- wrap_left -->
+                <div class="wrap_left">
+                    <!-- title -->
+                    <h2 class="title m-b-25">통합관제시스템<button type="button" class="btn-line btn_gray fr"
+                            data-layer="popup_GControl">차단기 제어
+                            (전체)</button>
+                    </h2>
+                    <!-- //title -->
+
+                    <div class="wrap_track">
+                        <p>주행로별 CAPA (<span class="color_bule2">진입</span>/<span class="color_red2">MAX</span>)</p>
+
+                        <div class="box_state01 ride">
+                            <p>Ride (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7"></div>
+                        </div>
+
+                        <div class="box_state01 braking">
+                            <p>Braking (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7">Hyd-Straight (1)</div>
+                        </div>
+
+                        <div class="box_state01 vda">
+                            <p>VDA (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7"></div>
+                        </div>
+
+                        <div class="box_state01 pbn">
+                            <p>PBN/NVH (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7">PBN(1) / NVH(1)</div>
+                        </div>
+
+                        <div class="box_state01 whc">
+                            <p>WHC (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7">Hyd-Curve (1)</div>
+                        </div>
+
+                        <div class="box_state01 hso">
+                            <p>HSO (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7"></div>
+                        </div>
+
+                        <div class="box_state01 dhc">
+                            <p>DHC (<span class="color_bule2">4</span>/<span class="color_red2">12</span>)</p>
+                            <div class="row m-t-10">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                            <div class="box_text m-t-7">Chip-cut (1)</div>
+                        </div>
+
+                        <div class="box_state01 gnr">
+                            <p>GNR</p>
+                            <div class="row h28 m-t-10">
+                                <!-- <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button> -->
+                            </div>
+                            <div class="box_text m-t-7">Total 12</div>
+                        </div>
+
+                        <div class="box_state02 emergency">
+                            <p>Emergency (HSO)</p>
+                            <div class="row m-t-8">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 ride">
+                            <p>Ride</p>
+                            <div class="row m-t-8">
+                                <span>OUT</span>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 braking">
+                            <p>Braking</p>
+                            <div class="row m-t-8">
+                                <span>OUT</span>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 vda">
+                            <p>VDA</p>
+                            <div class="row m-t-8">
+                                <span>OUT</span>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 pbn">
+                            <div class="row m-t-7">
+                                <p>VDA/PBN<br />분기차단기</p>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 offRoad">
+                            <p>Off Road</p>
+                            <div class="row m-t-8">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                        <div class="box_state02 dhc">
+                            <p>DHC #2</p>
+                            <div class="row m-t-8">
+                                <div class="form_group w70">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">IN</option>
+                                            <option value="">OUT</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-line-s btn_gray w53">OPEN</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="track_info m-t-30">
+                        <!-- table list -->
+                        <section class="tbl_wrap_list">
+                            <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                                <caption>테이블</caption>
+                                <colgroup>
+                                    <col width="317px" />
+                                    <col width="" />
+                                    <col width="" />
+                                    <col width="" />
+                                    <col width="" />
+                                    <col width="" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Ride (<span class="color_bule2">4</span>/<span
+                                                class="color_red2">12</span>)</th>
+                                        <th colspan="5" scope="col" class="th_btnOpen">
+                                            <span>IN<button type="button"
+                                                    class="btn-line-s btn_gray m-l-12">OPEN</button></span>
+                                            <span>OUT<button type="button"
+                                                    class="btn-line-s btn_gray m-l-12">OPEN</button></span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </section>
+                        <!-- //table list -->
+
+                        <!-- table list -->
+                        <section class="tbl_wrap_list table_scroll_200">
+                            <table class="tbl_list border-t-0" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                                <caption>테이블</caption>
+                                <colgroup>
+                                    <col width="317px" />
+                                    <col width="202px" />
+                                    <col width="130px" />
+                                    <col width="114px" />
+                                    <col width="275px" />
+                                    <col width="" />
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국타이어</td>
+                                        <td>15:42:43</td>
+                                        <td>홍길동</td>
+                                        <td>Ch 12</td>
+                                        <td>BMW 320D F30</td>
+                                        <td>DARK BLUE</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        <!-- //table list -->
+                    </div>
+
+                </div>
+                <!-- //wrap_left -->
+
+                <!-- wrap_right -->
+                <div class="wrap_right">
+                    <div class="update_time">12.08(수) 13:00:00 갱신</div>
+
+                    <h3 class="m-t-21">기상정보</h3>
+                    <div class="wrap_weather m-t-10">
+                        <div class="col01">
+                            <div class="w_state">
+                                <span class="icon_weather">
+                                    <!-- <i class="lightning" title="번개"></i> -->
+                                    <!-- <i class="cloud" title="구름"></i> -->
+                                    <i class="rain" title="비"></i>
+                                    <!-- <i class="snow" title="눈"></i> -->
+                                    <!-- <i class="sun" title="맑음"></i> -->
+                                    <!-- <i class="wind" title="바람"></i> -->
+                                </span>
+                                <span class="t_state">- 1.9<small>℃</small></span>
+                            </div>
+                        </div>
+                        <div class="col02">
+                            <ul>
+                                <li>바람 : <strong>N 3</strong><small>m/s</small></li>
+                                <li>노면 : <strong>31.1</strong><small>℃</small></li>
+                                <li>습도 : <strong>57</strong><small>%</small></li>
+                                <li><a href="#" title="more" data-layer="popup_weather">+ more</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3 class="m-t-23">GNR GATE</h3>
+                    <div class="wrap_gnrGate m-t-10">
+                        <div class="wrap_hd">
+                            <div class="title">Total <strong>12</strong></div>
+                            <div class="wrap_btn">
+                                <button type="button" class="btn-sty2 btn_default w98 m-r-6">IN OPEN</button>
+                                <button type="button" class="btn-line-bs btn_default fs14 w98">OUT OPEN</button>
+                            </div>
+                        </div>
+                        <div class="wrap_state m-t-9">
+                            <ul>
+                                <li><strong>· 예약번호 :</strong> 2020010101(HSO VDA 외)</li>
+                                <li><strong>· 평가자 :</strong> 한국타이어 홍길동(Lv A/ch 12)</li>
+                                <li><strong>· 차량 :</strong> BMW 320D F30(32머2575/DARK BLUE)</li>
+                            </ul>
+                        </div>
+                        <div class="wrap_cctv m-t-17">cctv</div>
+                    </div>
+                    <h3 class="m-t-23">평가자 검색</h3>
+                    <div class="wrap_tpSearch m-t-10">
+                        <div class="row">
+                            <div class="form_group w300">
+                                <input type="text" id="" class="form_control" placeholder="평가자를 입력하세요" name="">
+                            </div>
+                            <button type="button" class="btn-s btn_default">검색</button>
+                        </div>
+                        <div class="wrap_state m-t-12">
+                            <ul>
+                                <li><strong>· 트랙 출입 시간 :</strong> [HSO] / 09:12분 입차 (/출차)</li>
+                                <li><strong>· 평가자 :</strong> 한국타이어 홍길동 (Lv3 / 3ch)</li>
+                                <li><strong>· 차량 :</strong> BMW 320D F30 (32머2575 / 흰색)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="wrap_emergency m-t-23">
+                        <div class="row">
+                            <span class="title">비상상황</span>
+                            <button type="button" class="btn-sty3 btn_default" data-layer="popup_emergency">전체
+                                문열림</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- //wrap_right -->
+            </div>
+            <!-- //content -->
+            <!-- quickmenu -->
+            <div class="quickmenu_wrap">
+                <section>
+                    <a href="#" class="test" title="시험로 시험관리">시험로<br />시험관리</a>
+                    <a href="#" class="gate" title="게이트 제어">게이트<br />제어</a>
+                    <a href="#" class="schedule" title="스케줄 관리">스케줄<br />관리</a>
+                </section>
+                <a href="#" class="top" title="위로 이동"></a>
+            </div>
+            <!-- //quickmenu -->
+        </div>
+        <!-- //container -->
+        <!-- footer -->
+        <div class="footer">
+            <section>
+                <span><img src="./images/ci_hankook.png" alt="한국타이어" /></span>
+                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.</p>
+            </section>
+        </div>
+        <!-- //footer -->
+    </div>
+    <!-- //wrapper -->
+
+    <!-- popup_m -->
+    <div class="ly_group">
+        <article class="layer_m popup_emergency">
+            <!-- # 타이틀 # -->
+            <h1>비상상황</h1>
+            <!-- # 컨텐츠 # -->
+            <div class="ly_con">
+                <!-- table_view -->
+                <div class="tbl_wrap_view">
+                    <table class="tbl_view01" summary="테이블입니다.">
+                        <caption>테이블입니다.</caption>
+                        <colgroup>
+                            <col width="140px" />
+                            <col width="" />
+                        </colgroup>
+                        <tr>
+                            <th scope="row">비상문구 선택</th>
+                            <td>
+                                <div class="form_group w_full">
+                                    <div class="select_group">
+                                        <select id="" title="select" class="form_control">
+                                            <option value="">비상코드 A - 화재발생</option>
+                                            <option value="">선택하세요</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">직접입력</th>
+                            <td>
+                                <div class="form_group w_full">
+                                    <textarea name="" id="" cols="" rows="3" class="form_control h60"
+                                        placeholder="예) 화재발생했습니다. 어서대피하세요"></textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- //table_view -->
+                <div class="m-t-15 tac"><button type="button" class="btn-sty1 btn_default">전광판 송출</button></div>
+            </div>
+            <!-- 버튼 -->
+            <div class="wrap_btn01 m-t-15">
+                <!-- <button type="button" class="btn-pop btn_gray m-r-11">취소</button> -->
+                <button type="button" class="btn-pop btn_default lyClose">전체 문열림</button>
+                <button type="button" class="btn-pop btn_default lyClose m-l-6">전체 문닫힘</button>
+            </div>
+            <!-- # 닫기버튼 # -->
+            <button data-fn="lyClose">레이어닫기</button>
+        </article>
+    </div>
+    <!-- //popup_m -->
+
+    <!-- popup_l -->
+    <div class="ly_group">
+        <article class="layer_l popup_GControl">
+            <!-- # 타이틀 # -->
+            <h1>차단기 제어 (전체)</h1>
+            <!-- # 컨텐츠 # -->
+            <div class="ly_con">
+                <div class="tar">
+                    <div class="form_group">
+                        <div class="check_inline">
+                            <label class="check_default">
+                                <input type="checkbox" name="" value="">
+                                <span class="check_icon"></span>한국타이어</label>
+                            <label class="check_default">
+                                <input type="checkbox" name="" value="" checked="">
+                                <span class="check_icon"></span>현대자동차</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- table list -->
+                <section class="tbl_wrap_list m-t-20">
+                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                        <caption>테이블</caption>
+                        <colgroup>
+                            <col width="50px" />
+                            <col width="" />
+                            <col width="114px" />
+                            <col width="114px" />
+                            <col width="114px" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">시험로</th>
+                                <th scope="col">IN</th>
+                                <th scope="col">OUT</th>
+                                <th scope="col">편개</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="tal">GNR</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="tal">DHC / Chip-Cut</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="tal">HSO</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td class="tal">WHC / Hyd-Curve</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td class="tal">Ride</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td class="tal">Braking / Hyd-Straight</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td class="tal">VDA</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td class="tal">NVH / PBN</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td class="tal color_bule2">Off Road</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_gray m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td class="tal color_bule2">DHC #2</td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td class="tal">분기차단기</td>
+                                <td></td>
+                                <td></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td class="tal color_red2">Emergency</td>
+                                <td></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray">닫힘</button></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <!-- //table list -->
+            </div>
+            <!-- 버튼 -->
+            <!-- <div class="wrap_btn01">
+                <button type="button" class="btn-pop btn_gray m-r-11">취소</button>
+                <button type="button" class="btn-pop btn_default lyClose">확인</button>
+            </div> -->
+            <!-- # 닫기버튼 # -->
+            <button data-fn="lyClose">레이어닫기</button>
+        </article>
+    </div>
+    <!-- //popup_l -->
+
+    <!-- popup_xxl -->
+    <div class="ly_group">
+        <article class="layer_xxl popup_weather">
+            <!-- # 타이틀 # -->
+            <h1>기상세부정보</h1>
+            <!-- # 컨텐츠 # -->
+            <div class="ly_con">
+                <div class="wrap_IWeather">
+                    <!-- col_left -->
+                    <div class="col_left">
+                        <!-- tab -->
+                        <div class="wrap_tab">
+                            <div class="tab">
+                                <button class="tablinks" onclick="openTab(event, 'tab1')"
+                                    id="defaultOpen">위성(구름)</button>
+                                <button class="tablinks" onclick="openTab(event, 'tab2')">레이더</button>
+                                <button class="tablinks" onclick="openTab(event, 'tab3')">노면온도 센서위치</button>
+                            </div>
+                            <div class="wrap_tabcontent h743 p-b-0">
+                                <div id="tab1" class="tabcontent">
+                                    위성
+                                </div>
+                                <div id="tab2" class="tabcontent">
+                                    레이어
+                                </div>
+                                <div id="tab3" class="tabcontent">
+                                    노면온도 센서위치
+                                </div>
+                            </div>
+                        </div>
+                        <!-- //tab -->
+                    </div>
+                    <!-- //col_left -->
+                    <!-- col_right -->
+                    <div class="col_right">
+                        <div class="update_time">12.09(목) 13:00:00 갱신</div>
+                        <div class="wrap_winfo m-t-30">
+                            <div class="w_state">
+                                <span class="icon_weather">
+                                    <!-- <i class="lightning" title="번개"></i> -->
+                                    <!-- <i class="cloud" title="구름"></i> -->
+                                    <i class="rain" title="비"></i>
+                                    <!-- <i class="snow" title="눈"></i> -->
+                                    <!-- <i class="sun" title="맑음"></i> -->
+                                    <!-- <i class="wind" title="바람"></i> -->
+                                </span>
+                                <span class="t_state">- 1.9<small>℃</small></span>
+                            </div>
+                            <div class="w_state_info m-t-20">
+                                <ul>
+                                    <li class="humidity">습도 : <strong>57</strong><small>%</small></li>
+                                    <li class="wind">바람 : <strong>N 3</strong><small>m/s</small></li>
+                                    <li class="pressure">기압 : <strong>1010.3</strong><small>hPa</small></li>
+                                </ul>
+                                <ul class="m-t-8">
+                                    <li class="rain">1일 강우량 : <strong>12.4</strong><small>mm</small></li>
+                                    <li class="rain">1시간 강우량 : <strong>2.4</strong><small>mm</small></li>
+                                </ul>
+                            </div>
+                            
+
+                        </div>
+                        <h3 class="m-t-23">노면온도</h3>
+                        <!-- table list -->
+                        <section class="tbl_wrap_list m-t-10">
+                            <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                                <caption>테이블</caption>
+                                <colgroup>
+                                    <col width="50px" />
+                                    <col width="" />
+                                    <col width="113px" />
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">구분 (명칭 및 약어)</th>
+                                        <th scope="col">노면온도 (℃)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>DHC</td>
+                                        <td>38.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>WHC</td>
+                                        <td>42.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Hydro Curve</td>
+                                        <td>38.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>NVH Conc.</td>
+                                        <td>38.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>NVH Smoooth Asp.</td>
+                                        <td>42.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>WET Conc.</td>
+                                        <td>38.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>Hydro Straight</td>
+                                        <td>42.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>Wet Asp.</td>
+                                        <td>42.5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td>Dry Asp.</td>
+                                        <td>38.9</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                        <!-- //table list -->
+                    </div>
+                    <!-- //col_right -->
+                </div>
+            </div>
+            <!-- 버튼 -->
+            <!-- <div class="wrap_btn01">
+                <button type="button" class="btn-pop btn_gray lyClose m-r-6">취소</button>
+                <button type="button" class="btn-pop btn_default lyClose">확인</button>
+            </div> -->
+            <!-- # 닫기버튼 # -->
+            <button data-fn="lyClose">레이어닫기</button>
+        </article>
+    </div>
+    <!-- //popup_xxl -->
+
+    <!-- tab -->
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+    <!-- //tab -->
+
+</body>
+
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.member.dao.MemberDAO">
+    <select id="getMmemberlist" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        SELECT * FROM PG_MEMBER
+    </select>
+	<update id="updateCompany" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+		UPDATE PG_COMPANY
+		SET
+			COMP_NAME = #{compName},
+			COMP_ADDR = #{compAddr},
+			COMP_POST_NO = #{compPostNo},
+			COMP_ADDR_DETAIL = #{compAddrDetail},
+			COMP_PHONE = #{compPhone},
+			COMP_ACCT_NAME = #{compAcctName},
+			COMP_ACCT_PHONE = #{compAcctPhone},
+			COMP_ACCT_EMAIL =#{compAcctEmail},
+			COMP_ACCT_DEPT = #{compAcctDept}
+		WHERE COMP_LICENSE = #{compLicense}
+	</update>
+	<update id="updateMember" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+		UPDATE PG_MEMBER
+		SET
+			MEM_NAME = #{memName},
+			MEM_DEPT = #{memDept},
+			MEM_EMAIL = #{memEmail},
+			MEM_PHONE = #{memPhone},
+			MEM_COMP_PHONE = #{memCompPhone},
+			MEM_MOD_DT = #{memModDt},
+			MEM_MOD_USER = #{memModUser}
+		WHERE MEM_ID = #{memId}
+	</update>
+	<update id="updateAdmin" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+		UPDATE PG_MEMBER
+		SET
+			AUTH_CODE = #{authCode},
+			MEM_NAME = #{memName},
+			MEM_DEPT = #{memDept},
+			MEM_PHONE = #{memPhone},
+			MEM_MOD_DT = #{memModDt},
+			MEM_MOD_USER = #{memModUser},
+			MEM_PURPOSE = #{memPurpose},
+			MEM_USE_YN = #{memUseYn},
+			KAKAO_SMS_YN = #{kakaoSmsYn}
+		WHERE MEM_ID = #{memId}
+	</update>
+    <select id="getMemberinfo" parameterType="String" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        select
+            PM.MEM_ID
+            ,PM.MEM_PWD
+            ,PM.MEM_NAME
+            ,PM.AUTH_CODE
+            ,PM.COMP_CODE
+            ,PM.MEM_PHONE
+            ,PM.MEM_COMP_PHONE
+            ,PM.MEM_USER_TYPE
+            ,PM.MEM_USE_YN
+            ,PM.MEM_EMAIL
+            ,PM.MEM_REG_USER
+            ,PM.MEM_REG_DT
+            ,PM.MEM_BIRTH
+            ,PM.MEM_DEPT
+            ,PM.MEM_PURPOSE
+            ,PM.MEM_ADDR
+            ,PM.MEM_POST_NO
+            ,PM.MEM_ADDR_DETAIL
+            ,PM.MEM_APPROVAL
+            ,PM.MEM_AGREEMENT
+            ,PM.MEM_MOD_DT
+            ,PA.AUTH_NM
+            ,PA.AUTH_DEFAULT_URL
+            ,PC.COMP_LICENSE
+			,PC.COMP_PHONE
+			,PC.COMP_FAX
+			,PC.COMP_KIND
+			,PC.COMP_ADDR
+			,PC.COMP_POST_NO
+			,PC.COMP_ADDR_DETAIL
+			,PC.COMP_NAME
+			,PC.COMP_COND
+			,PC.COMP_ACCT_NAME
+			,PC.COMP_ACCT_PHONE
+			,PC.BLACK_LIST
+			,PC.COMP_MEMO
+			,PC.COMP_REG_USER
+			,PC.COMP_REG_DT
+			,PC.COMP_ACCT_EMAIL
+			,PC.COMP_ACCT_DEPT
+			,FM.F_NAME
+			,PM.MEM_MOD_USER
+			,PM.KAKAO_SMS_YN
+        from PG_MEMBER PM
+                 join PG_AUTH PA on PM.AUTH_CODE = PA.AUTH_CODE
+                 left join PG_COMPANY PC on PM.COMP_CODE = PC.COMP_CODE
+                 left join FILE_MANAGEMENT FM on PC.COMP_LICENSE = FM.F_GROUP
+        where MEM_ID = #{memId}
+    </select>
+
+    <insert id="insertMember" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        INSERT INTO PG_MEMBER (
+            MEM_ID,
+        	MEM_NAME,
+        	MEM_PWD,
+        	MEM_PHONE,
+        	MEM_EMAIL,
+        	MEM_USE_YN,
+        	MEM_DEPT,
+        	MEM_PURPOSE,
+            AUTH_CODE,
+            COMP_CODE,
+        	MEM_APPROVAL,
+        	MEM_AGREEMENT,
+        	MEM_REG_DT,
+        	MEM_MOD_DT,
+        	MEM_REG_USER,
+        	MEM_MOD_USER,
+        	MEM_USER_TYPE,
+        	MEM_BIRTH,
+        	KAKAO_SMS_YN
+        ) VALUES (
+            #{memId},
+            #{memName},
+            #{memPwd},
+            #{memPhone},
+            #{memEmail},
+            #{memUseYn},
+            #{memDept},
+            #{memPurpose},
+            #{authCode},
+            #{compCode},
+            #{memApproval},
+            #{memAgreement},
+            #{memRegDt},
+            #{memModDt},
+            #{memRegUser},
+            #{memModUser},
+            #{memUserType},
+            #{memBirth},
+            #{kakaoSmsYn}
+        )
+    </insert>
+    <insert id="createCompany" parameterType="com.hankook.pg.content.member.dto.MemberDto" useGeneratedKeys="true" keyProperty="compCode">
+    		<selectKey resultType="string" keyProperty="compCode" order="BEFORE">
+		        SELECT CONCAT('C',LPAD(NEXTVAL(SEQ_COMP_CODE),4,'0')) AS COMP_CODE
+		    </selectKey>
+        INSERT INTO PG_COMPANY (
+            COMP_CODE
+			,COMP_LICENSE
+			,COMP_PHONE
+			,COMP_ADDR
+			,COMP_POST_NO
+			,COMP_ADDR_DETAIL
+			,COMP_NAME
+			,COMP_ACCT_NAME
+			,COMP_ACCT_PHONE
+			,COMP_REG_USER
+			,COMP_REG_DT
+			,COMP_ACCT_EMAIL
+			,COMP_ACCT_DEPT
+			,BLACK_LIST
+        ) VALUES (
+            #{compCode},
+            #{compLicense},
+            #{compPhone},
+            #{compAddr},
+            #{compPostNo},
+            #{compAddrDetail},
+            #{compName},
+            #{compAcctName},
+            #{compAcctPhone},
+            #{compRegUser},
+            #{compRegDt},
+            #{compAcctEmail},
+            #{compAcctDept},
+            'N'
+        )
+    </insert>
+
+    <update id="update" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        UPDATE MEMBERS
+        SET
+            MEMBER_ID = #{memId},
+            MEMBER_PWD = #{memPwd},
+            MEMBER_NM = #{memNm},
+        WHERE id = #{memId}
+    </update>
+
+    <update id = "deleteById" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        UPDATE MEMBERS
+        SET
+            MEMBER_ID = #{memId},
+            MEMBER_PWD = '****',
+            MEMBER_NM = '****'
+        WHERE id = #{memId}
+    </update>
+
+    <select id="chkMemId" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="_int">
+        select
+            count(*)
+        from PG_MEMBER PM
+        where PM.MEM_ID = #{memId}
+    </select>
+    <select id="chkMemEmail" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="_int">
+        select
+            count(*)
+        from PG_MEMBER PM
+        where PM.MEM_EMAIL = #{memEmail}
+    </select>
+    <select id="chkCompLicense" resultType="_int">
+        select
+            count(*)
+        from PG_COMPANY PC
+        where PC.COMP_LICENSE = #{b_no}
+    </select>
+    <select id="searchId" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="com.hankook.pg.content.member.dto.MemberDto">
+        select
+            PM.MEM_ID
+        from PG_MEMBER PM
+        where PM.MEM_NAME = #{memName}
+        and PM.MEM_EMAIL = #{memEmail}
+        and PM.MEM_PHONE = #{memPhone}
+        <if test="memId != null and memId !='' ">
+        and PM.MEM_ID = #{memId}
+        </if>
+    </select>
+
+    <update id="modiPwd" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+    UPDATE PG_MEMBER
+    SET MEM_PWD =#{memPwd},
+    	MEM_MOD_DT = DATE_FORMAT( now(), '%Y%m%d%H%i%s')
+    WHERE MEM_ID = #{memId}
+    </update>
+    <select id="chkApproval" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="String">
+        SELECT PM.AUTH_CODE
+        FROM PG_MEMBER PM,PG_COMPANY PC
+        WHERE PM.COMP_CODE = PC.COMP_CODE
+        	AND PC.COMP_LICENSE = #{compLicense}
+        	AND PM.MEM_NAME = #{memName}
+        	AND PM.MEM_EMAIL = #{memEmail}
+    </select>
+    <update id="dueChkPwd" parameterType="com.hankook.pg.content.member.dto.MemberDto">
+        UPDATE PG_MEMBER
+    SET MEM_PWD =#{newPwd},
+    	MEM_MOD_DT = DATE_FORMAT( now(), '%Y%m%d%H%i%s')
+    WHERE MEM_ID = #{memId}
+    </update>
+    <select id="getAdminList" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="com.hankook.pg.content.member.dto.MemberDto">
+    	<include refid="COMMON.sqlPagingTop" />
+        SELECT
+        	M.MEM_USE_YN,
+        	M.MEM_ID,
+        	M.MEM_NAME,
+        	M.AUTH_CODE,
+        	A.AUTH_NM,
+        	M.MEM_REG_USER,
+        	M.MEM_REG_DT
+        FROM PG_MEMBER M,PG_AUTH A
+        WHERE M.AUTH_CODE = A.AUTH_CODE
+        AND M.AUTH_CODE !='A000' AND M.AUTH_CODE != 'A002'
+        <if test="authCode !=null and authCode != ''">
+        AND M.AUTH_CODE = #{authCode}
+        </if>
+        <if test="searchKeyword !=null and searchKeyword != ''">
+        AND (M.MEM_ID LIKE CONCAT('%',#{searchKeyword},'%') OR M.MEM_NAME LIKE CONCAT('%',#{searchKeyword},'%'))
+        </if>
+        <if test="memUseYn !=null and memUseYn != ''">
+        AND M.MEM_USE_YN = #{memUseYn}
+        </if>
+       <include refid="COMMON.sqlPagingBottom" />
+    </select>
+    <select id="getAdminListCnt" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="_int">
+    	<include refid="COMMON.sqlCountTop" />
+        SELECT
+        	M.MEM_USE_YN,
+        	M.MEM_ID,
+        	M.MEM_NAME,
+        	M.AUTH_CODE,
+        	A.AUTH_NM,
+        	M.MEM_REG_USER,
+        	M.MEM_REG_DT
+        FROM PG_MEMBER M,PG_AUTH A
+        WHERE M.AUTH_CODE = A.AUTH_CODE
+        AND M.AUTH_CODE !='A000' AND M.AUTH_CODE != 'A002'
+        <if test="authCode !=null and authCode != ''">
+        AND M.AUTH_CODE = #{authCode}
+        </if>
+        <if test="searchKeyword !=null and searchKeyword != ''">
+        AND (M.MEM_ID LIKE CONCAT('%',#{searchKeyword},'%') OR M.MEM_NAME LIKE CONCAT('%',#{searchKeyword},'%'))
+        </if>
+        <if test="memUseYn !=null and memUseYn != ''">
+        AND M.MEM_USE_YN = #{memUseYn}
+        </if>
+       <include refid="COMMON.sqlCountBottom" />
+    </select>
+
+    <select id="chkMemIdName" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="_int">
+        select
+            count(*)
+        from PG_MEMBER PM
+        where PM.MEM_ID = #{memId}
+        and PM.MEM_NAME =#{memName}
+    </select>
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.tire.dao.WheelRepository">
+
+    <select id="findAll" parameterType="com.hankook.pg.content.admin.tire.dto.WheelPagingAndSearchRequestDto"  resultType="com.hankook.pg.content.admin.tire.domain.Wheel">
+        <include refid="COMMON.sqlPagingTop" />
+        SELECT
+            LOTA01 as BARCODE_NO,
+            LOTA02 as WHEEL_SIZE,
+            LOTA03 as PROJECT,
+            LOTA04NM as MAKER,
+            FLDN02 as WHEEL_OFFSET,
+            FLDN04 as HUB,
+            FLDN05 as HOLE,
+            FLDN06 as PCD,
+            LOCAKY,
+            LOCAKYNM as LOCAKY_NAME
+        FROM IFSTK_WHEEL
+        <include refid="COMMON.sqlPagingBottom" />
+    </select>
+
+    <select id="findAllCount" parameterType="com.hankook.pg.content.admin.tire.dto.WheelPagingAndSearchRequestDto"  resultType="_int">
+        <include refid="COMMON.sqlCountTop" />
+        SELECT
+            LOTA01 as BARCODE_NO,
+            LOTA02 as WHEEL_SIZE,
+            LOTA03 as PROJECT,
+            LOTA04NM as MAKER,
+            FLDN02 as WHEEL_OFFSET,
+            FLDN04 as HUB,
+            FLDN05 as HOLE,
+            FLDN06 as PCD,
+            LOCAKY,
+            LOCAKYNM as LOCAKY_NAME
+        FROM IFSTK_WHEEL
+        <include refid="COMMON.sqlCountBottom" />
+    </select>
+
+    <select id="findWheelAttr" parameterType="com.hankook.pg.content.admin.tire.dto.WheelPagingAndSearchRequestDto"  resultType="com.hankook.pg.content.admin.tire.domain.Wheel">
+        <include refid="COMMON.sqlPagingTop" />
+        SELECT
+            LOTA01 as BARCODE_NO,
+            LOTA02 as WHEEL_SIZE,
+            LOTA03 as PROJECT,
+            LOTA04NM as MAKER,
+            FLDN02 as WHEEL_OFFSET,
+            FLDN04 as HUB,
+            FLDN05 as HOLE,
+            FLDN06 as PCD,
+            LOCAKY,
+            LOCAKYNM as LOCAKY_NAME
+        FROM IFSTK_WHEEL
+        WHERE 1=1
+        <if test="wheelSize !=''">
+            AND LOTA02 LIKE CONCAT('%',#{wheelSize},'%')
+        </if>
+        <if test="maker !=''">
+            AND LOTA04NM LIKE CONCAT('%',#{maker},'%')
+        </if>
+        <if test="project !=''">
+            AND LOTA03 LIKE CONCAT('%',#{project},'%')
+        </if>
+        <include refid="COMMON.sqlPagingBottom" />
+    </select>
+
+    <select id="findWheelAttrCount" parameterType="com.hankook.pg.content.admin.tire.dto.WheelPagingAndSearchRequestDto"  resultType="_int">
+        <include refid="COMMON.sqlCountTop" />
+        SELECT
+            LOTA01 as BARCODE_NO,
+            LOTA02 as WHEEL_SIZE,
+            LOTA03 as PROJECT,
+            LOTA04NM as MAKER,
+            FLDN02 as WHEEL_OFFSET,
+            FLDN04 as HUB,
+            FLDN05 as HOLE,
+            FLDN06 as PCD,
+            LOCAKY,
+            LOCAKYNM as LOCAKY_NAME
+        FROM IFSTK_WHEEL
+        WHERE 1=1
+        <if test="wheelSize !=''">
+            AND LOTA02 LIKE CONCAT('%',#{wheelSize},'%')
+        </if>
+        <if test="maker !=''">
+            AND LOTA04NM LIKE CONCAT('%',#{maker},'%')
+        </if>
+        <if test="project !=''">
+            AND LOTA03 LIKE CONCAT('%',#{project},'%')
+        </if>
+        <include refid="COMMON.sqlCountBottom" />
+    </select>
+
+</mapper>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.testerManage.dao.TesterDao">
+<select id="getTesterInfo" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+  <include refid="COMMON.sqlPagingTop" />
+  SELECT PTS.TC_SEQ,
+  PTS.TC_RESERV_CODE,
+  CASE PTR.TR_TRACK_TYPE
+  WHEN 'TYP00' THEN "공동"
+  WHEN 'TYP01' THEN "단독"
+  END AS TR_TRACK_TYPE,
+  PTS.TC_DAY,
+  PTS.TC_DAY2,
+--   #        PTS.TC_STEP,
+--   #        PTS.TC_REG_DT,
+  PTS.COMP_NAME,
+  PRM.RM_TYPE,
+  PRM.D_SEQ,
+  PRM.D_NAME,
+  PRM.N_DCCP_YN,
+  PD.D_EDU,
+  PD.D_EDU_END_DT,
+  PRM.R_ID,
+  PRM.RM_W_CH,
+  PRM.W_ID,
+  PRM.C_CODE,
+  PRM.RM_R_YN,
+  PRM.RM_W_YN,
+  PRM.RM_R_MOD_DT,
+  PRM.RM_W_MOD_DT,
+  PTS.TC_REG_DT
+  FROM PG_TEST_SCHDULE PTS
+  LEFT OUTER JOIN PG_RESOURCE_MAPPING PRM ON PTS.TC_SEQ = PRM.TC_SEQ AND PRM.TC_DAY = #{testDate}
+  LEFT OUTER JOIN PG_DRIVER PD on PRM.D_SEQ = PD.D_SEQ
+  LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+  WHERE 1=1
+  AND #{testDate} BETWEEN PTS.TC_DAY AND PTS.TC_DAY2
+  AND PRM.RM_IN_OUT = 'O'
+  AND PRM.RM_TYPE = 'D'
+  AND PTS.TC_APPROVAL = '3'
+  <if test="text != null and text != ''">
+    AND (
+    PTS.TC_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+    OR PTS.COMP_NAME LIKE CONCAT('%',#{text},'%')
+    OR PRM.D_NAME = #{enText}
+    )
+  </if>
+  GROUP BY PTS.TC_RESERV_CODE, PRM.D_SEQ, PRM.C_CODE
+  ORDER BY PRM.D_SEQ ASC, PTS.TC_RESERV_CODE ASC
+  <include refid="COMMON.sqlPagingBottom" />
+</select>
+  
+  <select id="getTesterCnt" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+    SELECT PTS.TC_SEQ
+    FROM PG_TEST_SCHDULE PTS
+    LEFT OUTER JOIN PG_RESOURCE_MAPPING PRM ON PTS.TC_SEQ = PRM.TC_SEQ AND PRM.TC_DAY = #{testDate}
+    LEFT OUTER JOIN PG_DRIVER PD on PRM.D_SEQ = PD.D_SEQ
+    LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+    WHERE 1=1
+    AND #{testDate} BETWEEN PTS.TC_DAY AND PTS.TC_DAY2
+    AND PRM.RM_IN_OUT = 'O'
+    AND PRM.RM_TYPE = 'D'
+    AND PTS.TC_APPROVAL = '3'
+    <if test="text != null and text != ''">
+      AND (
+      PTS.TC_RESERV_CODE LIKE CONCAT('%',#{text},'%')
+      OR PTS.COMP_NAME LIKE CONCAT('%',#{text},'%')
+      OR PRM.D_NAME = #{enText}
+      )
+    </if>
+    GROUP BY PTS.TC_RESERV_CODE, PRM.D_SEQ, PRM.C_CODE
+    ORDER BY PRM.D_SEQ ASC, PTS.TC_RESERV_CODE ASC
+    <include refid="COMMON.sqlCountBottom" />
+  </select>
+
+  <select id="getDup" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    SELECT ROW_NUMBER() over (order by PTS.TC_RESERV_CODE) as num
+     , PTS.TC_RESERV_CODE
+     , PTS.TC_DAY
+     , PTS.TC_DAY2
+     , PTS.COMP_NAME
+     , COUNT(*) as dup
+    FROM PG_RESOURCE_MAPPING PRM
+         LEFT OUTER JOIN PG_TEST_SCHDULE PTS ON PTS.TC_SEQ = PRM.TC_SEQ and PTS.TC_DAY = PRM.TC_DAY
+         LEFT OUTER JOIN PG_DRIVER PD on PRM.D_SEQ = PD.D_SEQ
+    WHERE 1=1
+    AND PRM.TC_DAY = #{testDate}
+    AND PRM.RM_IN_OUT = 'O'
+    AND PRM.RM_TYPE = 'D'
+    AND PTS.TC_APPROVAL = '3'
+  </select>
+
+  <select id="getTestCar" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.TestCarVo">
+    SELECT PTS.TC_SEQ,
+       PTS.TC_RESERV_CODE,
+       PTS.TC_DAY,
+       PTS.TC_DAY2,
+       PRM.RM_TYPE,
+       PRM.R_ID,
+       PRM.C_CODE,
+       PC.C_NUMBER,
+       PRM.RM_R_YN,
+       PRM.RM_R_MOD_DT
+    FROM PG_TEST_SCHDULE PTS
+         LEFT OUTER JOIN PG_RESOURCE_MAPPING PRM ON PTS.TC_SEQ = PRM.TC_SEQ AND PRM.TC_DAY = #{testDate}
+         LEFT OUTER JOIN PG_CAR PC ON PRM.C_CODE = PC.C_CODE
+    WHERE 1=1
+        AND #{testDate} BETWEEN PTS.TC_DAY AND PTS.TC_DAY2
+        AND PRM.RM_IN_OUT = 'O'
+        AND PRM.RM_TYPE = 'C'
+        AND PTS.TC_APPROVAL = '3'
+    GROUP BY PTS.TC_RESERV_CODE, PRM.C_CODE
+    ORDER BY PTS.TC_RESERV_CODE ASC
+  </select>
+
+  <!--사용자 분출-->
+  <update id="updateRW" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET R_ID = #{rId},
+    RM_W_CH = #{rmWCh},
+    W_ID = #{wId}
+    WHERE D_SEQ = #{dSeq}
+    AND TC_SEQ = #{tcSeq}
+  </update>
+
+  <update id="updateR" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET R_ID = #{rId}
+    WHERE D_SEQ = #{dSeq}
+  </update>
+  <update id="updateRC" parameterType="com.hankook.pg.content.admin.testerManage.vo.TestCarVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET R_ID = #{rId},
+    N_DCCP_YN = 'Y'
+    WHERE C_CODE = #{cCode}
+  </update>
+  <update id="changeRW" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET
+    <if test="rId != null and wId == null">
+      R_ID = #{rId}
+    </if>
+    <if test="rId == null and wId != null">
+      W_ID = #{wId},
+      RM_W_CH = #{wCh}
+    </if>
+    WHERE D_SEQ = #{dSeq}
+    AND TC_SEQ = #{tcSeq}
+  </update>
+
+  <update id="returnRW" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET RM_R_YN = 'N',
+    RM_W_YN = 'N',
+    RM_R_MOD_DT = DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i%s'),
+    RM_W_MOD_DT = DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i%s')
+    WHERE D_SEQ = #{dSeq}
+    AND TC_SEQ = #{tcSeq}
+  </update>
+  <update id="returnR" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET RM_R_YN = 'N',
+    RM_R_MOD_DT = DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i%s')
+    WHERE D_SEQ = #{dSeq}
+  </update>
+  <update id="returnRC" parameterType="com.hankook.pg.content.admin.testerManage.vo.TestCarVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET RM_R_YN = 'N',
+    RM_R_MOD_DT = DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i%s')
+    WHERE C_CODE = #{cCode}
+  </update>
+  <update id="returnW" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET RM_W_YN = 'N',
+    RM_W_MOD_DT = DATE_FORMAT(SYSDATE(),'%Y%m%d%H%i%s')
+    WHERE D_SEQ = #{dSeq}
+  </update>
+
+<select id="getTcSeq" parameterType="com.hankook.pg.content.admin.testerManage.vo.TesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.TesterVo">
+    SELECT PRM.TC_SEQ
+    FROM PG_RESOURCE_MAPPING PRM
+    LEFT JOIN PG_TEST_SCHDULE PTS on PRM.TC_SEQ = PTS.TC_SEQ
+    WHERE #{date} BETWEEN PTS.TC_DAY AND PTS.TC_DAY2
+    AND PRM.D_SEQ = #{dSeq}
+    GROUP BY PRM.TC_SEQ
+</select>
+
+  <!--HINT 평가자/평가차량-->
+  <select id="hintTesterList" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    <include refid="COMMON.sqlPagingTop" />
+    SELECT PHR.HR_SEQ,
+    PHD.EMPLOYEE_NO,
+    PHD.NAME,
+    PHD.DEPT_NAME,
+    PHD.CRN_DTM,
+    PHR.R_ID,
+    PHR.W_ID,
+    PHR.R_RETURN,
+    PHR.W_RETURN,
+    PHR.W_CH
+    FROM PG_HINT_DRIVER PHD
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHD.EMPLOYEE_NO = PHR.EMPLOYEE_NO
+    WHERE 1=1
+    <choose>
+      <when test="type == 'new'">
+        AND R_ID IS NULL
+        AND W_ID IS NULL
+        <if test="text != null and text != ''">
+          AND PHD.NAME LIKE CONCAT('%',#{text},'%')
+        </if>
+      </when>
+      <otherwise>
+        AND R_ID IS NOT NULL
+        AND W_ID IS NOT NULL
+        <if test="text != null and text != ''">
+          AND (
+          PHD.NAME LIKE CONCAT('%',#{text},'%')
+          OR PHD.EMPLOYEE_NO LIKE CONCAT('%',#{text},'%')
+          OR PHR.R_ID LIKE CONCAT('%',#{text},'%')
+          OR PHR.W_ID LIKE CONCAT('%',#{text},'%')
+          )
+        </if>
+      </otherwise>
+    </choose>
+    ORDER BY PHD.CRN_DTM DESC
+    <include refid="COMMON.sqlPagingBottom" />
+  </select>
+
+  <select id="getHintTesterCnt" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+    SELECT PHR.HR_SEQ,
+    PHD.EMPLOYEE_NO,
+    PHD.NAME,
+    PHD.DEPT_NAME,
+    PHD.CRN_DTM,
+    PHR.R_ID,
+    PHR.W_ID,
+    PHR.R_RETURN,
+    PHR.W_RETURN
+    FROM PG_HINT_DRIVER PHD
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHD.EMPLOYEE_NO = PHR.EMPLOYEE_NO
+    WHERE 1=1
+    <choose>
+      <when test="type == 'new'">
+        AND R_ID IS NULL
+        AND W_ID IS NULL
+        <if test="text != null and text != ''">
+          AND PHD.NAME LIKE CONCAT('%',#{text},'%')
+        </if>
+      </when>
+      <otherwise>
+        AND R_ID IS NOT NULL
+        AND W_ID IS NOT NULL
+        <if test="text != null and text != ''">
+          AND (
+          PHD.NAME LIKE CONCAT('%',#{text},'%')
+          OR PHD.EMPLOYEE_NO LIKE CONCAT('%',#{text},'%')
+          OR PHR.R_ID LIKE CONCAT('%',#{text},'%')
+          OR PHR.W_ID LIKE CONCAT('%',#{text},'%')
+          )
+        </if>
+      </otherwise>
+    </choose>
+    ORDER BY PHD.CRN_DTM DESC
+    <include refid="COMMON.sqlCountBottom" />
+  </select>
+
+  <select id="hintCarList" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    <include refid="COMMON.sqlPagingTop" />
+    SELECT PHR.HR_SEQ,
+    PHC.VHCL_CODE,
+    PHC.VHCL_RGSNO,
+    PHC.VHCL_MAKER,
+    PHC.CRN_DTM,
+    PHR.R_ID,
+    PHR.R_RETURN
+    FROM PG_HINT_CAR PHC
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHC.VHCL_CODE = PHR.VHCL_CODE
+    WHERE 1=1
+    <choose>
+      <when test="type == 'new'">
+        AND R_ID IS NULL
+      </when>
+      <otherwise>
+        AND R_ID IS NOT NULL
+      </otherwise>
+    </choose>
+    <if test="text != null and text != ''">
+      AND VHCL_RGSNO LIKE CONCAT('%',#{text},'%')
+    </if>
+    ORDER BY PHC.CRN_DTM DESC
+    <include refid="COMMON.sqlPagingBottom" />
+  </select>
+  <select id="getHintTestCarCnt" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+    SELECT PHR.HR_SEQ,
+    PHC.VHCL_CODE,
+    PHC.VHCL_RGSNO,
+    PHC.VHCL_MAKER,
+    PHC.CRN_DTM,
+    PHR.R_ID,
+    PHR.R_RETURN
+    FROM PG_HINT_CAR PHC
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHC.VHCL_CODE = PHR.VHCL_CODE
+    WHERE 1=1
+    <choose>
+      <when test="type == 'new'">
+        AND R_ID IS NULL
+      </when>
+      <otherwise>
+        AND R_ID IS NOT NULL
+      </otherwise>
+    </choose>
+    <if test="text != null and text != ''">
+      AND VHCL_RGSNO LIKE CONCAT('%',#{text},'%')
+    </if>
+    ORDER BY PHC.CRN_DTM DESC
+    <include refid="COMMON.sqlCountBottom" />
+  </select>
+
+  <!--HINT 분출-->
+  <insert id="hintRW" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    INSERT INTO PG_HINT_RESOURCE
+    (
+    VHCL_CODE,
+    EMPLOYEE_NO,
+    HR_TYPE,
+    W_ID,
+    D_NAME,
+    R_ID,
+    W_CH
+    )
+    VALUES(
+    #{vhclCode},
+    #{employeeNo},
+    #{hrType},
+    #{wId},
+    #{dName},
+    #{rId},
+    #{wCh}
+    )
+  </insert>
+  <update id="hintUpdate" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_HINT_RESOURCE
+    SET
+    <if test="rId != null and wId == null">
+      R_ID = #{rId},
+      R_RETURN = #{rReturn}
+    </if>
+    <if test="rId == null and wId != null">
+      W_ID = #{wId},
+      W_CH = #{wCh},
+      W_RETURN = #{wReturn}
+    </if>
+    WHERE HR_SEQ = #{hrSeq}
+  </update>
+  <update id="hintReturn" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_HINT_RESOURCE
+    SET
+    <choose>
+      <when test='hrType == "R"'>
+        R_RETURN = DATE_FORMAT(SYSDATE(),'%Y%m%d')
+      </when>
+      <otherwise>
+        W_RETURN = DATE_FORMAT(SYSDATE(),'%Y%m%d')
+      </otherwise>
+    </choose>
+    WHERE HR_SEQ = #{hrSeq}
+  </update>
+
+  <select id="stopList" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    <include refid="COMMON.sqlPagingTop" />
+    SELECT PRM.RM_SEQ,
+    PHD.NAME,
+    PHD.EMPLOYEE_NO,
+    PHD.CRN_DTM,
+    MAX(PRM.TC_DAY) as TC_DAY,
+    PHR.R_RETURN
+    FROM PG_RESOURCE_MAPPING PRM
+    LEFT OUTER JOIN PG_HINT_DRIVER PHD on PRM.D_SEQ = PHD.EMPLOYEE_NO
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHD.EMPLOYEE_NO = PHR.EMPLOYEE_NO
+    WHERE PRM.RM_IN_OUT = 'I'
+    AND PRM.RM_TYPE = 'D'
+    AND PRM.N_DCCP_YN = 'N'
+    AND PRM.TC_DAY <![CDATA[ < ]]> DATE_FORMAT(SYSDATE(),'%Y%m%d')
+    <if test="text != null and text != ''">
+      AND (
+      PRM.D_NAME LIKE CONCAT('%',#{text},'%')
+      OR PHD.EMPLOYEE_NO LIKE CONCAT('%',#{text},'%')
+      )
+    </if>
+    <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+      AND PRM.TC_DAY BETWEEN #{stDate} AND #{edDate}
+    </if>
+    GROUP BY PHD.EMPLOYEE_NO
+    <include refid="COMMON.sqlPagingBottom" />
+  </select>
+
+  <select id="stopListCnt" parameterType="com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+    SELECT PRM.RM_SEQ,
+    PHD.NAME,
+    PHD.EMPLOYEE_NO,
+    PHD.CRN_DTM,
+    MAX(PRM.TC_DAY) as TC_DAY,
+    PHR.R_RETURN
+    FROM PG_RESOURCE_MAPPING PRM
+    LEFT OUTER JOIN PG_HINT_DRIVER PHD on PRM.D_SEQ = PHD.EMPLOYEE_NO
+    LEFT OUTER JOIN PG_HINT_RESOURCE PHR on PHD.EMPLOYEE_NO = PHR.EMPLOYEE_NO
+    WHERE PRM.RM_IN_OUT = 'I'
+    AND PRM.RM_TYPE = 'D'
+    AND PRM.N_DCCP_YN = 'N'
+    AND PRM.TC_DAY <![CDATA[ < ]]> DATE_FORMAT(SYSDATE(),'%Y%m%d')
+    <if test="text != null and text != ''">
+      AND (
+      PHD.NAME LIKE CONCAT('%',#{text},'%')
+      OR PHD.EMPLOYEE_NO LIKE CONCAT('%',#{text},'%')
+      )
+    </if>
+    <if test="stDate != null and stDate != '' and edDate != null and edDate != ''">
+      AND PRM.TC_DAY BETWEEN #{stDate} AND #{edDate}
+    </if>
+    <include refid="COMMON.sqlCountBottom" />
+  </select>
+
+  <select id="rfidChk" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo" resultType="com.hankook.pg.content.admin.rfid.vo.RfidVo">
+    SELECT R_ID, R_IN_OUT
+    FROM PG_RFID
+    WHERE 1=1
+    AND R_QR_ID = #{rQrId}
+    AND R_STATUS = 'Y'
+  </select>
+  <select id="wiressChk" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo" resultType="com.hankook.pg.content.admin.wiress.vo.WiressVo">
+    SELECT W_ID, W_IN_OUT
+    FROM PG_WIRESS
+    WHERE 1=1
+    AND W_QR_ID = #{wQrId}
+    AND W_STATUS = 'Y'
+  </select>
+
+  <update id="rfidInOut" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RFID
+    SET R_IN_OUT = #{inOut}
+    WHERE R_ID = #{rId}
+  </update>
+  <update id="wiressInOut" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_WIRESS
+    SET W_IN_OUT = #{inOut}
+    WHERE W_ID = #{wId}
+  </update>
+
+  <select id="rfidIdChk" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo" resultType="_int">
+    SELECT COUNT (*)
+    FROM PG_RFID
+    WHERE 1=1
+    AND R_ID = #{rId}
+    AND R_STATUS = 'Y'
+    AND R_IN_OUT = 'O'
+  </select>
+  <select id="wiressIdChk" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo" resultType="_int">
+    SELECT COUNT (*)
+    FROM PG_WIRESS
+    WHERE 1=1
+    AND W_ID = #{wId}
+    AND W_STATUS = 'Y'
+    AND W_IN_OUT = 'O'
+  </select>
+
+  <select id="getAllCCode" parameterType="com.hankook.pg.content.admin.testerManage.vo.TestCarVo" resultType="com.hankook.pg.content.admin.testerManage.vo.TestCarVo">
+    SELECT PC.C_CODE
+    FROM PG_RESOURCE_MAPPING PRM
+    LEFT OUTER JOIN PG_TEST_SCHDULE PTS on PRM.TC_SEQ = PTS.TC_SEQ
+    LEFT OUTER JOIN PG_CAR PC on PRM.C_CODE = PC.C_CODE
+    WHERE #{tcDay} BETWEEN PTS.TC_DAY AND PTS.TC_DAY2
+    AND PTS.TC_APPROVAL = '3' AND PTS.TC_STEP in('00000', '00001')
+    AND PC.C_NUMBER = (
+        SELECT C_NUMBER FROM PG_CAR WHERE C_CODE = #{cCode}
+        )
+    GROUP BY PC.C_CODE
+
+  </select>
+
+</mapper>

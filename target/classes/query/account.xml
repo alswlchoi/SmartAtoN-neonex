@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hankook.pg.content.account.dao.AccountDao">
+
+    <resultMap id="accountResult" type="com.hankook.pg.share.entity.AccountEntity">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+        <result column="orgn_code" property="orgnCode" jdbcType="VARCHAR" />
+        <result column="crprt_name" property="crprtName" jdbcType="VARCHAR" />
+        <result column="phone_num" property="phoneNum" jdbcType="VARCHAR" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="role" property="role" jdbcType="VARCHAR" />
+        <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        <result column="reg_dt" property="regDt" jdbcType="DATE" />
+        <result column="upd_dt" property="updDt" jdbcType="DATE" />
+        <result column="reg_id" property="regId" jdbcType="VARCHAR" />
+        <result column="upd_id" property="updId" jdbcType="VARCHAR" />
+        <result column="agre_yn" property="agreYn" jdbcType="CHAR" />
+        <result column="use_yn" property="useYn" jdbcType="CHAR" />
+        <result column="acce_dt" property="acceDt" jdbcType="DATE" />
+        <result column="fail_cnt" property="failCnt" jdbcType="NUMERIC" />
+        <result column="pwd_chg_dt" property="pwdChgDt" jdbcType="DATE" />
+        <result column="pwd_chg_yn" property="pwdChgYn" jdbcType="CHAR" />
+    </resultMap>
+
+    <sql id="ACCOUNT_LIST">
+        SELECT
+            AC.ID
+        ,   AC.NAME
+        ,   AC.PWD
+        ,   ORG.ORGN_CODE
+        ,   ORG.CRPRT_NAME
+        ,   AC.PHONE_NUM
+        ,   AC.EMAIL
+        ,   R.ROLE
+        ,   R.ROLE_NAME
+        ,   AC.REG_DT
+        ,   AC.UPD_DT
+        ,   AC.REG_ID
+        ,   AC.UPD_ID
+        ,   AC.AGRE_YN
+        ,   AC.USE_YN
+        ,   AC.ACCE_DT
+        ,   AC.FAIL_CNT
+        ,   AC.PWD_CHG_DT
+        ,   AC.PWD_CHG_YN
+        FROM ACCOUNT AC, ORGANIZATION ORG, ROLE R
+        WHERE AC.ORGN_CODE = ORG.ORGN_CODE AND AC.ROLE = R.ROLE
+          AND AC.ROLE != '${@hankook.pg.share.constant.AccountRole@ROLE_ADMIN.getRole()}'
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(id)">
+            AND AC.ID = #{id}
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(name)">
+            AND AC.NAME LIKE '%'||#{name}||'%'
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(orgName)">
+            AND ORG.CRPRT_NAME LIKE '%'||#{orgName}||'%'
+        </if>
+        <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(role)">
+            AND AC.ROLE = #{role}
+        </if>
+    </sql>
+
+    <select id="findAccountList" parameterType="com.hankook.pg.content.account.dto.SearchAccountDto" resultMap="accountResult">
+        --
+        -- AccountDao.findAccountList
+<!--         <include refid="COMMON.sqlPagingTop" /> -->
+<!--         <include refid="ACCOUNT_LIST" /> -->
+<!--         <include refid="COMMON.sqlPagingBottom" /> -->
+    </select>
+
+    <select id="findAccountsCount" parameterType="com.hankook.pg.content.account.dto.SearchAccountDto" resultType="Integer">
+        SELECT COUNT(*)
+        FROM (
+        <include refid="ACCOUNT_LIST" />
+        )
+    </select>
+
+    <select id="findAccountById" parameterType="String" resultType="com.hankook.pg.share.entity.AccountEntity">
+        SELECT
+            AC.ID
+        ,   AC.NAME
+        ,   AC.PWD
+        ,   ORG.ORGN_CODE
+        ,   ORG.CRPRT_NAME
+        ,   AC.PHONE_NUM
+        ,   AC.EMAIL
+        ,   R.ROLE
+        ,   R.ROLE_NAME
+        ,   AC.REG_DT
+        ,   AC.UPD_DT
+        ,   AC.REG_ID
+        ,   AC.UPD_ID
+        ,   AC.AGRE_YN
+        ,   AC.USE_YN
+        ,   AC.ACCE_DT
+        ,   AC.FAIL_CNT
+        ,   AC.PWD_CHG_DT
+        ,   AC.PWD_CHG_YN
+        FROM ACCOUNT AC, ORGANIZATION ORG, ROLE R
+        WHERE   AC.ORGN_CODE = ORG.ORGN_CODE AND AC.ROLE = R.ROLE
+        AND     AC.ID = #{id}
+    </select>
+
+    <select id="findAccountId" parameterType="map" resultType="String">
+        SELECT  AC.ID
+        FROM    ACCOUNT AC
+        WHERE   AC.NAME = #{name}
+          AND   AC.PHONE_NUM = #{phoneNum}
+          AND   AC.EMAIL = #{email}
+    </select>
+
+    <insert id="insertAccount" parameterType="com.hankook.pg.share.entity.AccountEntity">
+        INSERT INTO ACCOUNT (
+            ID
+        ,   NAME
+        ,   PWD
+        ,   ORGN_CODE
+        ,   PHONE_NUM
+        ,   EMAIL
+        ,   ROLE
+        ,   REG_DT
+        ,   REG_ID
+        ,   AGRE_YN
+        ,   FAIL_CNT
+        ,   PWD_CHG_DT
+        ,   PWD_CHG_YN
+        ,   USE_YN
+        ) VALUES (
+            #{id, jdbcType=VARCHAR}
+        ,   #{name, jdbcType=VARCHAR}
+        ,   #{pwd, jdbcType=VARCHAR}
+        ,   #{orgnCode, jdbcType=VARCHAR}
+        ,   #{phoneNum, jdbcType=VARCHAR}
+        ,   #{email, jdbcType=VARCHAR}
+        ,   #{role, jdbcType=VARCHAR}
+        ,   SYSDATE
+        ,   #{regId, jdbcType=VARCHAR}
+        ,   #{agreYn, jdbcType=CHAR}
+        ,   0
+        ,   SYSDATE
+        ,   #{pwdChgYn, jdbcType=CHAR}
+        ,   'Y'
+        )
+    </insert>
+
+    <update id="updateAccount" parameterType="com.hankook.pg.share.entity.AccountEntity">
+        UPDATE ACCOUNT
+        SET ORGN_CODE = #{orgnCode, jdbcType=VARCHAR}
+        ,   PHONE_NUM = #{phoneNum, jdbcType=VARCHAR}
+        ,   EMAIL = #{email, jdbcType=VARCHAR}
+        ,   ROLE = #{role, jdbcType=VARCHAR}
+        ,   AGRE_YN = DECODE(#{agreYn}, 'null', null, #{agreYn})
+        ,   UPD_ID = #{updId, jdbcType=VARCHAR}
+        ,   ACCE_DT = #{acceDt, jdbcType=DATE}
+        ,   UPD_DT = SYSDATE
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateMyAccount" parameterType="com.hankook.pg.share.entity.AccountEntity">
+        UPDATE ACCOUNT
+        SET PHONE_NUM = #{phoneNum, jdbcType=VARCHAR}
+        ,   EMAIL = #{email, jdbcType=VARCHAR}
+        ,   UPD_ID = #{id, jdbcType=VARCHAR}
+        ,   UPD_DT = SYSDATE
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updatePassword" parameterType="map">
+        UPDATE ACCOUNT
+        SET PWD = #{password, jdbcType=VARCHAR}
+        ,   PWD_CHG_YN = #{pwdChgYn, jdbcType=CHAR}
+        ,   PWD_CHG_DT = SYSDATE
+        ,   FAIL_CNT = 0
+        WHERE ID = #{id}
+    </update>
+
+    <select id="findManagerAccounts" resultType="com.hankook.pg.share.entity.AccountEntity">
+        SELECT
+            AC.ID
+        ,   AC.NAME
+        ,   AC.PWD
+        ,   ORG.ORGN_CODE
+        ,   ORG.CRPRT_NAME
+        ,   AC.PHONE_NUM
+        ,   AC.EMAIL
+        ,   R.ROLE
+        ,   R.ROLE_NAME
+        ,   AC.REG_DT
+        ,   AC.UPD_DT
+        ,   AC.REG_ID
+        ,   AC.UPD_ID
+        ,   AC.AGRE_YN
+        ,   AC.USE_YN
+        ,   AC.ACCE_DT
+        ,   AC.FAIL_CNT
+        ,   AC.PWD_CHG_DT
+        ,   AC.PWD_CHG_YN
+        FROM ACCOUNT AC, ORGANIZATION ORG, ROLE R
+        WHERE AC.ORGN_CODE = ORG.ORGN_CODE AND AC.ROLE = R.ROLE
+          AND AC.ROLE IN (
+                '${@com.hankook.pg.share.constant.AccountRole@ROLE_ADMIN.getRole()}',
+                '${@com.hankook.pg.share.constant.AccountRole@ROLE_OP.getRole()}',
+                '${@com.hankook.pg.share.constant.AccountRole@ROLE_PM.getRole()}'
+          )
+    </select>
+
+    <select id="findRootAccount" resultType="com.hankook.pg.share.entity.AccountEntity">
+        SELECT
+            AC.ID
+        ,   AC.NAME
+        ,   AC.PWD
+        ,   ORG.ORGN_CODE
+        ,   ORG.CRPRT_NAME
+        ,   AC.PHONE_NUM
+        ,   AC.EMAIL
+        ,   R.ROLE
+        ,   R.ROLE_NAME
+        ,   AC.REG_DT
+        ,   AC.UPD_DT
+        ,   AC.REG_ID
+        ,   AC.UPD_ID
+        ,   AC.AGRE_YN
+        ,   AC.USE_YN
+        ,   AC.ACCE_DT
+        ,   AC.FAIL_CNT
+        ,   AC.PWD_CHG_DT
+        ,   AC.PWD_CHG_YN
+        FROM ACCOUNT AC, ORGANIZATION ORG, ROLE R
+        WHERE AC.ORGN_CODE = ORG.ORGN_CODE AND AC.ROLE = R.ROLE
+          AND AC.ROLE = '${@com.hankook.pg.share.constant.AccountRole@ROLE_ADMIN.getRole()}'
+    </select>
+
+    <select id="findAccountNotificationsById" parameterType="String" resultType="String">
+        SELECT AN.SVC_SE FROM ACCOUNT_NOTI AN WHERE AN.ID = #{id}
+    </select>
+
+    <delete id="deleteAccountNotificationsById" parameterType="String">
+        DELETE FROM ACCOUNT_NOTI WHERE ID = #{id}
+    </delete>
+
+    <insert id="insertAccountNotification" parameterType="map">
+        INSERT INTO ACCOUNT_NOTI (
+            ID
+        ,   SVC_SE
+        ) VALUES (
+            #{id}
+        ,   #{svcSe}
+        )
+    </insert>
+
+    <delete id="deleteAccount" parameterType="String">
+        DELETE FROM ACCOUNT WHERE ID = #{id}
+    </delete>
+
+</mapper>
