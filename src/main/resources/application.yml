@@ -53,11 +53,11 @@ spring:
       pg:
         driver-class-name: "org.mariadb.jdbc.Driver"
         jdbc-url: "jdbc:mariadb://106.248.228.114:33306/hankook"
-        username: "hankook_web"
-        password: "gksrnrpg3#"
 #        jdbc-url: "jdbc:mariadb://10.182.25.182:3306/HKPG_DB"
-#        username: "hankook_pg"
-#        password: "hankook_pg"
+#        username: "hankook_web"
+#        password: "gksrnrpg3#"
+        username: "hankook_pg"
+        password: "hankook_pg"
         maximum-pool-size: 100
         pool-name: hankook-db-cp
         max-lifetime: 60000
