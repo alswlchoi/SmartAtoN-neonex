@@ -16,7 +16,7 @@
                ptt.VHCL_CODE,
                ptt.VHCL_NAME,
                ptt.RETURN_SCRAP,
-               pts.TM_ENGINEER as ENGINEER,
+               phd.NAME as ENGINEER,
                pts.TIRE_PUSH,
                pts.TM_LIFT as LIFT,
                location.LOCAKY as TIRE_NUMBER,
@@ -27,6 +27,7 @@
                pts.TM_TRWH_YN
         FROM PG_TIRE_TOTAL ptt
                  JOIN PG_TIRE_MANAGEMENT pts ON ptt.REQ_NO=pts.TC_REQUEST_NUMBER and ptt.PLN_DTM = pts.TC_DAY and ptt.TEST_ITEM_NAME = pts.TEST_ITEM_NAME
+                 LEFT JOIN PG_HINT_DRIVER phd on pts.TM_ENGINEER = phd.EMPLOYEE_NO
                  LEFT JOIN (select REQ_NO,TC_DAY,TEST_ITEM_NAME, group_concat(distinct WAREKY) as WAREKY , group_concat(distinct LOCAKY) as LOCAKY
                             FROM PG_TIRE
                             JOIN IFSTK_TIRE ON PG_TIRE.TIRE_BARCODE_NO = IFSTK_TIRE.LOTA01

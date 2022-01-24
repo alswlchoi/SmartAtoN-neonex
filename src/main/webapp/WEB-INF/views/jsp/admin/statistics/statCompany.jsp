@@ -266,17 +266,17 @@ function downloadExcel(targetId, fileName) {
                
                     <!-- search_wrap -->
                     <section class="search_wrap">
-                        <div class="form_group m-r-10">
-                            <div class="check_inline">
-                                <span class="label">회원구분</span>
-                                <label class="check_default">
-                                    <input type="checkbox" name="cbox" value="B">
-                                    <span class="check_icon"></span>B2B회원</label>
-                                <label class="check_default">
-                                    <input type="checkbox" name="cbox" value="H">
-                                    <span class="check_icon"></span>내부평가</label>
-                            </div>
-                        </div>
+<!--                         <div class="form_group m-r-10"> -->
+<!--                             <div class="check_inline"> -->
+<!--                                 <span class="label">회원구분</span> -->
+<!--                                 <label class="check_default"> -->
+<!--                                     <input type="checkbox" name="cbox" value="B"> -->
+<!--                                     <span class="check_icon"></span>B2B회원</label> -->
+<!--                                 <label class="check_default"> -->
+<!--                                     <input type="checkbox" name="cbox" value="H"> -->
+<!--                                     <span class="check_icon"></span>내부평가</label> -->
+<!--                             </div> -->
+<!--                         </div> -->
                         <div class="form_group w230">
                             <input type="text" id="date1" autocomplete='off' class="form_control dateicon datefromto"
                                 placeholder="기간 선택" name="">
