@@ -17,7 +17,7 @@
  *  INIT
  * ----------------------------------
  */
-
+     
 $(function(){
     searchToday(1);
     searchDay(1,moment().add(1,'day').format('YYYYMMDD'),moment().add(1,'day').format('YYYYMMDD'));
