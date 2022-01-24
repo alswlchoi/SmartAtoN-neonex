@@ -348,6 +348,10 @@ $(document).on("click",".godetail",function(){
 
 //상세보기 테이블
 function drawingDetailTable(trReserve, driver, company){
+
+    console.log(trReserve);
+
+
 	$("#data_detail").show();
 	var html='';
 	var trTrackType = undefinedChk(trReserve.trTrackType,"");
@@ -361,7 +365,15 @@ function drawingDetailTable(trReserve, driver, company){
 	html += '</tr>';
 	html += '</thead>';		
 	html += '<tbody>';
-	html += '<td>'+undefinedChk(trReserve.tcReservCode,"")+'</td>';
+
+    html += '<td>'
+        if(trReserve.compCode == "THINT") {
+            html += '<br /><span class="color_red">' +undefinedChk(trReserve.tcReservCode,"")+'</span><br>';
+        }
+        html += undefinedChk(trReserve.tcRequestNumber,"") ;
+    +'</td>';
+
+    html += '<td>'+undefinedChk(trReserve.tcRequestNumber,"")+'</td>';
 	var tcRegDt = undefinedChk(trReserve.tcRegDt,"");
 	if(tcRegDt.length==14){
 		tcRegDt = tcRegDt.substring(0,4)+ "."+ tcRegDt.substring(4,6)+ "."+ tcRegDt.substring(6,8);
@@ -373,14 +385,6 @@ function drawingDetailTable(trReserve, driver, company){
 	tcDay2 = tcDay2.substring(0,4)+'-'+tcDay2.substring(4,6)+'-'+tcDay2.substring(6,8);
 	html += '<td><div class="form_group w230">'+tcDay+' ~ '+tcDay2+'</td>';
 	html += '<td>';
-	if(undefinedChk(trReserve.compName,"")==""){
-		html += "T-HINT";
-	}else{
-		html += trReserve.compName;
-		if(undefinedChk(trReserve.blackList,"")=="Y") {
-			html += '<br /><span class="color_red">(B/L)</span>';	
-		}
-	}
 	html += '</td>';
 	html += '<td>';
 	var trackInfo = new Array();
@@ -565,6 +569,7 @@ function drawingDetailTable(trReserve, driver, company){
 
 //테이블 그리는 함수
 function drawingTable(rows, paging){
+
 	var html='';
 	if(rows.length==0){
 		html += '<tr class="tr_nodata"><td colspan="8">데이터가 존재하지 않습니다.</td></tr>';
@@ -574,8 +579,16 @@ function drawingTable(rows, paging){
 			html += '<td><span style="display:none">'+undefinedChk(rows[list].tcSeq,"")+'</span>';
 			html += paging.totalCount-(paging.pageNo-1)*paging.pageSize-list;
 			html += '</td>';
-			html += '<td>'+undefinedChk(rows[list].tcReservCode,"")+'</td>';
-			var tcRegDt = "";
+			//html += '<td>'+undefinedChk(rows[list].tcReservCode,"")+'</td>';
+
+            html += '<td>'
+            if(rows[list].compCode == "THINT") {
+                html += '<br /><span class="color_red">' +undefinedChk(rows[list].tcReservCode,"")+'</span><br>';
+            }
+            html += undefinedChk(rows[list].tcRequestNumber,"") ;
+            +'</td>';
+
+            var tcRegDt = "";
 			if(rows[list].tcRegDt.length==14){
 				tcRegDt += rows[list].tcRegDt.substring(0,4)+ "."+ rows[list].tcRegDt.substring(4,6)+ "."+ rows[list].tcRegDt.substring(6,8);
 			}
