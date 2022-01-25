@@ -5,7 +5,7 @@
 <sec:csrfMetaTags/>
 <script type="text/javascript">
 
-	//화면 최초 조 회
+	//화면 최초 조회
 	$(document).ready(function(){
 		search(1);
 		//페이징 버튼
