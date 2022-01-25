@@ -133,7 +133,7 @@ function searchToday(page){
 function searchDay(page,startDate,endDate) {
     var param = {
         pageNo : page,
-        date : startDate,
+        date : startDate,  
         endDate : endDate
     }
     console.log("66666");
