@@ -366,8 +366,7 @@
         if(trReserve.compCode == "THINT") {
             html += '<br /><span class="color_red">' +undefinedChk(trReserve.tcReservCode,"")+'</span><br>';
         }
-        html += undefinedChk(trReserve.tcRequestNumber,"") ;
-        +'</td>';
+        html += undefinedChk(trReserve.tcRequestNumber,"")+ '</td>';
 
         html += '<td>'+undefinedChk(trReserve.tcRequestNumber,"")+'</td>';
         var tcRegDt = undefinedChk(trReserve.tcRegDt,"");
@@ -380,8 +379,6 @@
         tcDay = tcDay.substring(0,4)+'-'+tcDay.substring(4,6)+'-'+tcDay.substring(6,8);
         tcDay2 = tcDay2.substring(0,4)+'-'+tcDay2.substring(4,6)+'-'+tcDay2.substring(6,8);
         html += '<td><div class="form_group w230">'+tcDay+' ~ '+tcDay2+'</td>';
-        html += '<td>';
-        html += '</td>';
         html += '<td>';
         var trackInfo = new Array();
         var trNickName = "";
