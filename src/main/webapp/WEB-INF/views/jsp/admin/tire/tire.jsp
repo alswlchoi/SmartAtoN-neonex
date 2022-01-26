@@ -136,7 +136,6 @@ function searchDay(page,startDate,endDate) {
         date : startDate,
         endDate : endDate
     }
-    console.log("66666");
     postAjax("/admin/tire",param,"searchCallback",null,null,null);
     
 }
