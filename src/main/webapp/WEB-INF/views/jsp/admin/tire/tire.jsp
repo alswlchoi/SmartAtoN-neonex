@@ -302,13 +302,11 @@ function confirmData(data) {
     colType = data.attr("data-opt");
     checkDay = data.attr("data-day");
 	
-    console.log("11111");
     if(colType=="tireAssembly") {
         var check = data.attr("data-push");
         if(check == "null") {
             alert("출고 요청 전에 조립할 수 없습니다.");
         }else {
-            console.log("22222");
             confirm("OK (저장) 처리 하시겠습니까?", "confirmTrue", "confirmFalse");
         }
     }else if(colType =="tireDisassy") {
@@ -324,7 +322,6 @@ function confirmData(data) {
 }
 function confirmTrue() {
     insertData();
-    console.log("44444");
 }
 function confirmFalse(){}
 
@@ -358,7 +355,6 @@ function insertCallback(data) {
         }else {
             var startDay = $("#date-start").val().replaceAll("-","");
             var endDay = $("#date-end").val().replaceAll("-","");
-            console.log("555555");
             searchDay($(".dayPageNo.on").data("page"),startDay,endDay);
             
         }
