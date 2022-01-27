@@ -161,7 +161,6 @@ function searchCallback(data) {
                 html += '<tr class ="bg_blue">';
             }
 
-			console.log(list[i].reqNo);
 //             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
 //             html += '   <td>'+ list[i].reqNo + '</td>';
             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
