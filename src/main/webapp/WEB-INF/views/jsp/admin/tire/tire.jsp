@@ -127,7 +127,7 @@ function searchToday(page){
     var param = {
         pageNo:page
     }
-    postAjax("/admin/tire",param,"searchCallback",null,null,null);
+    asyncPostAjax("/admin/tire",param,"searchCallback",null,null,null);
 }
 
 function searchDay(page,startDate,endDate) {
@@ -136,7 +136,7 @@ function searchDay(page,startDate,endDate) {
         date : startDate,
         endDate : endDate
     }
-    postAjax("/admin/tire",param,"searchCallback",null,null,null);
+    asyncPostAjax("/admin/tire",param,"searchCallback",null,null,null);
     
 }
 
@@ -164,8 +164,8 @@ function searchCallback(data) {
 			console.log(list[i].reqNo);
 //             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
 //             html += '   <td>'+ list[i].reqNo + '</td>';
-            html += '   <td class="test'+list[i].reqNo+'1 , border-b-1">'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
-            html += '   <td class="test'+list[i].reqNo+'2 , border-b-1">'+ list[i].reqNo + '</td>';
+            html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
+            html += '   <td class="test'+list[i].reqNo+'2  border-b-1">'+ list[i].reqNo + '</td>';
             html += '   <td class="border-l-1">'+ list[i].setSize +'</td>';
             html += '   <td>'+ list[i].tireSize.replaceAll(',' , '</br>') + '</td>';
             html += '   <td>'+ list[i].wheelSize.replaceAll(',', '</br>') + '</td>';
@@ -256,7 +256,6 @@ function searchCallback(data) {
     if(type == "today") {
         $("#tireList").html(html);
         for (var i in data.list) {
-            funRowspan("test"+data.list[i].reqNo+"1");
             funRowspan("test"+data.list[i].reqNo+"2");
           }
         drawingPage(data.paging);
