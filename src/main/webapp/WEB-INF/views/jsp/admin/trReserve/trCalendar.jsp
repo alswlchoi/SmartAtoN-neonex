@@ -364,11 +364,10 @@
 
         html += '<td>'
         if(trReserve.compCode == "THINT") {
-            html += '<br /><span class="color_red">' +undefinedChk(trReserve.tcReservCode,"")+'</span><br>';
+            html += undefinedChk(trReserve.tcReservCode,"")+'</span><br>';
         }
-        html += undefinedChk(trReserve.tcRequestNumber,"")+ '</td>';
+        html += '<span class="color_red">' + undefinedChk(trReserve.tcRequestNumber,"")+ '</td>';
 
-        html += '<td>'+undefinedChk(trReserve.tcRequestNumber,"")+'</td>';
         var tcRegDt = undefinedChk(trReserve.tcRegDt,"");
         if(tcRegDt.length==14){
             tcRegDt = tcRegDt.substring(0,4)+ "."+ tcRegDt.substring(4,6)+ "."+ tcRegDt.substring(6,8);
@@ -379,7 +378,19 @@
         tcDay = tcDay.substring(0,4)+'-'+tcDay.substring(4,6)+'-'+tcDay.substring(6,8);
         tcDay2 = tcDay2.substring(0,4)+'-'+tcDay2.substring(4,6)+'-'+tcDay2.substring(6,8);
         html += '<td><div class="form_group w230">'+tcDay+' ~ '+tcDay2+'</td>';
+
         html += '<td>';
+        if(undefinedChk(trReserve.compCode,"")=="THINT"){
+            html += '한국타이어';
+        }else{
+            html += undefinedChk(trReserve.compName,"");
+            if(undefinedChk(trReserve.blackList,"")=="Y") {
+                html += '<br /><span class="color_red">(B/L)</span>';
+            }
+        }
+        html += '</td>'
+
+        html += '<td>'
         var trackInfo = new Array();
         var trNickName = "";
         trackInfo = trReserve.trackInfo;
@@ -395,6 +406,7 @@
             trTrackType = undefinedChk(trackInfo[list].trTrackType, "");
         }
         html += trNickName + '</td>';
+
         html += '<td>';
         if(trTrackType=="TYP00") {
             html += '공동';
@@ -576,9 +588,9 @@
 
                 html += '<td>'
                 if(rows[list].compCode == "THINT") {
-                    html += '<br /><span class="color_red">' +undefinedChk(rows[list].tcReservCode,"")+'</span><br>';
+                    html += undefinedChk(rows[list].tcReservCode,"")+'</span><br>';
                 }
-                html += undefinedChk(rows[list].tcRequestNumber,"") ;
+                html += '<span class="color_red">'+undefinedChk(rows[list].tcRequestNumber,"") ;
                 +'</td>';
 
                 var tcRegDt = "";
