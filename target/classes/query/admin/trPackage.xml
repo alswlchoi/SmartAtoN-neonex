@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.trPackage.dao.TrPackageDao">
+	<sql id="TRPACKAGE_LIST">
+		SELECT 
+        	TP_ID,
+        	TP_NAME,
+        	T_ID
+		FROM PG_TRACK_PACKAGE
+	</sql>
+    <select id="getMaxCompCode" resultType="String">
+	     SELECT IFNULL(MAX(TP_ID), 'P0001') TP_ID FROM PG_TRACK_PACKAGE
+    </select>
+    <select id="getTrPackageList" parameterType="com.hankook.pg.content.admin.trPackage.dto.SearchTrPackageDto" resultType="com.hankook.pg.content.admin.trPackage.dto.TrPackageDto">
+	     <include refid="TRPACKAGE_LIST" />
+			WHERE 1=1
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(tpName)">
+	         	AND TP_NAME LIKE CONCAT('%',#{tpName},'%')
+	         </if> 
+			ORDER BY TP_ID DESC
+	   		LIMIT #{startRowNum} ,#{pageSize}
+    </select>
+    
+    <select id="findTrPackageCount" parameterType="com.hankook.pg.content.admin.trPackage.dto.SearchTrPackageDto" resultType="Integer">
+         SELECT COUNT(*)
+         FROM PG_TRACK_PACKAGE WHERE 1=1
+         <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(tpName)">
+         	AND TP_NAME LIKE CONCAT('%',#{tpName},'%')
+         </if> 
+    </select>
+    
+    <select id="getCompCodeduplCheck" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) AS CNT
+		FROM PG_TRACK_PACKAGE
+		WHERE TP_ID=#{tpId}
+    </select>
+    
+    <select id="getTrPackageDetail" parameterType="String" resultType="com.hankook.pg.content.admin.trPackage.dto.TrPackageDto">
+         <include refid="TRPACKAGE_LIST" />
+		WHERE TP_ID=#{tpId}
+    </select>    
+    
+    <insert id="insertTrPackage" parameterType="com.hankook.pg.content.admin.trPackage.dto.TrPackageDto">
+       INSERT INTO PG_TRACK_PACKAGE
+		(TP_ID, TP_NAME, T_ID)
+		VALUES(#{tpId}, #{tpName}, #{tId})
+
+    </insert>
+    
+    <update id="updateTrPackage" parameterType="com.hankook.pg.content.admin.trPackage.dto.TrPackageDto">
+        UPDATE PG_TRACK_PACKAGE SET
+        	TP_NAME=#{tpName},
+        	T_ID=#{tId}
+		WHERE TP_ID=#{tpId}
+    </update>
+    
+    <delete id = "deleteTrPackage" parameterType="com.hankook.pg.content.admin.trPackage.dto.TrPackageDto">
+        DELETE FROM PG_TRACK_PACKAGE
+        WHERE TP_ID=#{tpId}
+    </delete>
+</mapper>

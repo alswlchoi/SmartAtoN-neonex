@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.user.userShop.dao.UserShopDao">
+<select id="selectUserShop" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+  SELECT PSS.WSS_RESERV_DAY,
+  PSS.WSS_ST_DAY,
+  PSS.WSS_ED_DAY,
+  PSS.WSS_APPROVAL,
+  PSS.WS_CODE,
+  PS.WS_NAME,
+  PC.COMP_NAME
+  FROM PG_SHOP_SCHDULE PSS
+  INNER JOIN PG_SHOP PS on PSS.WS_CODE = PS.WS_CODE
+  INNER JOIN PG_COMPANY PC on PSS.COMP_CODE = PC.COMP_CODE
+  WHERE 1=1
+  AND PSS.WSS_APPROVAL != 'R'
+  AND PSS.WSS_APPROVAL != 'C'
+<if test="wssApproval != null and wssApproval != ''">
+  AND PSS.WSS_APPROVAL = #{wssApproval}
+</if>
+<if test="wssStDay != null and wssStDay != ''">
+  AND PSS.WSS_ST_DAY &gt;= #{wssStDay}
+</if>
+<if test="wsCode != null and wsCode != ''">
+  AND PSS.WS_CODE = #{wsCode}
+</if>
+ORDER BY WSS_ST_DAY,WSS_ED_DAY
+</select>
+
+<insert id="insertUserShop" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+  INSERT INTO PG_SHOP_SCHDULE(
+    COMP_CODE
+    , WSS_ST_DAY
+    , WSS_ED_DAY
+    , WSS_RESERV_DAY
+    , WSS_RESERV_NAME
+    , WSS_APPROVAL
+    , WSS_MEMO
+    , WSS_RESERV_CODE
+    , WS_CODE
+    , WS_PRICE
+    , WSS_REG_USER
+    , WSS_REG_DT
+    )
+    VALUES(
+    #{compCode}
+    ,#{wssStDay}
+    ,#{wssEdDay}
+    ,#{wssReservDay}
+    ,#{wssReservName}
+    ,#{wssApproval}
+    ,#{wssMemo}
+    ,#{wssReservCode}
+    ,#{wsCode}
+    ,#{wsPrice}
+    ,#{wssRegUser}
+    ,DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+    )
+</insert>
+
+<update id="updateUserShop" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+  UPDATE PG_SHOP_SCHDULE
+    SET COMP_CODE = #{compCode}
+    , WSS_ST_DAY = #{wssStDay}
+    , WSS_ED_DAY = #{wssEdDay}
+    , WSS_RESERV_NAME = #{wssReservName}
+    , WSS_APPROVAL = #{wssApproval}
+    , WSS_MEMO = #{wssMemo}
+    , WS_CODE = #{wsCode}
+    , WS_PRICE = #{wsPrice}
+    , WSS_REG_USER = #{wssRegUser}
+    , WSS_REG_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d%H%i%s')
+    WHERE WSS_RESERV_CODE = #{wssReservCode}
+</update>
+
+<delete id="deleteUserShop" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+  DELETE FROM PG_SHOP_SCHDULE
+  WHERE WSS_RESERV_CODE = #{wssReservCode}
+</delete>
+
+<select id="getUserInfo" parameterType="com.hankook.pg.content.member.dto.MemberDto" resultType="com.hankook.pg.content.member.dto.MemberDto">
+  SELECT PC.COMP_NAME,
+       PC.COMP_CODE,
+       PC.COMP_LICENSE,
+       PM.MEM_NAME,
+       PM.MEM_DEPT,
+       PM.MEM_PHONE,
+       PC.COMP_PHONE,
+       PM.MEM_EMAIL,
+       PC.COMP_ACCT_NAME,
+       PC.COMP_ACCT_DEPT,
+       PC.COMP_ACCT_EMAIL,
+       PC.COMP_ACCT_PHONE
+  FROM PG_MEMBER PM
+  INNER JOIN PG_COMPANY PC ON PM.COMP_CODE = PC.COMP_CODE
+  WHERE PM.MEM_ID = #{memId}
+</select>
+
+<select id="getPrice" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="integer">
+  SELECT WS_PRICE
+  FROM PG_SHOP
+  WHERE WS_CODE = #{wsCode}
+</select>
+
+<select id="getMaxReserveCode" parameterType="String" resultType="String">
+  SELECT
+    IFNULL(MAX(WSS_RESERV_CODE), '')
+  FROM PG_SHOP_SCHDULE
+  WHERE WSS_RESERV_CODE LIKE CONCAT(#{wssReservCode},'%')
+</select>
+
+<update id="updateMember" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+UPDATE PG_MEMBER
+SET MEM_PHONE = #{memPhone},
+MEM_EMAIL = #{memEmail}
+WHERE MEM_ID = #{memId}
+</update>
+
+<update id="updateCompany" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+UPDATE PG_COMPANY
+SET COMP_PHONE = #{compPhone},
+COMP_ACCT_NAME = #{compAcctName},
+COMP_ACCT_DEPT = #{compAcctDept},
+COMP_ACCT_EMAIL = #{compAcctEmail},
+COMP_PHONE = #{compPhone},
+COMP_ACCT_PHONE = #{compAcctPhone}
+WHERE COMP_CODE = #{compCode}
+</update>
+
+<select id="chkSchedule" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="INTEGER">
+  SELECT COUNT(*)
+  FROM PG_SHOP_SCHDULE
+  WHERE WS_CODE = #{wsCode}
+  AND WSS_ST_DAY <![CDATA[ <= ]]> #{wssEdDay}
+  AND WSS_ED_DAY <![CDATA[ >= ]]> #{wssStDay}
+</select>
+<select id="chkWeekDay" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="INTEGER">
+  SELECT COUNT(*)
+  FROM PG_WEEK_DAY
+  WHERE WD_KIND = #{wsCode}
+  AND WD_ST_DT <![CDATA[ <= ]]> #{wssEdDay}
+  AND WD_ED_DT <![CDATA[ >= ]]> #{wssStDay}
+  AND WD_CON = 1
+</select>
+<select id="chkDayOff" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="INTEGER">
+  SELECT COUNT(*)
+  FROM PG_DAY_OFF
+  WHERE 1=1
+  AND DO_KIND = 'F'
+  AND DO_ST_DAY <![CDATA[ <= ]]> #{wssEdDay}
+  AND DO_ED_DAY <![CDATA[ >= ]]> #{wssStDay}
+</select>
+
+<select id="getEvents" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="com.hankook.pg.content.user.userShop.vo.UserShopVo">
+  SELECT PSC.WSS_ST_DAY,
+       PSC.WSS_ED_DAY,
+       PS.WS_NAME
+  FROM PG_SHOP_SCHDULE PSC
+  INNER JOIN PG_SHOP PS on PSC.WS_CODE = PS.WS_CODE
+  WHERE 1=1
+  AND PSC.WSS_APPROVAL = #{wssApproval}
+  AND PSC.WSS_ST_DAY <![CDATA[ > ]]> #{wssStDay}
+</select>
+
+<select id="getWeekDay" parameterType="String" resultType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  SELECT PWD.WD_ST_DT, PWD.WD_ED_DT, PS.WS_NAME, PWD.WD_DAY
+  FROM PG_WEEK_DAY PWD
+  INNER JOIN PG_SHOP PS ON PWD.WD_KIND = PS.WS_CODE
+  WHERE PWD.WD_CON = 1
+  AND PS.WS_DEL_YN = 'N'
+  <if test="wdKind != null">
+    AND PWD.WD_KIND = #{wdKind}
+  </if>
+</select>
+<select id="getBWDay" resultType="com.hankook.pg.content.admin.weekday.dto.WeekdayDto">
+  SELECT PWD.WD_ST_DT, PWD.WD_ED_DT, PWD.WD_DAY
+  FROM PG_WEEK_DAY PWD
+  WHERE PWD.WD_CON = 1
+    AND PWD.WD_KIND = 'b'
+</select>
+
+<select id="reservChk" parameterType="com.hankook.pg.content.user.userShop.vo.UserShopVo" resultType="_int">
+  SELECT COUNT (*)
+  FROM PG_SHOP_SCHDULE
+  WHERE WS_CODE = #{wsCode}
+  AND WSS_RESERV_DAY LIKE CONCAT('%',#{wssStDay},'%')
+</select>
+</mapper>

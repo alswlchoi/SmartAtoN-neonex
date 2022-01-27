@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.tire.dao.TireDao">
+
+    <select id="findAllToday" parameterType="com.hankook.pg.content.admin.tire.dto.PagingAndSearchRequestDto" resultType="com.hankook.pg.content.admin.tire.domain.TireManagement">
+        <include refid="COMMON.sqlPagingTop" />
+        SELECT
+               pts.TM_SEQ,
+               ptt.PLN_DTM ,
+               ptt.REQ_NO,
+               ptt.TEST_ITEM_NAME,
+               ptt.SET_SIZE,
+               ptt.TIRE_SIZE,
+               ptt.WHEEL_SIZE,
+               ptt.VHCL_CODE,
+               ptt.VHCL_NAME,
+               ptt.RETURN_SCRAP,
+               pts.TM_ENGINEER as ENGINEER,
+               pts.TIRE_PUSH,
+               pts.TM_LIFT as LIFT,
+               location.LOCAKY as TIRE_NUMBER,
+               location.WAREKY as TIRE_LOCATION,
+               pts.WHEEL_LOCATION,
+               pts.TM_ASSEMBLY,
+               pts.TM_DISASSY,
+               pts.TM_TRWH_YN
+        FROM PG_TIRE_TOTAL ptt
+                 JOIN PG_TIRE_MANAGEMENT pts ON ptt.REQ_NO=pts.TC_REQUEST_NUMBER and ptt.PLN_DTM = pts.TC_DAY and ptt.TEST_ITEM_NAME = pts.TEST_ITEM_NAME
+                 LEFT JOIN (select REQ_NO,TC_DAY,TEST_ITEM_NAME, group_concat(distinct WAREKY) as WAREKY , group_concat(distinct LOCAKY) as LOCAKY
+                            FROM PG_TIRE
+                            JOIN IFSTK_TIRE ON PG_TIRE.TIRE_BARCODE_NO = IFSTK_TIRE.LOTA01
+                            GROUP BY REQ_NO,TC_DAY,TEST_ITEM_NAME) location
+                           ON location.REQ_NO = ptt.REQ_NO AND location.TC_DAY = ptt.PLN_DTM AND location.TEST_ITEM_NAME = ptt.TEST_ITEM_NAME
+        <choose>
+            <when test = "date != null and endDate !=null">
+                WHERE ptt.PLN_DTM between #{date} and #{endDate} and ptt.PLN_DTM != #{today}
+            </when>
+            <otherwise>
+                where ptt.PLN_DTM = #{today}
+            </otherwise>
+        </choose>
+        <include refid="COMMON.sqlPagingBottom" />
+    </select>
+
+    <select id="findAllTodayCount" parameterType="com.hankook.pg.content.admin.tire.dto.PagingAndSearchRequestDto" resultType="_int">
+        <include refid="COMMON.sqlCountTop"/>
+        SELECT
+            pts.TM_SEQ,
+            ptt.PLN_DTM ,
+            ptt.REQ_NO,
+            ptt.TEST_ITEM_NAME,
+            ptt.SET_SIZE,
+            ptt.TIRE_SIZE,
+            ptt.WHEEL_SIZE,
+            ptt.VHCL_CODE,
+            ptt.VHCL_NAME,
+            ptt.RETURN_SCRAP,
+            pts.TM_ENGINEER as ENGINEER,
+            pts.TIRE_PUSH,
+            pts.TM_LIFT as LIFT,
+            location.LOCAKY as TIRE_NUMBER,
+            location.WAREKY as TIRE_LOCATION,
+            pts.WHEEL_LOCATION,
+            pts.TM_ASSEMBLY,
+            pts.TM_DISASSY,
+            pts.TM_TRWH_YN
+        FROM PG_TIRE_TOTAL ptt
+            JOIN PG_TIRE_MANAGEMENT pts ON ptt.REQ_NO=pts.TC_REQUEST_NUMBER and ptt.PLN_DTM = pts.TC_DAY and ptt.TEST_ITEM_NAME = pts.TEST_ITEM_NAME
+            LEFT JOIN (select REQ_NO,TC_DAY,TEST_ITEM_NAME, group_concat(distinct WAREKY) as WAREKY , group_concat(distinct LOCAKY) as LOCAKY
+                        FROM PG_TIRE
+                        JOIN IFSTK_TIRE ON PG_TIRE.TIRE_BARCODE_NO = IFSTK_TIRE.LOTA01
+                        GROUP BY REQ_NO,TC_DAY,TEST_ITEM_NAME) location
+                ON location.REQ_NO = ptt.REQ_NO AND location.TC_DAY = ptt.PLN_DTM AND location.TEST_ITEM_NAME = ptt.TEST_ITEM_NAME
+        <choose>
+            <when test = "date != null and endDate !=null">
+                WHERE ptt.PLN_DTM between #{date} and #{endDate} and ptt.PLN_DTM != #{today}
+            </when>
+            <otherwise>
+                where ptt.PLN_DTM = #{today}
+            </otherwise>
+        </choose>
+        <include refid="COMMON.sqlCountBottom" />
+    </select>
+
+    <update id="insertTirePush" parameterType="com.hankook.pg.content.admin.tire.dto.InsertTireDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET TIRE_PUSH = #{complete} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+    <update id="insertTireLift" parameterType="com.hankook.pg.content.admin.tire.dto.InsertTireDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET TM_LIFT = #{lift} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+    <update id="insertAssembly" parameterType="com.hankook.pg.content.admin.tire.dto.InsertTireDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET TM_ASSEMBLY = #{saveTime}, TM_ENGINEER = #{engineer} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+    <update id="insertDisAssembly" parameterType="com.hankook.pg.content.admin.tire.dto.InsertTireDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET TM_DISASSY = #{saveTime} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+    <update id="insertTireLocation" parameterType="com.hankook.pg.content.admin.tire.dto.InsertTireDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET TM_TRWH_YN = #{tmTrwhYn} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+    <select id="findTireAttr" parameterType="com.hankook.pg.content.admin.tire.dto.PagingAndSearchRequestDto" resultType="com.hankook.pg.content.admin.tire.domain.TireManagement">
+        <include refid="COMMON.sqlPagingTop" />
+        SELECT
+            pts.TM_SEQ,
+            ptt.PLN_DTM ,
+            ptt.REQ_NO,
+            ptt.TEST_ITEM_NAME,
+            ptt.SET_SIZE,
+            ptt.TIRE_SIZE,
+            ptt.WHEEL_SIZE,
+            ptt.VHCL_CODE,
+            ptt.VHCL_NAME,
+            ptt.RETURN_SCRAP,
+            pts.TM_ENGINEER as ENGINEER,
+            pts.TIRE_PUSH,
+            pts.TM_LIFT as LIFT,
+            location.LOCAKY as TIRE_NUMBER,
+            location.WAREKY as TIRE_LOCATION,
+            pts.WHEEL_LOCATION,
+            pts.TM_ASSEMBLY,
+            pts.TM_DISASSY,
+            pts.TM_TRWH_YN
+        FROM PG_TIRE_TOTAL ptt
+        JOIN PG_TIRE_MANAGEMENT pts ON ptt.REQ_NO=pts.TC_REQUEST_NUMBER and ptt.PLN_DTM = pts.TC_DAY and ptt.TEST_ITEM_NAME = pts.TEST_ITEM_NAME
+        LEFT JOIN (select REQ_NO,TC_DAY,TEST_ITEM_NAME, group_concat(distinct WAREKY) as WAREKY , group_concat(distinct LOCAKY) as LOCAKY
+                    FROM PG_TIRE
+                    JOIN IFSTK_TIRE ON PG_TIRE.TIRE_BARCODE_NO = IFSTK_TIRE.LOTA01
+                    GROUP BY REQ_NO,TC_DAY,TEST_ITEM_NAME) location
+                ON location.REQ_NO = ptt.REQ_NO AND location.TC_DAY = ptt.PLN_DTM AND location.TEST_ITEM_NAME = ptt.TEST_ITEM_NAME
+        WHERE (ptt.PLN_DTM = #{today} AND ptt.REQ_NO LIKE CONCAT('%',#{attr},'%'))
+        OR (ptt.PLN_DTM = #{today} AND pts.TM_ENGINEER LIKE CONCAT ('%',#{attr},'%'))
+        OR (ptt.PLN_DTM = #{today} AND ptt.VHCL_NAME LIKE CONCAT('%',#{attr},'%'))
+        <include refid="COMMON.sqlPagingBottom" />
+    </select>
+
+    <select id="findTireAttrCount" parameterType="com.hankook.pg.content.admin.tire.dto.PagingAndSearchRequestDto" resultType="_int">
+        <include refid="COMMON.sqlCountTop"/>
+        SELECT
+            pts.TM_SEQ,
+            ptt.PLN_DTM ,
+            ptt.REQ_NO,
+            ptt.TEST_ITEM_NAME,
+            ptt.SET_SIZE,
+            ptt.TIRE_SIZE,
+            ptt.WHEEL_SIZE,
+            ptt.VHCL_CODE,
+            ptt.VHCL_NAME,
+            ptt.RETURN_SCRAP,
+            pts.TM_ENGINEER as ENGINEER,
+            pts.TIRE_PUSH,
+            pts.TM_LIFT as LIFT,
+            location.LOCAKY as TIRE_NUMBER,
+            location.WAREKY as TIRE_LOCATION,
+            pts.WHEEL_LOCATION,
+            pts.TM_ASSEMBLY,
+            pts.TM_DISASSY,
+            pts.TM_TRWH_YN
+        FROM PG_TIRE_TOTAL ptt
+        JOIN PG_TIRE_MANAGEMENT pts ON ptt.REQ_NO=pts.TC_REQUEST_NUMBER and ptt.PLN_DTM = pts.TC_DAY and ptt.TEST_ITEM_NAME = pts.TEST_ITEM_NAME
+        LEFT JOIN (select REQ_NO,TC_DAY,TEST_ITEM_NAME, group_concat(distinct WAREKY) as WAREKY , group_concat(distinct LOCAKY) as LOCAKY
+                    FROM PG_TIRE
+                    JOIN IFSTK_TIRE ON PG_TIRE.TIRE_BARCODE_NO = IFSTK_TIRE.LOTA01
+                    GROUP BY REQ_NO,TC_DAY,TEST_ITEM_NAME) location
+                ON location.REQ_NO = ptt.REQ_NO AND location.TC_DAY = ptt.PLN_DTM AND location.TEST_ITEM_NAME = ptt.TEST_ITEM_NAME
+        WHERE (ptt.PLN_DTM = #{today} AND ptt.REQ_NO LIKE CONCAT('%',#{attr},'%'))
+        OR (ptt.PLN_DTM = #{today} AND pts.TM_ENGINEER LIKE CONCAT ('%',#{attr},'%'))
+        OR (ptt.PLN_DTM = #{today} AND ptt.VHCL_NAME LIKE CONCAT('%',#{attr},'%'))
+        <include refid="COMMON.sqlCountBottom" />
+    </select>
+
+    <update id="insertWheelLocation" parameterType="com.hankook.pg.content.admin.tire.dto.InsertWheelDataDto">
+        UPDATE PG_TIRE_MANAGEMENT SET WHEEL_LOCATION = #{wheelList} WHERE TM_SEQ = #{tmSeq}
+    </update>
+
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.wiress.dao.WiressDao">
+  <select id="selectWiress" parameterType="com.hankook.pg.content.admin.wiress.vo.SearchWiressVo" resultType="com.hankook.pg.content.admin.wiress.vo.WiressVo">
+    <include refid="COMMON.sqlPagingTop" />
+    SELECT *
+    FROM (
+      SELECT ROW_NUMBER() over (ORDER BY W_ID) as num
+      , W_ID
+      , W_NAME
+      , W_STATUS
+      , W_SERIAL
+      , W_USE_YN
+      , W_IN_OUT
+      , W_OUT_CODE
+      , W_REASON
+      , W_QR_ID
+      FROM PG_WIRESS
+      WHERE 1=1
+      <if test="text != null and text != ''">
+        AND (
+        W_SERIAL LIKE CONCAT('%',#{text},'%')
+        OR W_NAME LIKE CONCAT('%',#{text},'%')
+        )
+      </if>
+      <if test="yes != null and yes != '' or no != null and no != '' or lost != '' and lost != null">
+        AND W_USE_YN IN (#{yes},#{no},#{lost})
+      </if>
+    ) W
+    ORDER BY W.num desc
+    <include refid="COMMON.sqlPagingBottom" />
+  </select>
+
+  <select id="getWiressCnt" parameterType="com.hankook.pg.content.admin.wiress.vo.SearchWiressVo" resultType="_int">
+    <include refid="COMMON.sqlCountTop" />
+    SELECT ROW_NUMBER() over ()
+    , W_ID
+    , W_NAME
+    , W_STATUS
+    , W_SERIAL
+    , W_USE_YN
+    , W_IN_OUT
+    , W_OUT_CODE
+    , W_REASON
+    , W_QR_ID
+    FROM PG_WIRESS
+    WHERE 1=1
+    <if test="text != null and text != ''">
+      AND W_SERIAL LIKE CONCAT('%',#{text},'%')
+      OR W_NAME LIKE CONCAT('%',#{text},'%')
+    </if>
+    <if test="yes != null and yes != '' or no != null and no != '' or lost != '' and lost != null">
+      AND W_USE_YN IN (#{yes},#{no},#{lost})
+    </if>
+    <include refid="COMMON.sqlCountBottom" />
+  </select>
+
+  <insert id="insertWiress" parameterType="com.hankook.pg.content.admin.wiress.vo.WiressVo">
+    INSERT INTO PG_WIRESS(
+    W_ID
+    , W_NAME
+    , W_STATUS
+    , W_SERIAL
+    , W_USE_YN
+    , W_IN_OUT
+    , W_OUT_CODE
+    , W_REASON
+    , W_QR_ID
+    )
+    VALUES(
+    #{wId}
+    ,#{wName}
+    ,#{wStatus}
+    ,#{wSerial}
+    ,#{wStatus}
+    , 'I'
+    ,#{wOutCode}
+    ,#{wReason}
+    ,#{wQrId}
+    )
+  </insert>
+
+  <update id="updateWiress" parameterType="com.hankook.pg.content.admin.wiress.vo.WiressVo">
+    UPDATE PG_WIRESS
+    SET W_STATUS = #{wStatus}
+    , W_USE_YN = #{wUseYn}
+    , W_REASON = #{wReason}
+    WHERE W_ID = #{wId}
+  </update>
+
+  <delete id="deleteWiress" parameterType="com.hankook.pg.content.admin.wiress.vo.WiressVo">
+    DELETE FROM PG_WIRESS
+    WHERE W_ID = #{wId}
+  </delete>
+
+  <select id="getMaxId" resultType="String">
+    SELECT MAX(W_NAME) FROM PG_WIRESS
+  </select>
+
+  <select id="chkWQr" parameterType="com.hankook.pg.content.admin.wiress.vo.WiressVo" resultType="_int">
+    select
+       count(*)
+    from PG_WIRESS
+    where W_QR_ID = #{wQrId}
+  </select>
+</mapper>

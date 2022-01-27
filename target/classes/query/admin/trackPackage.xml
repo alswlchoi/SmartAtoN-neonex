@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.admin.trackPackage.dao.TrackPackageDao">
+	<select id="getTrackPackageList" parameterType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto" resultType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+	<include refid="COMMON.sqlPagingTop" />
+		SELECT ROW_NUMBER() OVER (ORDER BY TP_ID) AS num, 
+			TP_ID, 
+			TP_NAME
+		FROM PG_TRACK_PACKAGE
+		WHERE 1=1
+		<include refid="COMMON.sqlPagingBottom" />
+	</select>
+	
+	<select id="getTrackPackageDetail" parameterType="String" resultType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+		SELECT 	ROW_NUMBER() over (ORDER BY MAP_SEQ) as num, 
+			ptp.TP_ID, 
+			ptp.TP_NAME,
+			ppm.MAP_SEQ, 
+			ppm.T_NAME, 
+			ppm.T_LEVEL, 
+			ppm.T_PRICE 
+		FROM PG_TRACK_PACKAGE ptp 
+		LEFT JOIN PG_PACKAGE_MAPPING ppm  
+		on ppm.TP_ID = ptp.TP_ID
+		WHERE ptp.TP_ID=#{tpId}	
+	</select>
+	
+	<select id="getTrackName" resultType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+		SELECT DISTINCT T_NAME, T_ID
+		FROM PG_TRACK
+		WHERE T_USE_YN='Y'
+	</select>
+	
+	<select id="getEqTrackCnt" parameterType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto" resultType="_int"> 
+		SELECT COUNT(*)
+		FROM PG_PACKAGE_MAPPING
+		WHERE TP_ID = #{tpId} AND T_ID= #{tId}
+	</select>
+	
+	<delete id="deleteTrackPackage" parameterType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto" >
+	    DELETE FROM PG_PACKAGE_MAPPING
+    	WHERE MAP_SEQ = #{mapSeq}	
+	</delete>
+	
+	<insert id="insertTrackNm" parameterType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+		INSERT INTO PG_PACKAGE_MAPPING (
+			TP_ID,
+			T_ID,
+			TP_NAME,
+			T_NAME,
+			T_LEVEL,
+			T_PRICE
+		)
+		VALUES(
+			#{tpId}, 
+			#{tId}, 
+			#{tpName}, 
+			#{tName}, 
+			#{tLevel}, 
+			#{tPrice}
+		)
+	</insert>
+	
+	<select id="getTPNm" resultType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+		select TP_NAME
+		from PG_TRACK_PACKAGE 
+		where TP_ID = #{tpId}
+	</select>
+	
+	<select id="getTrackDetail" resultType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto">
+		SELECT T_LEVEL, T_PRICE, T_NAME
+		FROM PG_TRACK
+		WHERE T_ID = #{tpId}
+	</select>
+	
+	<select id="getTrackCnt" parameterType="com.hankook.pg.content.admin.trackPackage.dto.TrackPackageDto" resultType="_int">
+	<include refid="COMMON.sqlCountTop" />
+		SELECT ROW_NUMBER() OVER (ORDER BY TP_ID) AS num,
+				TP_ID, 
+				TP_NAME
+		FROM PG_TRACK_PACKAGE
+		WHERE 1=1
+    <include refid="COMMON.sqlCountBottom" />
+	</select>
+	
+</mapper>
