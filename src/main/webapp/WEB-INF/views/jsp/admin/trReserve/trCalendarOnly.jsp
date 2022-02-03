@@ -293,7 +293,7 @@ $(document).ready(function(){
 		$("#tcDay").text(tcDay);
 		var pageSize = 100;
 		var tcApproval = "0,3";
-		var tcStep = "0";
+		var tcStep = "0,1,2";
 		$.ajax({
 			url : "/admin/trReserve/search-trReserve",
 			type : "get",
@@ -906,7 +906,7 @@ $(document).on("click", ".accordion", function () {
 																		${dateList.date}
 																		<span class="capa">${dateList.strCnt}</span>
 																		${dateList.schedule_detail}
-																		<c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
+																		<c:if test="${dateList.schedule > 0}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
 																	</c:when>
 																	<c:when test="${date_status.index%7==0}">
 															</tr>
@@ -915,14 +915,14 @@ $(document).on("click", ".accordion", function () {
 																${dateList.date}
 																<span class="capa">${dateList.strCnt}</span>
 																${dateList.schedule_detail}
-																<c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
+																<c:if test="${dateList.schedule > 0}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
 																		</c:when>
 																		<c:otherwise>
 																<td valign="top" class="<c:if test="${dateList.value=='today'}">today_style </c:if>normal_day">
 																${dateList.date}
 																<span class="capa">${dateList.strCnt}</span>
 																${dateList.schedule_detail}
-																<c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
+																<c:if test="${dateList.schedule > 0}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
 																	</c:otherwise>
 																</c:choose>
 															</c:if>

@@ -210,19 +210,19 @@ public class TrReserveService{
 
 		String trContent = "";
 		String strCnt = trReserveDao.selectTrCalendarCount(searchTrReserve.getTcDay());
-		String beforePackageName = "";
-		for(int i=0; i<trReserveList.size();i++) {
+		String beforeReservCode = "";
+		int i=0;
+		for(TrReserveDto trReserve : trReserveList) {
 			if(i<4) {
-				TrReserveDto trReserve = trReserveList.get(i);
-				
 				String compName = trReserve.getCompName();
 				String compCode = trReserve.getCompCode();
 				
 				if(compCode.equals("THINT")) {
-					if(null!=trReserve.getTrPackageName()&&!beforePackageName.equals(trReserve.getTrPackageName())) {
+					if(null!=trReserve.getTcReservCode()&&!beforeReservCode.equals(trReserve.getTcReservCode())) {
 						trContent += "<span class=\"event_thint\" title=\""+trReserve.getTrPackageName()+"\">[공] "+trReserve.getTrPackageName()+"</span>";
+						i++;
 					}
-					beforePackageName = trReserve.getTrPackageName();
+					beforeReservCode = trReserve.getTcReservCode();
 				}else {
 					trContent += "<span class=\"";
 					if(trReserve.getTcApproval().equals("0")) {
@@ -243,6 +243,7 @@ public class TrReserveService{
 						trContent += trReserve.getTrTrackNickName() + "/" + compName.substring(0,7);
 					}
 					trContent += "</span>";
+					i++;
 				}
 				result.put("trContent", trContent);
 				result.put("tcApproval", trReserve.getTcApproval());

@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ include file="/WEB-INF/views/jsp/common/adminHeader.jsp" %>
-<sec:csrfMetaTags/>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
+<%@ include file="/WEB-INF/views/jsp/common/adminHeader.jsp"%>
+<sec:csrfMetaTags />
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -218,7 +219,7 @@
 
             var pageSize = 100;
             var tcApproval = "3";
-            var tcStep = "0";
+            var tcStep = "0,1,2,3";
             $.ajax({
                 url : "/admin/trReserve/search-trReserve",
                 type : "get",
@@ -699,355 +700,388 @@
 </script>
 <!-- container -->
 <div id="container">
-    <!-- content -->
-    <div class="content">
-        <!-- breadcrumb -->
-        <div class="breadcrumb"><span class="breadcrumb_icon"></span><span>시험관리</span><span>스케쥴관리</span>
-        </div>
-        <!-- //breadcrumb -->
-        <!-- title -->
-        <h2 class="title">스케쥴관리</h2>
-        <!-- //title -->
+	<!-- content -->
+	<div class="content">
+		<!-- breadcrumb -->
+		<div class="breadcrumb">
+			<span class="breadcrumb_icon"></span><span>시험관리</span><span>스케쥴관리</span>
+		</div>
+		<!-- //breadcrumb -->
+		<!-- title -->
+		<h2 class="title">스케쥴관리</h2>
+		<!-- //title -->
 
-        <!-- tab -->
-        <div class="wrap_tab">
-            <div class="tab">
-                <button class="tablinks active" onclick="pageMove('tab1')">시험로</button>
-                <button class="tablinks" onclick="pageMove('tab2')">부대시설</button>
-            </div>
-            <div class="wrap_tabcontent">
-                <!-- tab1-시험로 -->
-                <div id="tab1" class="tabcontent">
-                    <!-- tab2 -->
-                    <div class="webwidget_tab" id="webwidget_tab">
-                        <div class="tabContainer">
-                            <ul class="tabHead">
-                                <li class="currentBtn"><a href="/admin/trReserve/trcalendar">달력으로 보기</a></li>
-                                <li><a href="/admin/trReserve/trlist">목록으로 보기</a></li>
-                            </ul>
-                        </div>
-                        <div class="tabBody">
-                            <ul>
-                                <!-- 달력으로 보기 -->
-                                <li class="tabCot">
-                                    <!-- calendar2 -->
-                                    <div class="calendar_wrap2">
-                                        <div class="btn_cal">
-                                            <a href="/admin/trReserve/trcalendar?year=${today_info.before_year }&amp;month=${today_info.before_month }&amp;reqTrackType=${reqTrackType }&amp;reqCompType=${reqCompType }&amp;trTrackCode=${trTrackCode }&amp;tcApproval=3&amp;tcStep=0" class="prev"></a>
-                                            <span>
-	                                                    ${today_info.search_year}년 <c:if test="${today_info.search_month<10}">0</c:if>${today_info.search_month}월
-	                                                </span>
-                                            <a href="/admin/trReserve/trcalendar?year=${today_info.after_year}&amp;month=${today_info.after_month}&amp;reqTrackType=${reqTrackType }&amp;reqCompType=${reqCompType }&amp;trTrackCode=${trTrackCode }&amp;tcApproval=3&amp;tcStep=0"
-                                               class="next"></a>
-                                        </div>
-                                        <!-- search_wrap -->
-                                        <section class="search_wrap m-t-30 m-r-10">
-                                            <div class="form_group">
-                                                <div class="check_inline">
-                                                    <span class="label">시험유형</span>
-                                                    <label class="check_default">
-                                                        <input type="checkbox" name="reqTrackType" value="s" <c:if test='${fn:indexOf(reqTrackType, "s")>-1}'>checked="checked"</c:if>/>
-                                                        <span class="check_icon"></span>공동</label>
-                                                    <label class="check_default">
-                                                        <input type="checkbox" name="reqTrackType" value="m" <c:if test='${fn:indexOf(reqTrackType, "m")>-1}'>checked="checked"</c:if>/>
-                                                        <span class="check_icon"></span>단독</label>
-                                                </div>
-                                            </div>
-                                            <div class="form_group m-r-10">
-                                                <div class="check_inline">
-                                                    <span class="label">시험자구분</span>
-                                                    <label class="check_default">
-                                                        <input type="checkbox" name="reqCompType" value="h" <c:if test='${fn:indexOf(reqCompType, "h")>-1}'>checked="checked"</c:if>/>
-                                                        <span class="check_icon"></span>T-HINT</label>
-                                                    <label class="check_default">
-                                                        <input type="checkbox" name="reqCompType" value="b" <c:if test='${fn:indexOf(reqCompType, "b")>-1}'>checked="checked"</c:if>/>
-                                                        <span class="check_icon"></span>B2B회원</label>
-                                                </div>
-                                            </div>
-                                            <div class="form_group">
-                                                <!-- <label for="se1">검색선택</label> -->
-                                                <div id="track1" class="select_group"></div>
-                                            </div>
-                                            <span id="track1Max" class="m-l-4"></span>
-                                            <button type="button" id="btnSearch" class="btn-s btn_default">조회</button>
-                                        </section>
-                                        <!-- //search_wrap -->
+		<!-- tab -->
+		<div class="wrap_tab">
+			<div class="tab">
+				<button class="tablinks active" onclick="pageMove('tab1')">시험로</button>
+				<button class="tablinks" onclick="pageMove('tab2')">부대시설</button>
+			</div>
+			<div class="wrap_tabcontent">
+				<!-- tab1-시험로 -->
+				<div id="tab1" class="tabcontent">
+					<!-- tab2 -->
+					<div class="webwidget_tab" id="webwidget_tab">
+						<div class="tabContainer">
+							<ul class="tabHead">
+								<li class="currentBtn"><a
+									href="/admin/trReserve/trcalendar">달력으로 보기</a></li>
+								<li><a href="/admin/trReserve/trlist">목록으로 보기</a></li>
+							</ul>
+						</div>
+						<div class="tabBody">
+							<ul>
+								<!-- 달력으로 보기 -->
+								<li class="tabCot">
+									<!-- calendar2 -->
+									<div class="calendar_wrap2">
+										<div class="btn_cal">
+											<a
+												href="/admin/trReserve/trcalendar?year=${today_info.before_year }&amp;month=${today_info.before_month }&amp;reqTrackType=${reqTrackType }&amp;reqCompType=${reqCompType }&amp;trTrackCode=${trTrackCode }&amp;tcApproval=3&amp;tcStep=0"
+												class="prev"></a> <span> ${today_info.search_year}년 <c:if
+													test="${today_info.search_month<10}">0</c:if>${today_info.search_month}월
+											</span> <a
+												href="/admin/trReserve/trcalendar?year=${today_info.after_year}&amp;month=${today_info.after_month}&amp;reqTrackType=${reqTrackType }&amp;reqCompType=${reqCompType }&amp;trTrackCode=${trTrackCode }&amp;tcApproval=3&amp;tcStep=0"
+												class="next"></a>
+										</div>
+										<!-- search_wrap -->
+										<section class="search_wrap m-t-30 m-r-10">
+											<div class="form_group">
+												<div class="check_inline">
+													<span class="label">시험유형</span> <label
+														class="check_default"> <input type="checkbox"
+														name="reqTrackType" value="s"
+														<c:if test='${fn:indexOf(reqTrackType, "s")>-1}'>checked="checked"</c:if> />
+														<span class="check_icon"></span>공동
+													</label> <label class="check_default"> <input
+														type="checkbox" name="reqTrackType" value="m"
+														<c:if test='${fn:indexOf(reqTrackType, "m")>-1}'>checked="checked"</c:if> />
+														<span class="check_icon"></span>단독
+													</label>
+												</div>
+											</div>
+											<div class="form_group m-r-10">
+												<div class="check_inline">
+													<span class="label">시험자구분</span> <label
+														class="check_default"> <input type="checkbox"
+														name="reqCompType" value="h"
+														<c:if test='${fn:indexOf(reqCompType, "h")>-1}'>checked="checked"</c:if> />
+														<span class="check_icon"></span>T-HINT
+													</label> <label class="check_default"> <input
+														type="checkbox" name="reqCompType" value="b"
+														<c:if test='${fn:indexOf(reqCompType, "b")>-1}'>checked="checked"</c:if> />
+														<span class="check_icon"></span>B2B회원
+													</label>
+												</div>
+											</div>
+											<div class="form_group">
+												<!-- <label for="se1">검색선택</label> -->
+												<div id="track1" class="select_group"></div>
+											</div>
+											<span id="track1Max" class="m-l-4"></span>
+											<button type="button" id="btnSearch"
+												class="btn-s btn_default">조회</button>
+										</section>
+										<!-- //search_wrap -->
 
-                                        <div class="legend_cal">
-                                            <span class="approval">승인대기중</span><span class="b2b m-l-14">B2B회원</span><span class="thint m-l-14">T-HINT</span> / [단]단독 [공] 공동
-                                        </div>
+										<div class="legend_cal">
+											<span class="approval">승인대기중</span><span class="b2b m-l-14">B2B회원</span><span
+												class="thint m-l-14">T-HINT</span> / [단]단독 [공] 공동
+										</div>
 
-                                        <!-- table list -->
-                                        <section class="tbl_wrap_list_cal m-t-10">
-                                            <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
-                                                <caption>테이블</caption>
-                                                <colgroup>
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                    <col width="14.222%" />
-                                                </colgroup>
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">일</th>
-                                                    <th scope="col">월</th>
-                                                    <th scope="col">화</th>
-                                                    <th scope="col">수</th>
-                                                    <th scope="col">목</th>
-                                                    <th scope="col">금</th>
-                                                    <th scope="col">토</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:forEach var="dateList" items="${dateList}" varStatus="date_status">
-                                                <c:set var="year" value="${dateList.year }" />
-                                                <c:set var="month" value="${dateList.month+1 }" />
-                                                <c:set var="date" value="${dateList.date }" />
-                                                <c:if  test="${month < 10 }"><c:set var="month" value="0${month }" /></c:if>
-                                                <c:if  test="${date < 10 }"><c:set var="date" value="0${date }" /></c:if>
-                                                <c:set var="aid" value="${year }${month }${date }" />
-                                                <c:if test='${dateList.value=="not_month"}'>
-                                                    <td valign="top" class="next_month_txt">${dateList.date}</td>
-                                                </c:if>
-                                                <c:if test='${dateList.value!="not_month"}'>
-                                                <c:choose>
-                                                <c:when test="${date_status.index%7==6}">
-                                                    <td valign="top" class="<c:if test="${dateList.value=='today'}">today_style </c:if>sat_day">
-                                                            ${dateList.date}
-                                                        <span class="capa">${dateList.strCnt}</span>
-                                                            ${dateList.schedule_detail}
-                                                        <c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
-                                                </c:when>
-                                                <c:when test="${date_status.index%7==0}">
-                                                </tr>
-                                                <tr>
-                                                    <td valign="top" class="<c:if test="${dateList.value=='today'}">today_style </c:if>sun_day">${dateList.date}
-                                                        <span class="capa">${dateList.strCnt}</span>
-                                                            ${dateList.schedule_detail}
-                                                        <c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                    <td valign="top" class="<c:if test="${dateList.value=='today'}">today_style </c:if>normal_day">
-                                                            ${dateList.date}
-                                                        <span class="capa">${dateList.strCnt}</span>
-                                                            ${dateList.schedule_detail}
-                                                        <c:if test="${dateList.schedule > 4}"><a href="#" id="dt${aid }" class="more" data-layer-top="more_cal">+ more</a></c:if></td>
-                                                    </c:otherwise>
-                                                    </c:choose>
-                                                    </c:if>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </section>
-                                        <!-- //table list -->
-                                    </div>
-                                    <!-- //calendar2 -->
-                                </li>
-                                <!-- //달력으로 보기 -->
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- //tab2 -->
-                </div>
-                <!-- //tab1-시험로 -->
-            </div>
-        </div>
-        <!-- //tab -->
-    </div>
-    <!-- //content -->
+										<!-- table list -->
+										<section class="tbl_wrap_list_cal m-t-10">
+											<table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+												<caption>테이블</caption>
+												<colgroup>
+													<col width="14.222%" />
+													<col width="14.222%" />
+													<col width="14.222%" />
+													<col width="14.222%" />
+													<col width="14.222%" />
+													<col width="14.222%" />
+													<col width="14.222%" />
+												</colgroup>
+												<thead>
+													<tr>
+														<th scope="col">일</th>
+														<th scope="col">월</th>
+														<th scope="col">화</th>
+														<th scope="col">수</th>
+														<th scope="col">목</th>
+														<th scope="col">금</th>
+														<th scope="col">토</th>
+													</tr>
+												</thead>
+												<tbody>
+													<c:forEach var="dateList" items="${dateList}"
+														varStatus="date_status">
+														<c:set var="year" value="${dateList.year }" />
+														<c:set var="month" value="${dateList.month+1 }" />
+														<c:set var="date" value="${dateList.date }" />
+														<c:if test="${month < 10 }">
+															<c:set var="month" value="0${month }" />
+														</c:if>
+														<c:if test="${date < 10 }">
+															<c:set var="date" value="0${date }" />
+														</c:if>
+														<c:set var="aid" value="${year }${month }${date }" />
+														<c:if test='${dateList.value=="not_month"}'>
+															<td valign="top" class="next_month_txt">${dateList.date}</td>
+														</c:if>
+														<c:if test='${dateList.value!="not_month"}'>
+															<c:choose>
+																<c:when test="${date_status.index%7==6}">
+																	<td valign="top"
+																		class="<c:if test="${dateList.value=='today'}">today_style </c:if>sat_day">
+																		${dateList.date} <span class="capa">${dateList.strCnt}</span>
+																		${dateList.schedule_detail} <c:if
+																			test="${dateList.schedule > 0}">
+																			<a href="#" id="dt${aid }" class="more"
+																				data-layer-top="more_cal">+ more</a>
+																		</c:if>
+																	</td>
+																</c:when>
+																<c:when test="${date_status.index%7==0}">
+																	</tr>
+																	<tr>
+																		<td valign="top"
+																			class="<c:if test="${dateList.value=='today'}">today_style </c:if>sun_day">${dateList.date}
+																			<span class="capa">${dateList.strCnt}</span>
+																			${dateList.schedule_detail} <c:if
+																				test="${dateList.schedule > 0}">
+																				<a href="#" id="dt${aid }" class="more"
+																					data-layer-top="more_cal">+ more</a>
+																			</c:if>
+																		</td>
+																</c:when>
+																<c:otherwise>
+																	<td valign="top"
+																		class="<c:if test="${dateList.value=='today'}">today_style </c:if>normal_day">
+																		${dateList.date} <span class="capa">${dateList.strCnt}</span>
+																		${dateList.schedule_detail} <c:if
+																			test="${dateList.schedule > 0}">
+																			<a href="#" id="dt${aid }" class="more"
+																				data-layer-top="more_cal">+ more</a>
+																		</c:if>
+																	</td>
+																</c:otherwise>
+															</c:choose>
+														</c:if>
+													</c:forEach>
+												</tbody>
+											</table>
+										</section>
+										<!-- //table list -->
+									</div> <!-- //calendar2 -->
+								</li>
+								<!-- //달력으로 보기 -->
+							</ul>
+						</div>
+					</div>
+					<!-- //tab2 -->
+				</div>
+				<!-- //tab1-시험로 -->
+			</div>
+		</div>
+		<!-- //tab -->
+	</div>
+	<!-- //content -->
 </div>
 <!-- //container -->
 <!-- popup_xxl -->
 <div class="ly_group">
-    <article class="layer_xxl more_cal">
-        <!-- # 타이틀 # -->
-        <h1>일자별 상세보기</h1>
-        <!-- # 컨텐츠 # -->
-        <div class="ly_con">
-            <!-- search_wrap -->
-            <section class="search_wrap m-t-30 m-r-10">
-                <div class="form_group">
-                    <div class="check_inline">
-                        <span class="label">시험유형</span>
-                        <label class="check_default">
-                            <input type="checkbox" name="trTrackType" value="s" <c:if test='${fn:indexOf(trTrackType, "s")>-1}'>checked="checked"</c:if>/>
-                            <span class="check_icon"></span>공동</label>
-                        <label class="check_default">
-                            <input type="checkbox" name="trTrackType" value="m" <c:if test='${fn:indexOf(trTrackType, "m")>-1}'>checked="checked"</c:if>/>
-                            <span class="check_icon"></span>단독</label>
-                    </div>
-                </div>
-                <div class="form_group m-r-10">
-                    <div class="check_inline">
-                        <span class="label">시험자구분</span>
-                        <label class="check_default">
-                            <input type="checkbox" name="compType" value="h" <c:if test='${fn:indexOf(reqCompType, "h")>-1}'>checked="checked"</c:if>/>
-                            <span class="check_icon"></span>T-HINT</label>
-                        <label class="check_default">
-                            <input type="checkbox" name="compType" value="b" <c:if test='${fn:indexOf(reqCompType, "b")>-1}'>checked="checked"</c:if>/>
-                            <span class="check_icon"></span>B2B회원</label>
-                    </div>
-                </div>
-                <div class="form_group">
-                    <!-- <label for="se1">검색선택</label> -->
-                    <div id="track2" class="select_group"></div>
-                </div>
-                <button type="button" id="btnSearch2" class="btn-s btn_default">조회</button>
-            </section>
-            <!-- //search_wrap -->
-            <!-- table list -->
-            <section class="tbl_wrap_list m-t-15">
-                <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
-                    <caption>테이블</caption>
-                    <colgroup>
-                        <col width="80px" />
-                        <col width="" />
-                        <col width="" />
-                        <col width="" />
-                        <col width="" />
-                        <col width="" />
-                        <col width="" />
-                        <col width="" />
-                    </colgroup>
-                    <thead>
-                    <tr>
-                        <th scope="col">NO</th>
-                        <th scope="col">예약번호</th>
-                        <th scope="col"><button id="order3" class="btn_sort_down">접수일자</button></th>
-                        <th scope="col"><button id="order1" class="btn_sort_down">시험일자</button></th>
-                        <th scope="col">회사명</th>
-                        <th scope="col">평가트랙</th>
-                        <th scope="col"><button id="order5" class="btn_sort_up">유형</button></th>
-                        <th scope="col">진행상태</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    </tbody>
-                </table>
-            </section>
-            <!-- //table list -->
-            <div id="data_detail" style="display:none">
-                <!-- table list -->
-                <section class="tbl_wrap_list m-t-30">
-                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
-                        <caption>테이블</caption>
-                        <colgroup>
-                            <col width="" />
-                            <col width="" />
-                            <col width="" />
-                            <col width="" />
-                            <col width="" />
-                            <col width="" />
-                            <col width="" />
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">예약번호</th>
-                            <th scope="col">접수일자</th>
-                            <th scope="col">시험일자</th>
-                            <th scope="col">유형</th>
-                            <th scope="col">항목</th>
-                            <th scope="col">회사명</th>
-                            <th scope="col">진행상태</th>
-                        </tr>
-                        </thead>
-                        <tbody id="pickList">
-                        </tbody>
-                    </table>
-                </section>
-                <!-- //table list -->
+	<article class="layer_xxl more_cal">
+		<!-- # 타이틀 # -->
+		<h1>일자별 상세보기</h1>
+		<!-- # 컨텐츠 # -->
+		<div class="ly_con">
+			<!-- search_wrap -->
+			<section class="search_wrap m-t-30 m-r-10">
+				<div class="form_group">
+					<div class="check_inline">
+						<span class="label">시험유형</span> <label class="check_default">
+							<input type="checkbox" name="trTrackType" value="s"
+							<c:if test='${fn:indexOf(trTrackType, "s")>-1}'>checked="checked"</c:if> />
+							<span class="check_icon"></span>공동
+						</label> <label class="check_default"> <input type="checkbox"
+							name="trTrackType" value="m"
+							<c:if test='${fn:indexOf(trTrackType, "m")>-1}'>checked="checked"</c:if> />
+							<span class="check_icon"></span>단독
+						</label>
+					</div>
+				</div>
+				<div class="form_group m-r-10">
+					<div class="check_inline">
+						<span class="label">시험자구분</span> <label class="check_default">
+							<input type="checkbox" name="compType" value="h"
+							<c:if test='${fn:indexOf(reqCompType, "h")>-1}'>checked="checked"</c:if> />
+							<span class="check_icon"></span>T-HINT
+						</label> <label class="check_default"> <input type="checkbox"
+							name="compType" value="b"
+							<c:if test='${fn:indexOf(reqCompType, "b")>-1}'>checked="checked"</c:if> />
+							<span class="check_icon"></span>B2B회원
+						</label>
+					</div>
+				</div>
+				<div class="form_group">
+					<!-- <label for="se1">검색선택</label> -->
+					<div id="track2" class="select_group"></div>
+				</div>
+				<button type="button" id="btnSearch2" class="btn-s btn_default">조회</button>
+			</section>
+			<!-- //search_wrap -->
+			<!-- table list -->
+			<section class="tbl_wrap_list m-t-15">
+				<table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+					<caption>테이블</caption>
+					<colgroup>
+						<col width="80px" />
+						<col width="" />
+						<col width="" />
+						<col width="" />
+						<col width="" />
+						<col width="" />
+						<col width="" />
+						<col width="" />
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">NO</th>
+							<th scope="col">예약번호</th>
+							<th scope="col"><button id="order3" class="btn_sort_down">접수일자</button></th>
+							<th scope="col"><button id="order1" class="btn_sort_down">시험일자</button></th>
+							<th scope="col">회사명</th>
+							<th scope="col">평가트랙</th>
+							<th scope="col"><button id="order5" class="btn_sort_up">유형</button></th>
+							<th scope="col">진행상태</th>
+						</tr>
+					</thead>
+					<tbody id="tbody">
+					</tbody>
+				</table>
+			</section>
+			<!-- //table list -->
+			<div id="data_detail" style="display: none">
+				<!-- table list -->
+				<section class="tbl_wrap_list m-t-30">
+					<table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+						<caption>테이블</caption>
+						<colgroup>
+							<col width="" />
+							<col width="" />
+							<col width="" />
+							<col width="" />
+							<col width="" />
+							<col width="" />
+							<col width="" />
+						</colgroup>
+						<thead>
+							<tr>
+								<th scope="col">예약번호</th>
+								<th scope="col">접수일자</th>
+								<th scope="col">시험일자</th>
+								<th scope="col">유형</th>
+								<th scope="col">항목</th>
+								<th scope="col">회사명</th>
+								<th scope="col">진행상태</th>
+							</tr>
+						</thead>
+						<tbody id="pickList">
+						</tbody>
+					</table>
+				</section>
+				<!-- //table list -->
 
-                <!-- 시험정보 -->
-                <!-- accordion -->
-                <div class="wrap_accordion2 m-t-30">
-                    <button class="accordion">
-                        <h3 class="stitle disib vam0">시험정보</h3>
-                    </button>
-                    <div class="accordion_panel" id="pickInfo">
-                        <!-- table_view -->
-                        <div class="tbl_wrap_view">
-                            <table class="tbl_view01" summary="테이블입니다.">
-                                <caption>테이블입니다.</caption>
-                                <colgroup>
-                                    <col width="180px;" />
-                                    <col width="" />
-                                </colgroup>
-                                <tr>
-                                    <th scope="row"></th>
-                                    <td colspan="3"></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- //table_view -->
-                    </div>
-                </div>
-                <!-- //accordion -->
-                <!-- //시험정보 -->
+				<!-- 시험정보 -->
+				<!-- accordion -->
+				<div class="wrap_accordion2 m-t-30">
+					<button class="accordion">
+						<h3 class="stitle disib vam0">시험정보</h3>
+					</button>
+					<div class="accordion_panel" id="pickInfo">
+						<!-- table_view -->
+						<div class="tbl_wrap_view">
+							<table class="tbl_view01" summary="테이블입니다.">
+								<caption>테이블입니다.</caption>
+								<colgroup>
+									<col width="180px;" />
+									<col width="" />
+								</colgroup>
+								<tr>
+									<th scope="row"></th>
+									<td colspan="3"></td>
+								</tr>
+							</table>
+						</div>
+						<!-- //table_view -->
+					</div>
+				</div>
+				<!-- //accordion -->
+				<!-- //시험정보 -->
 
-                <!-- 예약 담당자 및 회계 담당자 정보 -->
-                <!-- accordion -->
-                <div class="wrap_accordion2 m-t-30">
-                    <button class="accordion">
-                        <h3 class="stitle disib vam0">예약 담당자 및 회계 담당자 정보</h3>
-                    </button>
-                    <div id="pickMember" class="accordion_panel">
-                        <!-- table_view -->
-                        <section class="tbl_wrap_view">
-                            <table class="tbl_view01" summary="테이블입니다.">
-                                <caption>테이블입니다.</caption>
-                                <colgroup>
-                                    <col width="180px;" />
-                                    <col width="" />
-                                    <col width="180px;" />
-                                    <col width="" />
-                                </colgroup>
-                                <tr>
-                                    <th scope="row">회사명</th>
-                                    <td></td>
-                                    <th></th>
-                                    <td></td>
-                                </tr>
-                            </table>
-                        </section>
-                        <!-- //table_view -->
-                    </div>
-                </div>
-                <!-- //accordion -->
+				<!-- 예약 담당자 및 회계 담당자 정보 -->
+				<!-- accordion -->
+				<div class="wrap_accordion2 m-t-30">
+					<button class="accordion">
+						<h3 class="stitle disib vam0">예약 담당자 및 회계 담당자 정보</h3>
+					</button>
+					<div id="pickMember" class="accordion_panel">
+						<!-- table_view -->
+						<section class="tbl_wrap_view">
+							<table class="tbl_view01" summary="테이블입니다.">
+								<caption>테이블입니다.</caption>
+								<colgroup>
+									<col width="180px;" />
+									<col width="" />
+									<col width="180px;" />
+									<col width="" />
+								</colgroup>
+								<tr>
+									<th scope="row">회사명</th>
+									<td></td>
+									<th></th>
+									<td></td>
+								</tr>
+							</table>
+						</section>
+						<!-- //table_view -->
+					</div>
+				</div>
+				<!-- //accordion -->
 
-                <!-- //예약 담당자 및 회계 담당자 정보 -->
+				<!-- //예약 담당자 및 회계 담당자 정보 -->
 
-                <!-- 관리자 메모 -->
-                <h3 class="stitle m-t-30">관리자 메모</h3>
-                <!-- table_view -->
-                <div class="tbl_wrap_view m-t-10">
-                    <table class="tbl_view01" summary="테이블입니다.">
-                        <caption>테이블입니다.</caption>
-                        <colgroup>
-                            <col width="180px;" />
-                            <col width="" />
-                        </colgroup>
-                        <tr>
-                            <th scope="row">메모</th>
-                            <td colspan="3">
-                                <div class="form_group w_full">
-                                    <textarea name="tcMemo" id="tcMemo" cols="" rows="5" class="form_control  h100"
-                                              placeholder="메모를 입력하세요." maxlength="100"></textarea>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <!-- //table_view -->
-                <!-- //관리자 메모 -->
-            </div>
-        </div>
-        <!-- # 닫기버튼 # -->
-        <button data-fn="lyClose">레이어닫기</button>
-    </article>
+				<!-- 관리자 메모 -->
+				<h3 class="stitle m-t-30">관리자 메모</h3>
+				<!-- table_view -->
+				<div class="tbl_wrap_view m-t-10">
+					<table class="tbl_view01" summary="테이블입니다.">
+						<caption>테이블입니다.</caption>
+						<colgroup>
+							<col width="180px;" />
+							<col width="" />
+						</colgroup>
+						<tr>
+							<th scope="row">메모</th>
+							<td colspan="3">
+								<div class="form_group w_full">
+									<textarea name="tcMemo" id="tcMemo" cols="" rows="5"
+										class="form_control  h100" placeholder="메모를 입력하세요."
+										maxlength="100"></textarea>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- //table_view -->
+				<!-- //관리자 메모 -->
+			</div>
+		</div>
+		<!-- # 닫기버튼 # -->
+		<button data-fn="lyClose">레이어닫기</button>
+	</article>
 </div>
 <!-- //popup_xxl -->
-<div id="tcDay" style="display:none"></div>
-<%@ include file="/WEB-INF/views/jsp/common/adminFooter.jsp" %>
+<div id="tcDay" style="display: none"></div>
+<%@ include file="/WEB-INF/views/jsp/common/adminFooter.jsp"%>

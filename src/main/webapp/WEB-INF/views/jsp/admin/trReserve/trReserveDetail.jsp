@@ -346,7 +346,9 @@ function drawTrackSelect(trackList, currentTid){
 	html += '<select name="trTrackCode" id="trTrackCode" class="form_control">';
 	html += '<option value="">트랙선택</option>';
 	for(var list in trackList){
-		html += '<option value="'+undefinedChk(trackList[list].tid,"")+'">'+undefinedChk(trackList[list].tname,"")+'</option>';
+		if(parseInt(list)>0){
+			html += '<option value="'+undefinedChk(trackList[list].tid,"")+'">'+undefinedChk(trackList[list].tname,"")+'</option>';
+		}
 	}
 	html += '</select>';
 	$("#trackInfo").html(html)

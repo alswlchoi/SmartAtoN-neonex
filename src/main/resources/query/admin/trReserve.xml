@@ -98,6 +98,9 @@
 			</if>
 		</if>
 		<if test='tcStep != null and tcStep !=""'>
+			<if test='tcStep == "0,1,2"'>
+				AND TC_STEP IN ('00000','00001','00002')
+			</if>
 			<if test='tcStep == "1,2"'>
 				AND TC_STEP IN ('00001','00002')
 			</if>
@@ -199,6 +202,7 @@
 			PTR.TR_PACKAGE_NAME,
 			PTR.TR_PACKAGE_CODE,
 			PTS.TC_APPROVAL,
+			PTS.TC_RESERV_CODE,
 			PTS.COMP_NAME,
 			PTS.COMP_CODE
 		FROM PG_TEST_SCHDULE PTS
@@ -232,7 +236,7 @@
 		  AND PTS.TC_APPROVAL = #{tcApproval}
 		</if>
 		ORDER BY PTS.TC_APPROVAL ASC, PTS.TC_SEQ DESC, TR_TRACK_CODE
-		LIMIT 0, 5
+		LIMIT 0, 12
 	</select>
 
 	<select id="selectTrCalendarCount" parameterType="String" resultType="String">
