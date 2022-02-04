@@ -218,8 +218,8 @@
             $("#tcDay").text(tcDay);
 
             var pageSize = 100;
-            var tcApproval = "3";
-            var tcStep = "0,1,2,3";
+            var tcApproval = "0,3";
+            var tcStep = "0,1,2";
             $.ajax({
                 url : "/admin/trReserve/search-trReserve",
                 type : "get",
