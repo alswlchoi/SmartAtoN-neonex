@@ -691,7 +691,12 @@ function drawingTable(rows, paging){
 			html += '<td><span style="display:none">'+undefinedChk(rows[list].tcSeq,"")+'</span>';
 			html += paging.totalCount-(paging.pageNo-1)*paging.pageSize-list;
 			html += '</td>';
-			html += '<td>'+undefinedChk(rows[list].tcReservCode,"")+'</td>';
+			html += '<td>'
+                html += undefinedChk(rows[list].tcReservCode,"");
+            if(rows[list].compCode == "THINT") {
+                html += '<br /><span class="color_orange">'+undefinedChk(rows[list].tcRequestNumber,"")+'</span>' ;
+            }
+            +'</td>';
 			var tcRegDt = "";
 			if(rows[list].tcRegDt.length==14){
 				tcRegDt += rows[list].tcRegDt.substring(0,4)+ "."+ rows[list].tcRegDt.substring(4,6)+ "."+ rows[list].tcRegDt.substring(6,8);

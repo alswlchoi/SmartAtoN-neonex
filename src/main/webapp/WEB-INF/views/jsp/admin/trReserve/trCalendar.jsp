@@ -585,13 +585,11 @@
                 html += '<td><span style="display:none">'+undefinedChk(rows[list].tcSeq,"")+'</span>';
                 html += paging.totalCount-(paging.pageNo-1)*paging.pageSize-list;
                 html += '</td>';
-                //html += '<td>'+undefinedChk(rows[list].tcReservCode,"")+'</td>';
-
                 html += '<td>'
+                    html += undefinedChk(rows[list].tcReservCode,"");
                 if(rows[list].compCode == "THINT") {
-                    html += undefinedChk(rows[list].tcReservCode,"")+'</span><br>';
+                    html += '<br /><span class="color_orange">'+undefinedChk(rows[list].tcRequestNumber,"")+'</span>' ;
                 }
-                html += '<span class="color_red">'+undefinedChk(rows[list].tcRequestNumber,"") ;
                 +'</td>';
 
                 var tcRegDt = "";
@@ -933,7 +931,7 @@
 			<!-- //search_wrap -->
 			<!-- table list -->
 			<section class="tbl_wrap_list m-t-15">
-				<table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+				<table class="tbl_list" summary="일자별 상세보기테이블 입니다. 항목으로는 NO, 예약번호, 접수일자, 시험일자, 회사명, 평가트랙, 유형, 진행상태등이 있습니다">
 					<caption>테이블</caption>
 					<colgroup>
 						<col width="80px" />
