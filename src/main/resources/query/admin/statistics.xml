@@ -336,16 +336,19 @@
 	
 	<!-- 일자별 입출로그 (천제) -->
 	<select id="nodaylog" parameterType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo" resultType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo">
-			SELECT ROW_NUMBER() OVER(ORDER BY PRL.RL_SEQ) as NUM,
-	   			   PRL.TC_DAY , PTS.COMP_NAME ,  MIN(PRL.IN_TIME) AS IN_TIME  , MAX(PRL.OUT_TIME) AS OUT_TIME , 
-				   SUM(PRL.DIFF_TIME) AS DIFF_TIME , PRL.CAR_TAG_ID , PT.T_NAME , PC.C_NUMBER , 
-				   PRL.TC_RESERV_CODE, PRM.C_CODE , PTS.TC_DAY2
-			FROM PG_RFID_LOG PRL 
-				 LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
-				 LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY 
-				 LEFT JOIN PG_CAR PC ON PRM.C_CODE = PC.C_CODE
-				 LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
-			WHERE PRM.R_ID IS NOT NULL
+			   SELECT PRL.TC_DAY ,
+			 		  PTS.COMP_NAME , 
+				   	  MIN(PRL.IN_TIME) AS IN_TIME  , 
+				   	  MAX(PRL.OUT_TIME) AS OUT_TIME , 
+					  sum(PRL.DIFF_TIME) AS DIFF_TIME , 	
+					  PRL.CAR_TAG_ID ,
+					  PT.T_NAME ,
+					  (SELECT PC.C_NUMBER from PG_CAR PC where PRM.C_CODE = PC.C_CODE) as C_NUMBER
+			   FROM PG_RFID_LOG PRL 
+			 	 	LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
+				 	LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
+				 	LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY and PRM.RM_TYPE = 'C' and PTS.TC_SEQ = PRM.TC_SEQ 
+			   WHERE 1=1
 			<!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
 		    <if test="text != null and text != ''">
 		      AND (
@@ -372,16 +375,19 @@
 	<!-- 일자별 입출로그 -->
 	<select id="daylog" parameterType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo" resultType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo">
 		<include refid="COMMON.sqlPagingTop" />
-			SELECT ROW_NUMBER() OVER(ORDER BY PRL.RL_SEQ) as NUM,
-	   			   PRL.TC_DAY , PTS.COMP_NAME ,  MIN(PRL.IN_TIME) AS IN_TIME  , MAX(PRL.OUT_TIME) AS OUT_TIME , 
-				   SUM(PRL.DIFF_TIME) AS DIFF_TIME , PRL.CAR_TAG_ID , PT.T_NAME , PC.C_NUMBER , 
-				   PRL.TC_RESERV_CODE, PRM.C_CODE , PTS.TC_DAY2
-			FROM PG_RFID_LOG PRL 
-				 LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
-				 LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY 
-				 LEFT JOIN PG_CAR PC ON PRM.C_CODE = PC.C_CODE
-				 LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
-			WHERE PRM.R_ID IS NOT NULL
+			 SELECT PRL.TC_DAY ,
+			 		  PTS.COMP_NAME , 
+				   	  MIN(PRL.IN_TIME) AS IN_TIME  , 
+				   	  MAX(PRL.OUT_TIME) AS OUT_TIME , 
+					  sum(PRL.DIFF_TIME) AS DIFF_TIME , 	
+					  PRL.CAR_TAG_ID ,
+					  PT.T_NAME ,
+					  (SELECT PC.C_NUMBER from PG_CAR PC where PRM.C_CODE = PC.C_CODE) as C_NUMBER
+			   FROM PG_RFID_LOG PRL 
+			 	 	LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
+				 	LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
+				 	LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY and PRM.RM_TYPE = 'C' and PTS.TC_SEQ = PRM.TC_SEQ 
+			   WHERE 1=1
 			<!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
 		    <if test="text != null and text != ''">
 		      AND (
@@ -409,16 +415,19 @@
 	<!-- 일자별 입출로그 - 페이징 --> 
 	<select id="daylogcnt" parameterType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo" resultType="int">
 		<include refid="COMMON.sqlCountTop" />
-			SELECT ROW_NUMBER() OVER(ORDER BY PRL.RL_SEQ) as NUM,
-	   			   PRL.TC_DAY , PTS.COMP_NAME ,  MIN(PRL.IN_TIME) AS IN_TIME  , MAX(PRL.OUT_TIME) AS OUT_TIME , 
-				   SUM(PRL.DIFF_TIME) AS DIFF_TIME , PRL.CAR_TAG_ID , PT.T_NAME , PC.C_NUMBER , 
-				   PRL.TC_RESERV_CODE, PRM.C_CODE , PTS.TC_DAY2
-			FROM PG_RFID_LOG PRL 
-				 LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
-				 LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY 
-				 LEFT JOIN PG_CAR PC ON PRM.C_CODE = PC.C_CODE
-				 LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
-			WHERE PRM.R_ID IS NOT NULL
+			 SELECT PRL.TC_DAY ,
+			 		  PTS.COMP_NAME , 
+				   	  MIN(PRL.IN_TIME) AS IN_TIME  , 
+				   	  MAX(PRL.OUT_TIME) AS OUT_TIME , 
+					  sum(PRL.DIFF_TIME) AS DIFF_TIME , 	
+					  PRL.CAR_TAG_ID ,
+					  PT.T_NAME ,
+					  (SELECT PC.C_NUMBER from PG_CAR PC where PRM.C_CODE = PC.C_CODE) as C_NUMBER
+			   FROM PG_RFID_LOG PRL 
+			 	 	LEFT JOIN PG_TRACK PT ON PRL.T_ID = PT.T_ID
+				 	LEFT JOIN PG_TEST_SCHDULE PTS ON PRL.TC_RESERV_CODE = PTS.TC_RESERV_CODE 
+				 	LEFT JOIN PG_RESOURCE_MAPPING PRM ON PRL.CAR_TAG_ID = PRM.R_ID AND PRL.TC_DAY = PRM.TC_DAY and PRM.RM_TYPE = 'C' and PTS.TC_SEQ = PRM.TC_SEQ 
+			   WHERE 1=1
 			<!-- 검색창란에 예약번호/사업자번호/회사명 입력 -->
 		    <if test="text != null and text != ''">
 		      AND (

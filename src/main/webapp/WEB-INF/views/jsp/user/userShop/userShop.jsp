@@ -1118,7 +1118,7 @@ $(document).on('click','.fc-button',function(){
             <button type="button" onclick="insertReserv();" class="btn-pop btn_default">확인</button>
         </div>
         <!-- # 닫기버튼 # -->
-        <button data-fn="lyClose">레이어닫기</button>
+<!--         <button data-fn="lyClose">레이어닫기</button> -->
     </article>
 </div>
 <!-- //popup_xl -->
