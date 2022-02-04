@@ -334,7 +334,7 @@
 		<include refid="COMMON.sqlCountBottom" />
 	</select>
 	
-	<!-- 일자별 입출로그 (천제) -->
+	<!-- 일자별 입출로그 (전체) -->
 	<select id="nodaylog" parameterType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo" resultType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo">
 			   SELECT PRL.TC_DAY ,
 			 		  PTS.COMP_NAME , 
