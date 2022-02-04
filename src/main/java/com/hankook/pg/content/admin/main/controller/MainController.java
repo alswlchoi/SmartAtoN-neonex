@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +39,14 @@ public class MainController {
   @RequestMapping(value = "", method = RequestMethod.GET)
   public ModelAndView main() throws Exception {
     log.info("MAIN");
-    ModelAndView mv = new ModelAndView("/admin/adminMain");
+	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+	ModelAndView mv = new ModelAndView();
+	if (authentication.getPrincipal() instanceof String) {
+		mv.setViewName("redirect:/adminLogin");
+	} else {
+		mv.setViewName("/admin/adminMain");
+	}
     return mv;
   }
 

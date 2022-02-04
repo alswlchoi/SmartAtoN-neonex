@@ -157,8 +157,7 @@ function drawTrackSelect(trackList){
 	var trTrackCode = '${trTrackCode}';
 	for(var list in trackList){
 		if(parseInt(list)>0){
-			trackHtml += '<option value="'+undefinedChk(trackList[list].tid,"")+'"';
-			trackHtml += '>'+undefinedChk(trackList[list].tname,"");
+			trackHtml += '<option value="'+undefinedChk(trackList[list].tid,"")+'">'+undefinedChk(trackList[list].tname,"")+'</option>';
 		}
 	}
 	trackHtml += '</select>';
@@ -357,11 +356,13 @@ function fnChkByte(obj, maxByte){
 							                </td>
 							                <td>
 							                ${trTrackNickName }
+							                <c:if test="${trReserve.tcStep eq '00000' or trReserve.tcStep eq '00001' }">
 							                <br />
                                             <div class="trdiv form_group w170" style="padding-left:20px">
 												<div id="trackInfo" class="select_group"></div>
 											</div>
 											<button type="button" id="addTrBtn" class="btn-line btn_gray">시험로 +</button>
+											</c:if>
                                             </td>
                                             <td>
 												<c:if test="${trTrackType eq 'TYP00'}">공동</c:if>

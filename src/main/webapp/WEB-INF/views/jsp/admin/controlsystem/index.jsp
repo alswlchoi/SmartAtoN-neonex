@@ -209,7 +209,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 	  			}
 	  		},
 	  		error : function(e){
-	  			alert("통신문제로 GATE를 열 수 없습니다.");
+	  			alert("통신문제로 GATE를 제어할 수 없습니다.");
 	  		}
 	  	});
 		
@@ -237,7 +237,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		  			}
 		  		},
 		  		error : function(e){
-		  			alert("통신문제로 GATE를 열 수 없습니다.");
+		  			alert("통신문제로 GATE를 제어할 수 없습니다.");
 		  		}
 		  	});
 			
@@ -246,7 +246,11 @@ $(".lodingdimm").removeClass("lodingdimm");
 	
 	function controlGate(name, openClose, inOut, num){
 		var url = ifserver;
-
+		console.log("자동 제어 시작=====");
+		console.log("name : " + name);
+		console.log("openClose : " + openClose);
+		console.log("inOut : " + inOut);
+		console.log("num : " + num);
 		if(inOut=="in"){
 			url = ifserver+"/gate/"+openClose+"/"+name+"/in";
 		}else if(inOut=="out"){
@@ -273,7 +277,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 	  			}
 	  		},
 	  		error : function(e){
-	  			alert("통신문제로 GATE를 열 수 없습니다.");
+	  			alert("통신문제로 GATE를 제어할 수 없습니다.");
 	  		}
 	  	});
 	}
@@ -282,7 +286,9 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#msg-kind").text("").removeClass("info_ment").removeClass("redfont");
 		var url = ifserver;
 		var kind = $("input:radio[name=kind]:checked").val();
-		if(kind=="b"){
+		if(kind=="b" && name != "T999"){		//자동 제어 시작(일반)
+			console.log("자동 제어 시작(일반)=====");
+			console.log("name : " + name, "openClose : " + openClose, "inOut : " + inOut, "num : " + num);
 			if(inOut=="in"){
 				url += "/gate/"+openClose+"/"+name+"/in";
 			}else if(inOut=="out"){
@@ -293,7 +299,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 				}
 			}
 			console.log(url);
-			/*
+
 		  	$.ajax({
 		  		url : url,
 		  		type : "get",
@@ -304,15 +310,17 @@ $(".lodingdimm").removeClass("lodingdimm");
 		  			}
 		  		},
 		  		error : function(e){
-		  			$("#msg-kind").text("통신문제로 GATE를 열 수 없습니다.").addClass("info_ment").addClass("redfont");
+		  			$("#msg-kind").text("통신문제로 GATE를 제어할 수 없습니다.").addClass("info_ment").addClass("redfont");
 		  		}
 		  	});
-			*/
 		}else{	//한국타이어(수동)
+			//console.log("수동 제어 시작=====");
+			//console.log("name : " + name, "openClose : " + openClose, "inOut : " + inOut, "num : " + num);
 			data = {
 				trackId : name
 			}
 
+		
 			if(inOut=="in"){
 				url = "/gate/"+openClose+"/in";
 			}else if(inOut=="out"){
@@ -322,20 +330,24 @@ $(".lodingdimm").removeClass("lodingdimm");
 					url = "/gate/"+openClose+"/out";
 				}
 			}
+			
+			//console.log("trackId : " + name, "url : " + url);
 
 			postAjax("${ifserver}"+url,data,"","gatePopupFail",null,null);
 
-			if(openClose=="open"){
-				if (el.classList.contains("btn_default")) {
-				    el.classList.remove("btn_default");
-				    el.classList.add("btn_gray");
-				}
-			}else{
-				var pre_el = el.previousElementSibling;
-
-				if (pre_el.classList.contains("btn_gray")) {
-					pre_el.classList.remove("btn_gray");
-					pre_el.classList.add("btn_default");
+			if($('#control_popup').css('display') == "block"){
+				if(openClose=="open"){
+					if (el.classList.contains("btn_default")) {
+					    el.classList.remove("btn_default");
+					    el.classList.add("btn_gray");
+					}
+				}else{
+					var pre_el = el.previousElementSibling;
+	
+					if (pre_el.classList.contains("btn_gray")) {
+						pre_el.classList.remove("btn_gray");
+						pre_el.classList.add("btn_default");
+					}
 				}
 			}
 		}
@@ -442,7 +454,11 @@ $(".lodingdimm").removeClass("lodingdimm");
 	*/
 
 	function gatePopupFail(){
-		$("#msg-kind").text("통신문제로 GATE를 열 수 없습니다.").addClass("info_ment").addClass("redfont");
+		if($('#control_popup').css('display') == "none"){
+			alert("통신문제로 GATE를 제어할 수 없습니다.");
+		}else{
+			$("#msg-kind").text("통신문제로 GATE를 제어할 수 없습니다.").addClass("info_ment").addClass("redfont");
+		}
 	}
 
 	function updateInTime(){
@@ -707,8 +723,8 @@ $(".lodingdimm").removeClass("lodingdimm");
                         <div class="box_state02 emergency">
                             <p>Emergency (HSO)</p>
                             <div class="row m-t-8">
-                                <button type="button" class="btn-line-s btn_gray w53" onclick="controlGate('T999', 'open', 'out', '1')">OPEN</button>
-                                <button type="button" class="btn-line-s btn_gray w53" onclick="controlGate('T999', 'close', 'out', '1')">CLOSE</button>
+                                <button type="button" class="btn-line-s btn_gray w53" onclick="controlGatePopup('T999', 'open', 'out', '1')">OPEN</button>
+                                <button type="button" class="btn-line-s btn_gray w53" onclick="controlGatePopup('T999', 'close', 'out', '1')">CLOSE</button>
                             </div>
                         </div>
 
@@ -952,7 +968,7 @@ $(".lodingdimm").removeClass("lodingdimm");
     <!-- //popup_m -->
 
     <!-- popup_l -->
-    <div class="ly_group">
+    <div class="ly_group" id="control_popup">
         <article class="layer_l popup_GControl">
             <!-- # 타이틀 # -->
             <h1>차단기 제어 (전체)</h1>
