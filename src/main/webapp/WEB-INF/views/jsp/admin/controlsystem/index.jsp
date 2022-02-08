@@ -231,7 +231,6 @@ $(".lodingdimm").removeClass("lodingdimm");
 		  		type : "get",
 		  		data : {},
 		  		success : function(resdata){
-		  			alert(resdata.message);
 		  			if(resdata.message!="OK"){
 		  				alert("(코드이상)정상동작할 수 없습니다.");
 		  			}
@@ -247,21 +246,17 @@ $(".lodingdimm").removeClass("lodingdimm");
 	function controlGate(name, openClose, inOut, num){
 		var url = ifserver;
 		console.log("자동 제어 시작=====");
-		console.log("name : " + name);
-		console.log("openClose : " + openClose);
-		console.log("inOut : " + inOut);
-		console.log("num : " + num);
 		if(inOut=="in"){
-			url = ifserver+"/gate/"+openClose+"/"+name+"/in";
+			url += "/gate/"+openClose+"/"+name+"/in";
 		}else if(inOut=="out"){
 			if(num=="2"){
-				url = ifserver+"/gate/"+openClose+"/"+name+"/out2";
+				url += "/gate/"+openClose+"/"+name+"/out2";
 			}else{
-				url = ifserver+"/gate/"+openClose+"/"+name+"/out";
+				url += "/gate/"+openClose+"/"+name+"/out";
 			}
 		}
 		
-		//console.log(url);
+		console.log(url);
 
 	  	$.ajax({
 	  		url : url,
@@ -286,9 +281,9 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#msg-kind").text("").removeClass("info_ment").removeClass("redfont");
 		var url = ifserver;
 		var kind = $("input:radio[name=kind]:checked").val();
-		if(kind=="b" && name != "T999"){		//자동 제어 시작(일반)
+		if(kind=="b" && openClose=="open" && name != "T999"){		//자동 제어 시작(일반)
 			console.log("자동 제어 시작(일반)=====");
-			console.log("name : " + name, "openClose : " + openClose, "inOut : " + inOut, "num : " + num);
+			console.log("name : " + name, ", openClose : " + openClose, ", inOut : " + inOut, ", num : " + num);
 			if(inOut=="in"){
 				url += "/gate/"+openClose+"/"+name+"/in";
 			}else if(inOut=="out"){
@@ -298,7 +293,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 					url += "/gate/"+openClose+"/"+name+"/out";
 				}
 			}
-			console.log(url);
+			//console.log(url);
 
 		  	$.ajax({
 		  		url : url,
@@ -314,26 +309,24 @@ $(".lodingdimm").removeClass("lodingdimm");
 		  		}
 		  	});
 		}else{	//한국타이어(수동)
-			//console.log("수동 제어 시작=====");
-			//console.log("name : " + name, "openClose : " + openClose, "inOut : " + inOut, "num : " + num);
+			console.log("수동 제어 시작=====");
+			console.log("name : " + name, ", openClose : " + openClose, ", inOut : " + inOut, ", num : " + num);
 			data = {
 				trackId : name
 			}
-
 		
 			if(inOut=="in"){
-				url = "/gate/"+openClose+"/in";
+				url += "/gate/"+openClose+"/in";
 			}else if(inOut=="out"){
 				if(num=="2"){
-					url = "/gate/"+openClose+"/out2";
+					url += "/gate/"+openClose+"/out2";
 				}else{
-					url = "/gate/"+openClose+"/out";
+					url += "/gate/"+openClose+"/out";
 				}
 			}
 			
 			//console.log("trackId : " + name, "url : " + url);
-
-			postAjax("${ifserver}"+url,data,"","gatePopupFail",null,null);
+			postAjax(url,data,"","gatePopupFail",null,null);
 
 			if($('#control_popup').css('display') == "block"){
 				if(openClose=="open"){
