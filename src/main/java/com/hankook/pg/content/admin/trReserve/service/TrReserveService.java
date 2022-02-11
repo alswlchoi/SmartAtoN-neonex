@@ -1932,10 +1932,6 @@ public class TrReserveService{
 		
 		TrReserveDto trReserve = getTestScheduleEqualsTcSeq1Row(tcSeq);
 		
-		trReserve.setMemName(AESCrypt.decrypt(trReserve.getMemName()));
-		trReserve.setMemPhone(AESCrypt.decrypt(trReserve.getMemPhone()));
-		trReserve.setMemEmail(AESCrypt.decrypt(trReserve.getMemEmail()));
-		
 		String tcDay = trReserve.getTcDay();
 		if(tcDay.indexOf("#")>-1) {
 			tcDay = tcDay.substring(0, tcDay.indexOf("#"));
@@ -1962,8 +1958,12 @@ public class TrReserveService{
 
 		CompanyDto company = new CompanyDto();
 		company = getCompanyDetail(trReserve.getCompCode());
-		company = companyService.getCompanyDetailExpression(company);
-
+		//company = companyService.getCompanyDetailExpression(company);
+		
+		company.setMemName(AESCrypt.decrypt(company.getMemName()));
+		company.setMemPhone(AESCrypt.decrypt(company.getMemPhone()));
+		company.setMemEmail(AESCrypt.decrypt(company.getMemEmail()));
+		
 		String driverStr = (String) driverInfo.get("driverStr");
 		String driverOnlyNameStr = (String) driverInfo.get("driverOnlyNameStr");
 		String wiressStr = (String) driverInfo.get("wiressStr");
