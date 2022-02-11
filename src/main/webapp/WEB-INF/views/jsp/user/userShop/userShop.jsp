@@ -840,7 +840,7 @@ $(document).on('click','.fc-button',function(){
         , compAcctPhone: $("#compAcctPhone").val()
         , wssReservDay: applyDate
       };
-      // postAjax("/user/userShop/insert", param, "goReservedPage", null, null, null);
+      postAjax("/user/userShop/insert", param, "goReservedPage", null, null, null);
     // }
   }
 
