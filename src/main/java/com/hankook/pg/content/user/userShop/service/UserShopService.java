@@ -112,7 +112,7 @@ public class UserShopService {
       email.setTableMap(tableMap);
       email.setBdt(null);// 내용
       email.setRcver(myPageVo.getMemName());
-      email.setRcverEmail(userShopVo.getMemEmail());
+      email.setRcverEmail(myPageVo.getMemEmail());
 
       emailService.SenderMail(email, "E07");
 //      emailService.GoogleSenderMail(email, "E07");

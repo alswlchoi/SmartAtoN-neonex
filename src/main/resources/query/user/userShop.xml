@@ -184,6 +184,7 @@ WHERE COMP_CODE = #{compCode}
   SELECT COUNT (*)
   FROM PG_SHOP_SCHDULE
   WHERE WS_CODE = #{wsCode}
+  AND WSS_APPROVAL != 'R' and WSS_APPROVAL != 'C'
   AND WSS_RESERV_DAY LIKE CONCAT('%',#{wssStDay},'%')
 </select>
 </mapper>
