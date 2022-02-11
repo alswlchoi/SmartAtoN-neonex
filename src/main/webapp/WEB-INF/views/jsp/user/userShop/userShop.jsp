@@ -765,6 +765,7 @@ $(document).on('click','.fc-button',function(){
   }
   // 예약 신청 확인버튼 클릭 시
   function insertReserv() {
+    getApplyDate();
     var date = $("#dateto").val().split(" ~ ");
     if ($("#shopSelect").val() == "") {
       alert3("부대시설을 선택해주세요.");
