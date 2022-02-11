@@ -1932,6 +1932,10 @@ public class TrReserveService{
 		
 		TrReserveDto trReserve = getTestScheduleEqualsTcSeq1Row(tcSeq);
 		
+		trReserve.setMemName(AESCrypt.decrypt(trReserve.getMemName()));
+		trReserve.setMemPhone(AESCrypt.decrypt(trReserve.getMemPhone()));
+		trReserve.setMemEmail(AESCrypt.decrypt(trReserve.getMemEmail()));
+		
 		String tcDay = trReserve.getTcDay();
 		if(tcDay.indexOf("#")>-1) {
 			tcDay = tcDay.substring(0, tcDay.indexOf("#"));
