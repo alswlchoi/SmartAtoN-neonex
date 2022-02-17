@@ -139,7 +139,6 @@ public class StatisticsController {
 	
 	@GetMapping(value = "/inout", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ModelAndView input(ModelAndView mav, StatisticsVo vo) throws Exception {
-		System.out.println("input first");
 		mav.setViewName("/admin/statistics/input");
 		
 		return mav;
@@ -148,7 +147,6 @@ public class StatisticsController {
 	@PostMapping("/inout")
 	public Map<String, Object> inputlog(ModelAndView mav,@RequestBody StatisticsVo vo) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
-		System.out.println("inputlog list");
 		
 		String[] arrOrderCoulmn = {"tcDay desc"};
 		vo.setArrOrderColumn(arrOrderCoulmn);

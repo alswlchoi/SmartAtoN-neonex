@@ -161,7 +161,9 @@ function drawTrackSelect(trackList, currentTid){
 	html += '<select name="trTrackCode" id="trTrackCode" class="form_control">';
 	html += '<option value="">트랙선택</option>';
 	for(var list in trackList){
-		html += '<option value="'+undefinedChk(trackList[list].tid,"")+'">'+undefinedChk(trackList[list].tname,"")+'</option>';
+		if(parseInt(list)>0){
+			html += '<option value="'+undefinedChk(trackList[list].tid,"")+'">'+undefinedChk(trackList[list].tname,"")+'</option>';
+		}
 	}
 	html += '</select>';
 	console.log(html);
@@ -178,7 +180,6 @@ function undefinedChk(str1, str2){
 }
 
 function succAddTrack(resdata){
-	console.log(resdata);
 	alert(resdata.message);
 	if(resdata.code=="200"){
 		$(".lyClose").click(function(){
@@ -328,8 +329,7 @@ function setDisable(list){
                                     <tbody>
                                     <c:if test="${trReserve.compCode ne 'THINT' }"> 
                                         <tr>
-                                            <td>${trReserve.tcReservCode }
-                                            <c:if test="${trReserve.compCode eq 'THINT' }"><br /><span class="color_orange">${trReserve.tcRequestNumber }</span></c:if></td>
+                                            <td>${trReserve.tcReservCode }</td>
                                             <td>
 	                                            <c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
 		                                            <c:if test="${status.index eq 0 }">
@@ -404,7 +404,13 @@ function setDisable(list){
 	                                            <td>${trReserve.tcReservCode }<br /><span class="color_orange">${trReserve.tcRequestNumber }</span></td>
 	                                            <td>${fn:substring(result.tcDay,0,4) }-${fn:substring(result.tcDay,4,6) }-${fn:substring(result.tcDay,6,8) }</td>
 	                                            <td>한국타이어</td>
-								                <td>${result.trTrackNickName }</td>
+								                <td>${result.trTrackNickName }
+								                <br />
+	                                            <div class="trdiv form_group w170" style="padding-left:20px">
+													<div id="trackInfo" class="select_group"></div>
+												</div>
+												<button type="button" id="addTrBtn" class="btn-line btn_gray">시험로 +</button>
+	                                            </td>
 	                                            <td>
 													<c:if test="${result.trTrackType eq 'TYP00'}">공동</c:if>
 	    	                                        <c:if test="${result.trTrackType eq 'TYP01'}">단독</c:if>

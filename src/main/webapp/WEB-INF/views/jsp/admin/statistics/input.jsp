@@ -68,7 +68,6 @@ $(function(){
         tcDay: stDate,
         tcDay2: edDate
       };
-      //console.log(param);
       postAjax("/admin/statistics/inout", param, "searchCallback", null, null, null);
     }
 

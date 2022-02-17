@@ -88,14 +88,15 @@ public class MyPageService {
   public int cancel(MyPageVo myPageVo) {
     int done;
     String discount = myPageDao.getDiscount(myPageVo.getCompCode());
+    if (discount == null) {
+      discount = "0";
+    }
     if (myPageVo.getType().equals("T")) { // 취소할 예약이 TRACK일 경우
       MyPageVo trackPay = myPageDao.getTrackPrice(myPageVo.getReservCode());
       // 실제 금액과 적용시간 값 계산
       int wholeM = trackPay.getPProductPay() * trackPay.getRealDate();
       double afterDis = wholeM;
-      if (discount != null) {
-        afterDis = wholeM * (1-(Integer.parseInt(discount) / 100.0));
-      }
+      afterDis = wholeM * (1-(Integer.parseInt(discount) / 100.0));
       double cancelP = Integer.parseInt(myPageVo.getPCancel()) / 100.0;
       int pPay = (int) (afterDis * cancelP);
       int applyTime = 240 * trackPay.getRealDate();
@@ -119,9 +120,7 @@ public class MyPageService {
       applyTime = wssReservDay.length;
       int wholeM = shopPay.getPProductPay() * applyTime;
       double afterDis = wholeM;
-      if (discount != null) {
-        afterDis = wholeM * (1-(Integer.parseInt(discount) / 100.0));
-      }
+      afterDis = wholeM * (1-(Integer.parseInt(discount) / 100.0));
       double cancelP = Integer.parseInt(myPageVo.getPCancel()) / 100.0;
       int pPay = (int) (afterDis * cancelP);
 

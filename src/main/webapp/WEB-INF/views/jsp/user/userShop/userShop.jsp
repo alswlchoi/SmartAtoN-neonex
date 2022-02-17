@@ -765,6 +765,7 @@ $(document).on('click','.fc-button',function(){
   }
   // 예약 신청 확인버튼 클릭 시
   function insertReserv() {
+    getApplyDate();
     var date = $("#dateto").val().split(" ~ ");
     if ($("#shopSelect").val() == "") {
       alert3("부대시설을 선택해주세요.");
@@ -840,7 +841,7 @@ $(document).on('click','.fc-button',function(){
         , compAcctPhone: $("#compAcctPhone").val()
         , wssReservDay: applyDate
       };
-      // postAjax("/user/userShop/insert", param, "goReservedPage", null, null, null);
+      postAjax("/user/userShop/insert", param, "goReservedPage", null, null, null);
     // }
   }
 
@@ -1118,7 +1119,7 @@ $(document).on('click','.fc-button',function(){
             <button type="button" onclick="insertReserv();" class="btn-pop btn_default">확인</button>
         </div>
         <!-- # 닫기버튼 # -->
-        <button data-fn="lyClose">레이어닫기</button>
+<!--         <button data-fn="lyClose">레이어닫기</button> -->
     </article>
 </div>
 <!-- //popup_xl -->

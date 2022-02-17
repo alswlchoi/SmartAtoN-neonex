@@ -84,3 +84,8 @@ file:
 
 default:
       password: "12345"
+      
+environments:
+  #ifserver : "http://10.182.25.181:8081"
+  ifserver : "http://127.0.0.1:8081"
+  hes-api-uri : "http://hes.hankooktech.com/external/externalResIf.do"
