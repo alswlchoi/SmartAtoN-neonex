@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.hankook.pg.content.kakao.service.KakaoService;
+import com.hankook.pg.content.kakao.vo.KakaoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,9 @@ public class UserShopController {
 
   @Autowired
   DayoffService dayoffService;
+
+  @Autowired
+  KakaoService kakaoService;
 
   @RequestMapping(value = "", method = RequestMethod.GET)
   public ModelAndView shop() throws Exception {
@@ -136,5 +142,10 @@ public class UserShopController {
     System.out.println("reservChk");
     int result = userShopService.reservChk(userShopVo);
     return result;
+  }
+
+  @PostMapping("/test")
+  public int test(@RequestBody KakaoVo kakaoVo) throws Exception {
+    return kakaoService.insertKakao(kakaoVo);
   }
 }

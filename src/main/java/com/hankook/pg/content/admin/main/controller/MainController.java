@@ -4,7 +4,7 @@ import com.hankook.pg.content.admin.main.service.MainService;
 import com.hankook.pg.content.admin.main.vo.MainVo;
 import com.hankook.pg.content.admin.notice.dto.NoticeDto;
 import com.hankook.pg.content.admin.notice.service.NoticeService;
-import com.hankook.pg.mail.service.EmailService;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,8 +32,6 @@ public class MainController {
   MainService mainService;
   @Autowired
   NoticeService noticeService;
-  @Autowired
-  EmailService emailService;
 
   @RequestMapping(value = "", method = RequestMethod.GET)
   public ModelAndView main() throws Exception {
@@ -98,11 +95,6 @@ public class MainController {
     String nType = noticeDto.getNType();
     List<NoticeDto> list = noticeService.mainNotice(nType);
     return list;
-  }
-
-  @GetMapping("/test")
-  public void test() throws Exception {
-//    emailService.GoogleSenderMail();
   }
 
 }
