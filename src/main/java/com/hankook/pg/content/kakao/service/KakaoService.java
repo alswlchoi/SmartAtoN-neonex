@@ -19,7 +19,7 @@ public class KakaoService {
     public int insertKakao(KakaoVo kakaoVo) throws Exception{
 
         kakaoVo.setTmplCd("K494_0001");
-        kakaoVo.setSendMsg("테스트입니다.");
+        kakaoVo.setSendMsg("알림톡 테스트입니다.");
 
         return kakaoDao.insertKakao(kakaoVo);
     }
