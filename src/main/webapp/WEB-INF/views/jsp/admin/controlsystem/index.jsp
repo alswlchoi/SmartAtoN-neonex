@@ -158,9 +158,9 @@ $(".lodingdimm").removeClass("lodingdimm");
 			.addClass("redfont");
 		}else{
 			var data ={
-				msg : msg
+                message : msg
 			};
-			
+
 			postAjax(ifserver+"/billboard/send",data,"successSendMessage","kakaoSend",null,null);
 		}
 	});
@@ -177,10 +177,10 @@ $(".lodingdimm").removeClass("lodingdimm");
 	function kakaoSend(resdata){
 		var msg = $("#emergency-msg").val().trim();
 		var data ={
-			msg : msg
+            message : msg
 		};
 
-		postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
+		//postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
 	}
 	
 	function failSendMessage(resdata){
@@ -256,7 +256,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 			}
 		}
 		
-		console.log(url);
+		console.log(name + " : " + url);
 
 	  	$.ajax({
 	  		url : url,
@@ -272,7 +272,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 	  			}
 	  		},
 	  		error : function(e){
-	  			alert("통신문제로 GATE를 제어할 수 없습니다.");
+                alert(e.responseJSON.errorCode)
 	  		}
 	  	});
 	}
@@ -325,7 +325,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 				}
 			}
 			
-			//console.log("trackId : " + name, "url : " + url);
+			console.log("trackId : " + name, "url : " + url);
 			postAjax(url,data,"","gatePopupFail",null,null);
 
 			if($('#control_popup').css('display') == "block"){
