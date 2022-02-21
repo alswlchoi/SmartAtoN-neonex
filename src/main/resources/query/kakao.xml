@@ -22,4 +22,37 @@
                 'N'
                 )
     </insert>
+
+  <select id="getTrackInfo" parameterType="String" resultType="com.hankook.pg.content.kakao.vo.KakaoVo">
+      SELECT PM.MEM_NAME,
+             CONCAT(PTS.TC_DAY,' ~ ',PTS.TC_DAY2) TC_DAY,
+             GROUP_CONCAT(DISTINCT PTR.TR_TRACK_NAME) TR_TRACK_NAME,
+             CASE WHEN PTS.TC_APPROVAL ='0' THEN '신청'
+                  WHEN PTS.TC_APPROVAL ='2' THEN '취소'
+                  WHEN PTS.TC_APPROVAL ='3' THEN '승인'
+                  ELSE '반려' END AS P_TYPE,
+             PTS.TC_MEMO,
+             PM.MEM_PHONE
+      FROM PG_TEST_SCHDULE PTS
+      LEFT OUTER JOIN PG_MEMBER PM ON PTS.TC_REG_USER = PM.MEM_ID
+      LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
+      WHERE PTS.TC_RESERV_CODE = #{reservCode}
+  </select>
+
+  <select id="getShopInfo" parameterType="String" resultType="com.hankook.pg.content.kakao.vo.KakaoVo">
+      SELECT PM.MEM_NAME,
+             CONCAT(PSS.WSS_ST_DAY,' ~ ',PSS.WSS_ED_DAY) TC_DAY,
+             PS.WS_NAME AS TR_TRACK_NAME,
+             CASE WHEN PSS.WSS_APPROVAL ='N' THEN '신청'
+                  WHEN PSS.WSS_APPROVAL ='C' THEN '취소'
+                  WHEN PSS.WSS_APPROVAL ='Y' THEN '승인'
+                  WHEN PSS.WSS_APPROVAL ='R' THEN '반려'
+                  ELSE '완료' END AS P_TYPE,
+             PSS.WSS_MEMO,
+             PM.MEM_PHONE
+      FROM PG_SHOP_SCHDULE PSS
+      LEFT OUTER JOIN PG_MEMBER PM ON PSS.WSS_REG_USER = PM.MEM_ID
+      LEFT OUTER JOIN PG_SHOP PS on PSS.WS_CODE = PS.WS_CODE
+      WHERE WSS_RESERV_CODE = #{reservCode}
+  </select>
 </mapper>

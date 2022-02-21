@@ -35,4 +35,10 @@ public class KakaoVo {
     private String kkoBtnInfo;
     private String imgUrl;
     private String imgLink;
+
+    // 트랙/부대시설 정보
+    private String memName;
+    private String tcDay;
+    private String trTrackName;
+    private String pType;
 }
