@@ -876,6 +876,20 @@ $(document).on('click','.fc-button',function(){
     etcHtml += '실 예약일 : '+length+'일';
     $("#etc").html(etcHtml);
   }
+
+function test() {
+    var param = {
+        phone: "<%=memberDto.getMemPhone()%>"
+    }
+    postAjax("/user/userShop/test", param, "ttttt", null, null, null)
+}
+function ttttt(res) {
+    if (res === 1) {
+        alert("성공");
+    } else {
+        alert("실패");
+    }
+}
 </script>
 
 <!-- container -->

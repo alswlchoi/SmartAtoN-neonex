@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hankook.pg.content.kakao.dao.KakaoDao">
+    <insert id="insertKakao" parameterType="com.hankook.pg.content.kakao.vo.KakaoVo">
+        INSERT INTO KAKAO_DATA
+            (
+             SENDER_KEY,
+             PHONE,TMPL_CD,
+             SEND_MSG,
+             REQ_DATE,
+             CUR_STATE,
+             SMS_TYPE
+             )
+        VALUES (
+                'dc20b121ce0d26d1635b80f86e46fc3de802ad77',
+                #{phone},
+                #{tmplCd},
+                #{sendMsg},
+                SYSDATE(),
+                '0',
+                'N'
+                )
+    </insert>
+</mapper>

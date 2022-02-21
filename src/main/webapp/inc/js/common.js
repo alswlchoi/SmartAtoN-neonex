@@ -10,7 +10,6 @@ $(document).ajaxError(function(event,jqxhr,setting,thrownError){
 //		alert(jqxhr.responseJSON.code+" ERROR 발생<br/>"+jqxhr.responseJSON.message);
 		}else{
 //		alert("[시스템 오류]관리자에게 문의해 주세요.");
-			alert(jqxhr.responseJSON);
 		}
 	}
 //	if(jqxhr.responseJSON.code == 401){

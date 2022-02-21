@@ -1959,10 +1959,10 @@ public class TrReserveService{
 		CompanyDto company = new CompanyDto();
 		company = getCompanyDetail(trReserve.getCompCode());
 		//company = companyService.getCompanyDetailExpression(company);
-		
+
 		company.setMemName(AESCrypt.decrypt(company.getMemName()));
 		company.setMemPhone(AESCrypt.decrypt(company.getMemPhone()));
-		company.setMemEmail(AESCrypt.decrypt(company.getMemEmail()));
+		company.setMemEmail(company.getMemEmail());
 		
 		String driverStr = (String) driverInfo.get("driverStr");
 		String driverOnlyNameStr = (String) driverInfo.get("driverOnlyNameStr");
