@@ -80,7 +80,11 @@
         var stop = list.stop[i];
         stopHtml += '<tr>';
         stopHtml += '<td>'+stop.name+'('+stop.employeeNo+')</td>';
-        stopHtml += '<td>'+moment(stop.crnDtm).format("YYYY.MM.DD")+'</td>';
+        if(stop.crnDtm == null) {
+            stopHtml += '<td>-</td>';
+        }else{
+            stopHtml += '<td>'+moment(stop.crnDtm).format("YYYY.MM.DD")+'</td>';
+        }
         stopHtml += '<td>'+moment(stop.tcDay).format("YYYY.MM.DD")+'</td>';
         if (stop.rreturn == '' || stop.rreturn == null) {
           stopHtml += '<td>-</td>';
