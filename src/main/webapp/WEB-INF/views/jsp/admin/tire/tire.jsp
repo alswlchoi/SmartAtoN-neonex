@@ -202,7 +202,7 @@ function searchCallback(data) {
                 var wheelList = list[i].wheelLocation.split(",");
                 html += '<td>';
                 wheelList.forEach(function(el) {
-                    html += el.substr(0,el.indexOf("(")-1) + '<br>' + el.substr(el.indexOf("(")) + '<br>';
+                    html += el.substr(0,el.indexOf("(")) + '<br>' + el.substr(el.indexOf("(")) + '<br>';
                 });
                 html += '</td>';
             }else {
@@ -299,7 +299,12 @@ function confirmData(data) {
     tmSeq = data.attr("data-seq");
     colType = data.attr("data-opt");
     checkDay = data.attr("data-day");
-	
+
+    alert(tmSeq);
+    alert(colType);
+    alert(checkDay);
+
+
     if(colType=="tireAssembly") {
         var check = data.attr("data-push");
         if(check == "null") {
@@ -324,6 +329,9 @@ function confirmTrue() {
 function confirmFalse(){}
 
 function insertData() {
+
+    alert(colType);
+
     var param;
 
     if(colType=='lift') {
@@ -342,7 +350,7 @@ function insertData() {
         };
     }
 
-    postAjax("/admin/tire/insert",param,"insertCallback",null,null,null);
+    //postAjax("/admin/tire/insert",param,"insertCallback",null,null,null);
 }
 
 function insertCallback(data) {

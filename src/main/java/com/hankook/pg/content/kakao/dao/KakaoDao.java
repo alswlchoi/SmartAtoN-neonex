@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface KakaoDao {
 
     int insertKakao(KakaoVo kakaoVo);
+
+    KakaoVo getTrackInfo (String reservCode);
+    KakaoVo getShopInfo (String reservCode);
 }

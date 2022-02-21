@@ -1023,20 +1023,19 @@
         	TC_SEQ,
         	TC_DAY,
         	RM_TYPE,
-        	PRM.D_SEQ,
+        	D_SEQ,
         	R_ID,
         	RM_LEVEL,
         	W_ID,
-        	PRM.D_NAME,
+        	D_NAME,
         	'Y' AS D_EDU,
         	RM_IN_OUT,
         	RM_REG_DT
 		FROM PG_RESOURCE_MAPPING PRM
-		INNER JOIN PG_HINT_DRIVER PD
-		ON PRM.D_SEQ=PD.EMPLOYEE_NO
 		WHERE
 		TC_SEQ=#{tcSeq}
 		AND RM_TYPE='D'
+		GROUP BY D_SEQ;
     </select>
 
     <select id="getTrRfidGeneralLog" parameterType="String" resultType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
