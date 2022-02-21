@@ -35,4 +35,5 @@ public class KakaoVo {
     private String kkoBtnInfo;
     private String imgUrl;
     private String imgLink;
+    private String name;
 }
