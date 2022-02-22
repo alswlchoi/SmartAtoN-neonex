@@ -2,7 +2,6 @@ package com.hankook.pg.content.kakao.service;
 
 import com.hankook.pg.content.kakao.dao.KakaoDao;
 import com.hankook.pg.content.kakao.vo.KakaoVo;
-
 import com.hankook.pg.share.AESCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,6 @@ public class KakaoService {
                 kakaoVo = kakaoDao.getShopInfo(reservCode);
             }
 
-        kakaoVo.setTmplCd("K494_0002");
-        kakaoVo.setSendMsg("[한국테크노링]\r\n"
-        		+ "가변문구 테스트 입니다\r\n"
-        		+ kakaoVo.getName() +"님\r\n"
-        		+ "에 부대시설A 예약 신청 완료되었습니다");
-
         kakaoVo.setSendMsg(
                 "[한국테크노링]"
                 + AESCrypt.decrypt(kakaoVo.getMemName())+"님"
@@ -49,7 +42,7 @@ public class KakaoService {
             // reservCode에 이름 전달
             // type으로 회원가입 신청/승인/반려, 운전자 신청/승인/반려 구분
             String serviceName = "회원가입"; // 회원가입/운전자등록
-            String approval = "완료"; // 신청/승인/반려
+            String approval = "신청"; // 신청/승인/반려
             switch (type) {
                 case "Rapp":
                     approval = "승인";

@@ -880,7 +880,6 @@ $(document).on('click','.fc-button',function(){
 function test() {
     var param = {
         phone: "<%=memberDto.getMemPhone()%>",
-        name: "<%=memberDto.getMemName()%>"
         
     }
     postAjax("/user/userShop/test", param, "ttttt", null, null, null)
