@@ -17,7 +17,7 @@ public class KakaoService {
     @Autowired
     private KakaoDao kakaoDao;
 
-    // phone에는 복호화된 수신자번호
+    // phone에는 복호화된 수신자번호..
     // type에는 회원가입 R, 운전자등록 D, 시험로예약 T, 부대시설 S
     // reservCode에는 예약 번호 -- 만약 회원가입/운전자등록에서 사용시 이름 넣기
     public int insertKakao(String phone, String type, String reservCode) throws Exception{
