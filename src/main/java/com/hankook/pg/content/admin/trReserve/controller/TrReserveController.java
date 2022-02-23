@@ -497,34 +497,39 @@ public class TrReserveController {
 		} else {
 			Integer pageNo = Fn.toInt(request, "pageNo", 1);
 			String tcStep = Fn.toString(request, "tcStep", "1");
-			TrReserveDto trReserve = trReserveService.getTrReserveDetail(searchTrReserve);
-			List<TrRfidDto> rfidLog = trReserveService.getTrRfidLog(trReserve.getTcReservCode());
-			List<ResourceMappingDto> rmInfo = trReserveService.getHintDriverInfo(searchTrReserve);
-			Map<String, Object> driverInfo = trReserveService.getDriverInfo(searchTrReserve);
-
-			String driverStr = (String) driverInfo.get("driverStr");
-			String wiressStr = (String) driverInfo.get("wiressStr");
-			String[] resourceArr = (String[]) driverInfo.get("resourceArr");
-
-			CompanyDto company = new CompanyDto();
-			if (null != trReserve && null != trReserve.getCompCode()) {
-				company = companyService.getCompanyDetail(trReserve.getCompCode());
+			
+			if(Fn.toInt(searchTrReserve.getTcSeq())==0) {
+				mav.setViewName("redirect:/admin/trReserve/trlist?pageNo="+pageNo+"&tcStep="+tcStep);
+			}else {
+				TrReserveDto trReserve = trReserveService.getTrReserveDetail(searchTrReserve);
+				List<TrRfidDto> rfidLog = trReserveService.getTrRfidLog(trReserve.getTcReservCode());
+				List<ResourceMappingDto> rmInfo = trReserveService.getHintDriverInfo(searchTrReserve);
+				Map<String, Object> driverInfo = trReserveService.getDriverInfo(searchTrReserve);
+	
+				String driverStr = (String) driverInfo.get("driverStr");
+				String wiressStr = (String) driverInfo.get("wiressStr");
+				String[] resourceArr = (String[]) driverInfo.get("resourceArr");
+	
+				CompanyDto company = new CompanyDto();
+				if (null != trReserve && null != trReserve.getCompCode()) {
+					company = companyService.getCompanyDetail(trReserve.getCompCode());
+				}
+	
+				Integer payCnt = trReserveService.getAccountYn(trReserve.getTcReservCode());
+	
+				mav.addObject("pageNo", pageNo);
+				mav.addObject("tcStep", tcStep);
+				mav.addObject("trReserve", trReserve);
+				mav.addObject("rmInfo", rmInfo);
+				mav.addObject("rfidLog", rfidLog);
+				mav.addObject("driver", driverStr);
+				mav.addObject("wiress", wiressStr);
+				mav.addObject("resourceArr", resourceArr);
+				mav.addObject("company", company);
+				mav.addObject("payCnt", payCnt);
+	
+				mav.setViewName("/admin/trReserve/trDetail");
 			}
-
-			Integer payCnt = trReserveService.getAccountYn(trReserve.getTcReservCode());
-
-			mav.addObject("pageNo", pageNo);
-			mav.addObject("tcStep", tcStep);
-			mav.addObject("trReserve", trReserve);
-			mav.addObject("rmInfo", rmInfo);
-			mav.addObject("rfidLog", rfidLog);
-			mav.addObject("driver", driverStr);
-			mav.addObject("wiress", wiressStr);
-			mav.addObject("resourceArr", resourceArr);
-			mav.addObject("company", company);
-			mav.addObject("payCnt", payCnt);
-
-			mav.setViewName("/admin/trReserve/trDetail");
 		}
 		return mav;
 
@@ -866,13 +871,19 @@ public class TrReserveController {
 			String tcDayToChange = trReserve.getTcDay();
 			String tcMemoToChange = trReserve.getTcMemo();
 			String days[] = new String[2];
+
+			String tcStDt = "";				//변경 후 기간(시작)
+			String tcEdDt = "";				//변경 후 기간(시작)
 			
-			days = tcDayToChange.split("~");	// 수정하고자 하는 기간. ~ 구분자로 시작일과 마감일 분리, 형식 안 맞으면 insert 안 됨
-			
-			String tcStDt = days[0].trim();				//변경 후 기간(시작)
-			String tcEdDt = days[1].trim();				//변경 후 기간(시작)
-	    	tcStDt = Fn.toDateFormat(tcStDt, "yyyyMMdd");
-	    	tcEdDt = Fn.toDateFormat(tcEdDt, "yyyyMMdd");
+			if(null!=tcDayToChange&&!tcDayToChange.equals("")) {
+				days = tcDayToChange.split("~");	// 수정하고자 하는 기간. ~ 구분자로 시작일과 마감일 분리, 형식 안 맞으면 insert 안 됨
+				
+				tcStDt = days[0].trim();				//변경 후 기간(시작)
+				tcEdDt = days[1].trim();				//변경 후 기간(시작)
+				
+		    	tcStDt = Fn.toDateFormat(tcStDt, "yyyyMMdd");
+		    	tcEdDt = Fn.toDateFormat(tcEdDt, "yyyyMMdd");
+			}
 
 	    	SearchTrReserveDto searchTrTreserve = new SearchTrReserveDto();
 	    	searchTrTreserve.setTcSeq(trReserve.getTcSeq());
