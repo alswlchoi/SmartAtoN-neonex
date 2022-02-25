@@ -70,6 +70,7 @@ public class MemberService {
                     .memCompPhone(memberDto.getMemCompPhone())
                     .memAgreement(memberDto.getMemAgreement())
                     .memPurpose(memberDto.getMemPurpose())
+                    .kakaoSmsYn("N")
                     .memUserType("user")
                     .memBirth(AESCrypt.encrypt("19990101"))
                     .authCode("A000")
