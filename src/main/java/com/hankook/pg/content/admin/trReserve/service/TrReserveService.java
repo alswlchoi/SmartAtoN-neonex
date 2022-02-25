@@ -220,7 +220,7 @@ public class TrReserveService{
 				
 				if(compCode.equals("THINT")) {
 					if((null!=trReserve.getTcSeq()&&beforeTcSeq!=trReserve.getTcSeq())
-							||(null!=trReserve.getTrPackageName()&&!beforePackageName.equals(trReserve.getTrPackageName()))) {
+							||(null!=beforePackageName&&null!=trReserve.getTrPackageName()&&!beforePackageName.equals(trReserve.getTrPackageName()))) {
 						trContent += "<span class=\"event_thint\" title=\""+trReserve.getTrPackageName()+"\">[공] "+trReserve.getTrPackageName()+"</span>";
 						i++;
 					}
