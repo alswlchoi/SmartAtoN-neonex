@@ -93,8 +93,8 @@ var hydCurveTime = 0;
 
 var MakeDateForm = function ( sec ) {
     var hours = Math.floor(sec/ 60 / 60);
-    var mins = (sec - (hours * 60)*60)/60;
-	var second = sec - (hours*60*60) - (mins*60)
+    var mins = Math.floor((sec - (hours * 60)*60)/60);
+	var second = Math.floor(sec - (hours*60*60) - (mins*60))
     var hourStr = (hours > 9)? hours : '0' + hours
     var minStr = (mins > 9)? mins : '0' + mins
     var secStr = (second > 9)? second : '0' + second
