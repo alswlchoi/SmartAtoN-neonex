@@ -145,6 +145,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#emergency-msg").val($("#emergency-sel-msg option:selected").text());
 	});
 	
+	//전광판
 	$(document).on("click",'#emergency-msg-send-btn' ,function(){
 		var msg = $("#emergency-msg").val().trim();
 
@@ -164,23 +165,48 @@ $(".lodingdimm").removeClass("lodingdimm");
 			postAjax(ifserver+"/billboard/send",data,"successSendMessage","kakaoSend",null,null);
 		}
 	});
+	
+	//알림톡
+	$(document).on("click",'#kakao-msg-send-btn' ,function(){
+		var msg = $("#emergency-msg").val().trim();
+
+		if(msg=="" && $("#emergency-sel-msg option:selected").val()!=""){
+			msg = $("#emergency-sel-msg option:selected").text();
+		}
+
+		if(msg == ""){
+			$("#errEmergencyMsg").text("비상문구 선택 또는 직접입력해 주세요.")
+			.addClass("info_ment")
+			.addClass("redfont");
+		}else{
+		    console.log(msg);
+			var data ={
+                message : msg
+			};
+		    console.log(data);
+			//postAjax(ifserver+"/billboard/send",data,"successSendMessage","kakaoSend",null,null);
+		    postAjax("/user/userShop/test", data, "successSendMessage", "successSendMessage", null, null)
+		}
+	});
 
 	function successSendMessage(resdata){
-		if(resdata.msg=="OK"){
+		//console.log(resdata);
+		if(resdata != ""){
 			$("#errEmergencyMsg").text("");
 			$("#billboard-msg-result").text("비상상황 알림을 완료하였습니다.");		
 		}else{
-			$("#billboard-msg-result").text(resdata.msg);
+			$("#billboard-msg-result").text(resdata);
 		}
 	}
 	
 	function kakaoSend(resdata){
+		//console.log("kakao"+resdata)
 		var msg = $("#emergency-msg").val().trim();
 		var data ={
             message : msg
 		};
 
-		//postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
+		postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
 	}
 	
 	function failSendMessage(resdata){
@@ -940,7 +966,10 @@ $(".lodingdimm").removeClass("lodingdimm");
                     </table>
                 </div>
                 <!-- //table_view -->
-                <div class="m-t-15 tac"><button type="button" id="emergency-msg-send-btn" class="btn-sty1 btn_default">전광판 송출</button></div>
+                <div class="m-t-15 tac">
+	                <button type="button" id="emergency-msg-send-btn" class="btn-sty1 btn_default">전광판 송출</button>
+	                <button type="button" id="kakao-msg-send-btn" class="btn-sty1 btn_default">알림톡 전송</button>
+                </div>
             </div>
             <!-- 버튼 -->
             <div class="m-t-10">

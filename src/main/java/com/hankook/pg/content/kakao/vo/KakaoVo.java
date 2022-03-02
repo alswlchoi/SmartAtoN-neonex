@@ -35,7 +35,8 @@ public class KakaoVo {
     private String kkoBtnInfo;
     private String imgUrl;
     private String imgLink;
-
+    
+    private String message; //비상상황 메세지
     // 트랙/부대시설 정보.
     private String memName;
     private String tcDay;

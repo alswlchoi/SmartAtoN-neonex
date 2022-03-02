@@ -877,7 +877,7 @@ $(document).on('click','.fc-button',function(){
     $("#etc").html(etcHtml);
   }
 
-function test() {
+<%-- function test() {
     var param = {
         phone: "<%=memberDto.getMemPhone()%>",
         
@@ -890,7 +890,7 @@ function ttttt(res) {
     } else {
         alert("실패");
     }
-}
+} --%>
 </script>
 
 <!-- container -->

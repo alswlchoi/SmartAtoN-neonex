@@ -144,8 +144,9 @@ public class UserShopController {
     return result;
   }
 
-//  @PostMapping("/test")
-//  public int test(@RequestBody KakaoVo kakaoVo) throws Exception {
-//    return kakaoService.insertKakao(kakaoVo);
-//  }
+  @PostMapping("/test")
+  public KakaoVo test(@RequestBody KakaoVo kakaoVo) throws Exception {
+      KakaoVo message = kakaoService.insertKakao(kakaoVo);
+	  return message;
+  }
 }
