@@ -535,22 +535,22 @@ function searchCallBack(data){
 	//중복제거
 	var newGnr = new Array();
 	gnr.reduce(function(acc, current) {
-	  if (ride.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&braking.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&vda.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&pbn.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&nvh.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&whc.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&hso.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&dhc.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&chipCut.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&hydStraight.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1
-		&&hydCurve.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1) {
-		  if (acc.findIndex(({ carRfidId }) => carRfidId === current.carRfidId) === -1) {
-			newGnr.push(current);
-		    acc.push(current);
-		  }
-	  }
+        if (ride.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&braking.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&vda.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&pbn.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&nvh.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&whc.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&hso.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&dhc.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&chipCut.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&hydStraight.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1
+            &&hydCurve.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1) {
+            if (acc.findIndex(({ tcReservCode }) => tcReservCode === current.tcReservCode) === -1 &&current.gnrOutTime == null) {
+                newGnr.push(current);
+                acc.push(current);
+            }
+        }
 	  return acc;
 	}, []);
 	for(var i =0;i<newGnr.length;i++){
