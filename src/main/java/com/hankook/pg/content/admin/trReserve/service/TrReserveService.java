@@ -827,7 +827,7 @@ public class TrReserveService{
 							email.setTitle(title);
 							email.setTableMap(tableMap);
 							email.setBdt(null);
-							email.setRcverEmail(AESCrypt.decrypt(company.getMemEmail()));
+							email.setRcverEmail(company.getMemEmail());
 							email.setSenderId(null);
 							email.setSenderName(null);
 							email.setStatusCode(null);
@@ -835,6 +835,8 @@ public class TrReserveService{
 							email.setErrDt(null);
 							email.setRegDt(null);
 							//emailService.GoogleSenderMail(email, "E03");
+							
+							System.out.println("++++++++++++++++++++++++++++"+email.getRcverEmail());
 							emailService.SenderMail(email, "E03");
 			        	}
 				    	
@@ -935,7 +937,7 @@ public class TrReserveService{
 								email.setTitle(title);
 								email.setTableMap(tableMap);
 								email.setBdt(null);
-								email.setRcverEmail(AESCrypt.decrypt(company.getMemEmail()));
+								email.setRcverEmail(company.getMemEmail());
 								email.setSenderId(null);
 								email.setSenderName(null);
 								email.setStatusCode(null);
@@ -1307,7 +1309,7 @@ public class TrReserveService{
 			email.setTitle(title);
 			email.setTableMap(tableMap);
 			email.setBdt(null);
-			email.setRcverEmail(AESCrypt.decrypt(company.getMemEmail()));
+			email.setRcverEmail(company.getMemEmail());
 			email.setSenderId(null);
 			email.setSenderName(null);
 			email.setStatusCode(null);
@@ -1962,7 +1964,7 @@ public class TrReserveService{
 
 		company.setMemName(AESCrypt.decrypt(company.getMemName()));
 		company.setMemPhone(AESCrypt.decrypt(company.getMemPhone()));
-		company.setMemEmail(company.getMemEmail());
+		company.setMemEmail(AESCrypt.decrypt(company.getMemEmail()));
 		
 		String driverStr = (String) driverInfo.get("driverStr");
 		String driverOnlyNameStr = (String) driverInfo.get("driverOnlyNameStr");
@@ -1982,7 +1984,7 @@ public class TrReserveService{
 		tableMap.put("wiress", wiressStr);
 		tableMap.put("resource", resource);
 		tableMap.put("company", company);
-	
+		
 		return tableMap;
 	}
 	
