@@ -74,6 +74,9 @@
     if (nowMon.length == 1) {
       nowMon = "0" + nowMon;
     }
+    if (nowDate.length == 1) {
+      nowDate = "0" + nowDate;
+    }
 
     switch (Now.getDay()) {
       case 1 :
