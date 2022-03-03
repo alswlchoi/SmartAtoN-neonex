@@ -827,7 +827,7 @@ public class TrReserveService{
 							email.setTitle(title);
 							email.setTableMap(tableMap);
 							email.setBdt(null);
-							email.setRcverEmail(company.getMemEmail());
+							email.setRcverEmail(AESCrypt.decrypt(company.getMemEmail()));
 							email.setSenderId(null);
 							email.setSenderName(null);
 							email.setStatusCode(null);
@@ -836,7 +836,6 @@ public class TrReserveService{
 							email.setRegDt(null);
 							//emailService.GoogleSenderMail(email, "E03");
 							
-							System.out.println("++++++++++++++++++++++++++++"+email.getRcverEmail());
 							emailService.SenderMail(email, "E03");
 			        	}
 				    	
@@ -937,7 +936,7 @@ public class TrReserveService{
 								email.setTitle(title);
 								email.setTableMap(tableMap);
 								email.setBdt(null);
-								email.setRcverEmail(company.getMemEmail());
+								email.setRcverEmail(AESCrypt.decrypt(company.getMemEmail()));
 								email.setSenderId(null);
 								email.setSenderName(null);
 								email.setStatusCode(null);
@@ -1965,6 +1964,7 @@ public class TrReserveService{
 		company.setMemName(AESCrypt.decrypt(company.getMemName()));
 		company.setMemPhone(AESCrypt.decrypt(company.getMemPhone()));
 		company.setMemEmail(AESCrypt.decrypt(company.getMemEmail()));
+		System.out.println("333333333333"+ company.getMemEmail());
 		
 		String driverStr = (String) driverInfo.get("driverStr");
 		String driverOnlyNameStr = (String) driverInfo.get("driverOnlyNameStr");
