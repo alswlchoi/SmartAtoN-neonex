@@ -39,6 +39,10 @@
   });
   $(function () {
     setInterval(function () {
+      date();
+    }, 3600000);
+
+    setInterval(function () {
       time();
     }, 1000);
 
