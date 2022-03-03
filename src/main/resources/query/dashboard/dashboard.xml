@@ -48,13 +48,16 @@ select
 from PG_TRACK PT
     </select>
     <select id="getRoadTemp" resultType="com.hankook.pg.content.admin.statistics.dto.StatisticsVo">
-select
-	ROW_NUMBER() OVER() AS NUM,
-	PRT.T_NICKNAME,
-	PRT.ROAD_TEMP,
-	MAX(PRT.ROAD_IN_TIME) AS ROAD_IN_TIME
-from PG_ROAD_TEMP PRT
-group by PRT.T_NICKNAME
-order by PRT.T_ID
+select 
+   ROW_NUMBER() over(ORDER BY A.T_NICKNAME) AS NUM,
+   A.T_NICKNAME , A.ROAD_TEMP 
+FROM 
+(select
+   ROW_NUMBER() OVER(PARTITION by PRT.T_NICKNAME order by PRT.ROAD_IN_TIME desc) AS NUMBER,
+   PRT.T_NICKNAME,
+   PRT.ROAD_TEMP,
+   PRT.ROAD_IN_TIME 
+from PG_ROAD_TEMP PRT) A
+where A.NUMBER = 1
     </select>
 </mapper>
