@@ -598,13 +598,13 @@ function fnChkByte(obj, maxByte){
                                                 	<td>${fn:substring(inFullTime, 0, 4) }-${fn:substring(inFullTime, 4, 6) }-${fn:substring(inFullTime, 6, 8) }</td>
                                                     <td><div class="form_group w150"><input type="text" style="text-align:center"
                                                     	name="inTimeUpd" class="form_control inTimeUpd" value="${fn:substring(inFullTime, 8, 12) }"
-	                                                		placeholder="입차시간(0930)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                		placeholder="입차시간(0930)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(inFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 09시 30분 - 0930</span>
 	                                                </td>
                                                     <td>
 	                                                	<div class="form_group w150"><input type="text" style="text-align:center"
 	                                                 	name="outTimeUpd" class="form_control outTimeUpd" value="${fn:substring(outFullTime, 8, 12) }"
-	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(outFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span>
 	                                                </td>
                                                     <td>GNR
@@ -634,13 +634,13 @@ function fnChkByte(obj, maxByte){
                                                 	<td>${fn:substring(inFullTime, 0, 4) }-${fn:substring(inFullTime, 4, 6) }-${fn:substring(inFullTime, 6, 8) }</td>
                                                     <td><div class="form_group w150"><input type="text" style="text-align:center"
                                                     	name="inTimeUpd" class="form_control inTimeUpd" value="${fn:substring(inFullTime, 8, 12) }"
-	                                                		placeholder="입차시간(0930)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                		placeholder="입차시간(0930)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(inFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 09시 30분 - 0930</span>
 	                                                </td>
                                                     <td>
 	                                                	<div class="form_group w150"><input type="text" style="text-align:center"
 	                                                 	name="outTimeUpd" class="form_control outTimeUpd" value="${fn:substring(outFullTime, 8, 12) }"
-	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(outFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span>
 	                                                </td>
                                                     <td>${result.diffTime}</td>
