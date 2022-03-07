@@ -234,4 +234,27 @@ public class ControlSystemController {
 	                .build();	
 		}
     }
+    
+    @GetMapping("/rfid")
+    public ModelAndView rfidTest() throws Exception {
+    	ModelAndView mav = new ModelAndView();
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	
+		if(authentication.getPrincipal() instanceof String) {
+			mav.setViewName("redirect:/adminLogin");
+		}else {
+			List<TrackDto> trackList = controlSystemService.selectTrackList();
+			List<EmergencyVo> emergencyList =  emergencyService.getEmergencyList(null);
+			
+			for(TrackDto track : trackList) {
+				String[] trackNameAndKapaInfoArr = {track.getNick(), Fn.toString(track.getCnt(), "0"), Fn.toString(track.getMax(), "0") };
+				mav.addObject(track.getId(), trackNameAndKapaInfoArr);
+			}
+			mav.addObject("emergencyList", emergencyList);
+			
+			mav.setViewName("/admin/controlsystem/rfid");
+		}    	
+    	
+    	return mav;
+    }
 }

@@ -10,7 +10,7 @@
 codebase="http://download.videolan.org/pub/videolan/vlc/2.2.4/win32/vlc-2.2.4-win32.exe"
 width="392" height="295" id="vlc" events="True">
     <embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" name="vlc" />
-    <param name="src" value="rtsp://admin:hktqwer12!@@10.182.25.49:554/trackID=4" />
+    <param name="src" value="rtsp://admin:pass2580@@10.182.25.49:554/trackID=1" />
     <param name="autostart" value="true" />
     <param name="ShowDisplay" value="false" />
     <param name="AutoLoop" value="false" />
