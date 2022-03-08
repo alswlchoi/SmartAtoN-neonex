@@ -32,9 +32,9 @@ left join PG_TRACK PT
 /*where PRG.OUT_TIME is null*/
 )
 select dashboard.*,
-	(select count(*) from dashboard where dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d') and dashboard.GNR_OUT_TIME is null )	 as total_cnt,
-	(select count(*) from dashboard where dashboard.IN_OUT = 'I' and dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d')and dashboard.GNR_OUT_TIME is null )	 as hk_cnt,
-	(select count(*) from dashboard where dashboard.IN_OUT = 'O' and dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d')and dashboard.GNR_OUT_TIME is null )	 as b2b_cnt
+    (select count(DISTINCT CAR_RFID_ID) from dashboard where dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d') and dashboard.GNR_OUT_TIME is null ) as total_cnt,
+    (select count(DISTINCT CAR_RFID_ID) from dashboard where dashboard.IN_OUT = 'I' and dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d')and dashboard.GNR_OUT_TIME is null )    as hk_cnt,
+    (select count(DISTINCT CAR_RFID_ID) from dashboard where dashboard.IN_OUT = 'O' and dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d')and dashboard.GNR_OUT_TIME is null )    as b2b_cnt
 from dashboard
 where dashboard.TC_DAY = DATE_FORMAT(NOW(),'%Y%m%d')
 order by dashboard.GNR_IN_TIME
