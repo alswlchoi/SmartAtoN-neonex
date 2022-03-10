@@ -100,6 +100,19 @@ $(document).ready(function () {
 			$("#confirmBtnAfter").prop("id", "confirmBtn").removeClass("btn_gray");
 			return false;
 		}
+
+		if(strackCodeArr.indexOf("T002")>-1&&strackCodeArr.indexOf("T005")>-1){	//VDA, PBN 동시 예약 안 됨
+			alert("VDA와 PBN은 동시에 예약하실 수 없습니다.");
+			$("#confirmBtnAfter").prop("id", "confirmBtn").removeClass("btn_gray");
+			return false;
+		}
+		
+		if(mtrackCodeArr.indexOf("T002")>-1&&mtrackCodeArr.indexOf("T005")>-1){	//VDA, PBN 동시 예약 안 됨
+			alert("VDA와 PBN은 동시에 예약하실 수 없습니다.");
+			$("#confirmBtnAfter").prop("id", "confirmBtn").removeClass("btn_gray");
+			return false;
+		}
+		
 		var driverArr = new Array();
 		$('#driver li').each(function( index ) {
 			var driverId = $(this).attr("id");

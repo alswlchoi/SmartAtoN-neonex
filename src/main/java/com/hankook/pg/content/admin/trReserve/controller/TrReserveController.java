@@ -729,6 +729,42 @@ public class TrReserveController {
 		return ResultCode.builder().code(result).message(message).build();
 	}
 	
+	@RequestMapping(value = "/add-gnr-log", method = { RequestMethod.POST })
+	public ResultCode addGnrLog(@RequestBody TrRfidGnrDto rfidLog) throws Exception {
+		
+		Integer result;
+		String message = "";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication.getPrincipal() instanceof String) {
+			result = 403;
+			message = "수정권한이 없습니다.";
+		} else {
+			// 사용자 등록
+			result = trReserveService.addGnrLog(rfidLog);
+			
+			if (result == -10) {
+				message = "기존 RFID 로그와 중복되는 시간입니다.";
+			} else if (result == -30) {
+				message = "예약된 시험일자만 추가 가능합니다.";
+			} else if (result == -40) {
+				message = "등록된 차량 RFID카드만 추가 가능합니다.";
+			} else if (result == -50) {
+				message = "입장시간을 정확하게 입력해 주세요.";
+			} else if (result == -60) {
+				message = "등록된 운전자 RFID카드만 추가 가능합니다.";
+			} else if (result == 0) {
+				message = "RFID 로그가 추가되지 않았습니다.";
+			} else if (result <= 0) {
+				message = "RFID 로그추가에 실패하였습니다.";
+			} else {
+				result = 200;
+				message = "RFID 로그추가가 완료 되었습니다.";
+			}
+		}
+		
+		return ResultCode.builder().code(result).message(message).build();
+	}
+	
 	@RequestMapping(value = "/update-rfid-gnr-log", method = { RequestMethod.POST })
 	public ResultCode updateRfidGnrLog(@RequestBody TrRfidGnrDto rfidGnrLog) throws Exception {
 		
@@ -745,6 +781,8 @@ public class TrReserveController {
 				
 				if (result == -10) {
 					message = "기존 RFID 로그와 중복되는 시간입니다.";
+				} else if (result == -20) {
+					message = "입장시간을 정확하게 입력해 주세요.";
 				} else if (result == -50) {
 					message = "수정하실 시간이 정확하지 않습니다.";
 				} else if (result <= 0) {
@@ -778,6 +816,8 @@ public class TrReserveController {
 
 				if (result == -10) {
 					message = "기존 RFID 로그와 중복되는 시간입니다.";
+				} else if (result == -20) {
+					message = "입장시간을 정확하게 입력해 주세요.";
 				} else if (result == -50) {
 					message = "수정하실 시간이 정확하지 않습니다.";
 				} else if (result <= 0) {

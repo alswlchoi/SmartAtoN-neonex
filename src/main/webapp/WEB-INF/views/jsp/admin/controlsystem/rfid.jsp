@@ -46,4 +46,8 @@
 </table>
 <button name="btn" id="btn" onclick="procRfid()">클릭</button>
 
+
+<hr />
+<a href="http://10.182.25.181:8081/gate/fuel">주유기 테스트</a><br />
+
 <%@ include file="/WEB-INF/views/jsp/common/adminFooter.jsp"%>
