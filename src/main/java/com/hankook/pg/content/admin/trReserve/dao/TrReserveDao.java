@@ -79,9 +79,12 @@ public interface TrReserveDao {
     /* 트랙 추가할 때 기존에 예약된 트랙인지 확인 */
     Integer getCountReserveTrack(SearchTrReserveDto searchTrReserve) throws Exception;
     
+    /* 로그 추가할 때 기존에 사용된 시간인지 확인(GNR용) */
+    Integer getCountGnrLog(TrRfidGnrDto rfidLog) throws Exception;
+    
     /* 로그 추가할 때 기존에 사용된 시간인지 확인 */
     Integer getCountRfidLog(TrRfidDto rfidLog) throws Exception;
-
+    
     /* 로그 추가할 운전자 태그아이디 1개 추출 */
     String getMaxDriverTagIdForRfidLog(Integer tcSeq) throws Exception;
     
@@ -174,6 +177,9 @@ public interface TrReserveDao {
     
     /* 수동 시간 변경을 위해 로그 1row 가져옴 */
     TrRfidDto getRfidLog1Row(Integer rlSeq) throws Exception;
+    
+    /* 수동으로 입력받은 입출차 내역 추가(GNR) */
+    Integer addGnrLog(TrRfidGnrDto rfidLog) throws Exception;
     
     /* 수동으로 입력받은 입출차 내역 추가 */
     Integer addRfidLog(TrRfidDto rfidLog) throws Exception;
@@ -314,4 +320,7 @@ public interface TrReserveDao {
     /* 방문자데이터 입력 */
     Integer insertEaiHk(EaiHkDto eaiHk) throws Exception;
     
+    void addTrackCapa(String trackId) throws Exception;
+    
+    void minusTrackCapa(String trackId) throws Exception;
 }

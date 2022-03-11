@@ -29,6 +29,7 @@ left join PG_RFID_LOG PRL
 	/*and PRL.OUT_TIME is null*/
 left join PG_TRACK PT
 	on PRL.T_ID = PT.T_ID
+where COMP_NAME is not null
 /*where PRG.OUT_TIME is null*/
 )
 select dashboard.*,

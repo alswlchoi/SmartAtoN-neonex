@@ -440,72 +440,174 @@ public class TrReserveService{
     	return resultCnt;
     }
     
-    public Integer addRfidLog(TrRfidDto rfidLog) throws Exception {
-    	System.out.println("rfidLog : " + rfidLog);
-    	String tcDay = Fn.toDateFormat(rfidLog.getTcDay(), "yyyyMMdd");
-    	rfidLog.setTcDay(tcDay);
-    	rfidLog.setInsertFlug("Y");
-    	rfidLog.setInTime(tcDay+rfidLog.getInTime()+"00");
-    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
-    		rfidLog.setOutTime(tcDay+rfidLog.getOutTime()+"00");
-    	}
-    	rfidLog.setType("WEB");
+    public Integer addGnrLog(TrRfidGnrDto rfidLog) throws Exception {
+    	Integer resultCnt = 0;
+    	Integer cnt_tcday_log = 0;
+    	Integer cnt_rfid_log = 0;
+    	Integer cnt_carRfid_log = 0;
+    	Integer dSeq = 0;
     	
-    	Timestamp inTime = Fn.toTimestamp(rfidLog.getInTime());
-    	Timestamp outTime = Fn.toTimestamp(rfidLog.getOutTime());
-    	Integer diffTime = 0;
-    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
-    		diffTime = Fn.getSubMinutes(outTime, inTime);
+    	if(null==rfidLog.getInTime() || rfidLog.getInTime().equals("")) {
+    		resultCnt = -50;		//intime 없을 경우 등록 안 됨
+    	}else {
+	    	String tcDay = Fn.toDateFormat(rfidLog.getTcDay(), "yyyyMMdd");
+	    	rfidLog.setTcDay(tcDay);
+	    	rfidLog.setInTime(tcDay+rfidLog.getInTime()+"00");
+	    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
+	    		rfidLog.setOutTime(tcDay+rfidLog.getOutTime()+"00");
+	    	}
+	    	
+	    	Timestamp inTime = Fn.toTimestamp(rfidLog.getInTime());
+	    	Timestamp outTime = Fn.toTimestamp(rfidLog.getOutTime());
+	    	Integer diffTime = 0;
+	    	
+	    	
+	    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
+	    		diffTime = Fn.getSubMinutes(outTime, inTime);
+	    		rfidLog.setInsertFlug("N");
+	    	}else {
+	    		rfidLog.setInsertFlug("Y");
+	    	}
+	    	
+	    	SearchTrReserveDto searchTrReserve = new SearchTrReserveDto();
+	    	searchTrReserve.setTcSeq(rfidLog.getTcSeq());
+	    	searchTrReserve.setTcDay(tcDay);
+	    	
+	    	List<ResourceMappingDto> resourceMappingList = trReserveDao.getResourceMapping(searchTrReserve);
+	    	
+	    	for(ResourceMappingDto resourceMapping : resourceMappingList) {
+	    		if(tcDay.equals(resourceMapping.getTcDay())) {
+	    			cnt_tcday_log++;
+	    		}
+	
+	    		if(resourceMapping.getRmType().equals("C")&&rfidLog.getCarRfidId().equals(resourceMapping.getRId())) {
+	    			cnt_carRfid_log++;
+	    			
+		        	rfidLog.setCCode(resourceMapping.getCCode());
+	    		}
+	    		
+	    		if(resourceMapping.getRmType().equals("D")&&rfidLog.getTagId().equals(resourceMapping.getRId())) {
+	    			cnt_rfid_log++;
+	    			dSeq = Fn.toInt(resourceMapping.getDSeq());
+	    			
+	    			if(dSeq>0)
+	    				rfidLog.setDSeq(Fn.toInt(resourceMapping.getDSeq()));
+	
+	    			rfidLog.setDName(resourceMapping.getDName());
+	    			rfidLog.setDLevel(resourceMapping.getRmLevel());
+	    			rfidLog.setWCh(resourceMapping.getRmWCh());
+	    		}
+	    	}
+	    	
+	    	if(cnt_tcday_log==0){
+	    		resultCnt = -30;		//예약된 시험일자만 추가 가능하다는 안내메세지
+	    	}else if(cnt_rfid_log==0){
+	    		resultCnt = -60;		//등록된 운전자 RFID 카드만 추가 가능
+	    	}else if(cnt_carRfid_log==0){
+	    		resultCnt = -40;		//등록된 차량 RFID 카드만 추가 가능
+	    	}else {
+		    	Integer cnt_reserved_log = trReserveDao.getCountGnrLog(rfidLog);
+		    	
+		    	if(cnt_reserved_log>0) {
+		    		resultCnt = - 10;
+		    	}else {
+	
+		        	TrReserveDto trReserveDto = trReserveDao.getTestScheduleEqualsTcSeq1Row(rfidLog.getTcSeq());
+		        	
+		        	rfidLog.setCompName(trReserveDto.getCompName());
+		        	
+		    		if(rfidLog.getTcReservCode().indexOf("B") > -1)	{
+			    		rfidLog.setInOut("O");	//B2B
+		    		}else {
+			    		rfidLog.setInOut("I");	//Hint
+		    		}
+		    		
+		    		if(null==rfidLog.getOutTime()||rfidLog.getOutTime().equals(""))
+		    			trReserveDao.addTrackCapa("T001");
+		    		
+		    		resultCnt = trReserveDao.addGnrLog(rfidLog);
+		    	}	
+	    	}
     	}
-    	rfidLog.setDiffTime(diffTime);
-    	    	
-    	SearchTrReserveDto searchTrReserve = new SearchTrReserveDto();
-    	searchTrReserve.setTcSeq(rfidLog.getTcSeq());
-    	searchTrReserve.setTcDay(tcDay);
-    	List<TrReserveDto> trReserveList = trReserveDao.getTrTrackList(rfidLog.getTcSeq());
-    	List<ResourceMappingDto> resourceMappingList = trReserveDao.getResourceMapping(searchTrReserve);
-
+    	
+    	return resultCnt;
+    }
+    
+    public Integer addRfidLog(TrRfidDto rfidLog) throws Exception {
     	Integer resultCnt = 0;
     	Integer cnt_track_log = 0;
     	Integer cnt_tcday_log = 0;
     	Integer cnt_rfid_log = 0;
     	Integer cnt_carRfid_log = 0;
-    	
-    	for(TrReserveDto trReserve : trReserveList) {
-    		if(rfidLog.getTId().equals(trReserve.getTrTrackCode())) {
-    			cnt_track_log++;
-    		}
-    		if(tcDay.equals(trReserve.getTcDay())) {
-    			cnt_tcday_log++;
-    		}
-    	}
-    	
-    	for(ResourceMappingDto resourceMapping : resourceMappingList) {
-    		if(resourceMapping.getRmType().equals("D")&&rfidLog.getTagId().equals(resourceMapping.getRId())) {
-    			cnt_rfid_log++;
-    		}
-    		if(resourceMapping.getRmType().equals("C")&&rfidLog.getCarTagId().equals(resourceMapping.getRId())) {
-    			cnt_carRfid_log++;
-    		}
-    	}
-    	
-    	if(cnt_track_log==0) {		//예약된 트랙이 없는 경우 트랙먼저 추가하라는 안내메세지
-    		resultCnt = -20;
-    	}else if(cnt_tcday_log==0){
-    		resultCnt = -30;		//예약된 시험일자만 추가 가능하다는 안내매세지
-    	}else if(cnt_rfid_log==0){
-    		resultCnt = -60;		//등록된 운전자 RFID 카드만 추가 가능
-    	}else if(cnt_carRfid_log==0){
-    		resultCnt = -40;		//등록된 차량 RFID 카드만 추가 가능
+
+    	if(null==rfidLog.getInTime() || rfidLog.getInTime().equals("")) {
+    		resultCnt = -50;		//intime 없을 경우 등록 안 됨
     	}else {
-	    	Integer cnt_reserved_log = trReserveDao.getCountRfidLog(rfidLog);
+	    	String tcDay = Fn.toDateFormat(rfidLog.getTcDay(), "yyyyMMdd");
+	    	rfidLog.setTcDay(tcDay);
+	    	rfidLog.setInTime(tcDay+rfidLog.getInTime()+"00");
+	    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
+	    		rfidLog.setOutTime(tcDay+rfidLog.getOutTime()+"00");
+	    	}
+	    	rfidLog.setType("WEB");
 	    	
-	    	if(cnt_reserved_log>0) {
-	    		resultCnt = - 10;
+	    	Timestamp inTime = Fn.toTimestamp(rfidLog.getInTime());
+	    	Timestamp outTime = Fn.toTimestamp(rfidLog.getOutTime());
+	    	Integer diffTime = 0;
+	    	if(null!=rfidLog.getOutTime()&&!rfidLog.getOutTime().equals("")) {
+	    		diffTime = Fn.getSubMinutes(outTime, inTime);
+	    		rfidLog.setInsertFlug("N");
 	    	}else {
-	    		resultCnt = trReserveDao.addRfidLog(rfidLog);
-	    	}	
+	    		rfidLog.setInsertFlug("Y");
+	    	}
+	    	rfidLog.setDiffTime(diffTime);
+	    	
+	    	SearchTrReserveDto searchTrReserve = new SearchTrReserveDto();
+	    	searchTrReserve.setTcSeq(rfidLog.getTcSeq());
+	    	searchTrReserve.setTcDay(tcDay);
+	    	List<TrReserveDto> trReserveList = trReserveDao.getTrTrackList(rfidLog.getTcSeq());
+	    	List<ResourceMappingDto> resourceMappingList = trReserveDao.getResourceMapping(searchTrReserve);
+	    	    	
+	    	for(TrReserveDto trReserve : trReserveList) {
+	    		if(rfidLog.getTId().equals(trReserve.getTrTrackCode())) {
+	    			cnt_track_log++;
+	    		}
+	    		if(tcDay.equals(trReserve.getTcDay())) {
+	    			cnt_tcday_log++;
+	    		}
+	    	}
+	    	
+	    	for(ResourceMappingDto resourceMapping : resourceMappingList) {
+	    		if(resourceMapping.getRmType().equals("D")&&rfidLog.getTagId().equals(resourceMapping.getRId())) {
+	    			cnt_rfid_log++;
+	    		}
+	    		if(resourceMapping.getRmType().equals("C")&&rfidLog.getCarTagId().equals(resourceMapping.getRId())) {
+	    			cnt_carRfid_log++;
+	    		}
+	    	}
+	    	
+	    	if(cnt_track_log==0) {		//예약된 트랙이 없는 경우 트랙먼저 추가하라는 안내메세지
+	    		resultCnt = -20;
+	    	}else if(cnt_tcday_log==0){
+	    		resultCnt = -30;		//예약된 시험일자만 추가 가능하다는 안내메세지
+	    	}else if(cnt_rfid_log==0){
+	    		resultCnt = -60;		//등록된 운전자 RFID 카드만 추가 가능
+	    	}else if(cnt_carRfid_log==0){
+	    		resultCnt = -40;		//등록된 차량 RFID 카드만 추가 가능
+	    	}else {
+	    		Integer cnt_reserved_log = trReserveDao.getCountRfidLog(rfidLog);
+	    		
+	    		if(cnt_reserved_log>0) {
+	    			resultCnt = - 10;
+	    		}else {
+		    		if(null==rfidLog.getOutTime()||rfidLog.getOutTime().equals(""))
+			    		trReserveDao.addTrackCapa(rfidLog.getTId());
+		    		
+	    			resultCnt = trReserveDao.addRfidLog(rfidLog);
+	    		}	
+	    	}
     	}
+    	
     	return resultCnt;
     }
     
@@ -516,27 +618,37 @@ public class TrReserveService{
     	String afterOutTime = "";
     	Integer resultCnt = 0; 
     	
-    	rfidGnrLog = trReserveDao.getRfidGnrLog1Row(rfidGnrLog.getPrgNo());
-    	//날짜랑 시간 잘 붙는지 확인하고
-    	//updateRfidGnrLog, updateRfidLog parameterType 변경한 것 잘 동작하는지 확이
-    	afterInTime = rfidGnrLog.getTcDay()+beforeInTime+"00"; 
-
-		if(null!=beforeOutTime&&!beforeOutTime.equals("")) {
-    		afterOutTime = rfidGnrLog.getTcDay()+beforeOutTime+"00";	
+    	if(null==beforeInTime||beforeInTime.equals("")) {
+    		resultCnt = -20; //입장시간을 정확하게 입력해 주세요.
     	}else {
-    		afterOutTime = null;
+	    	rfidGnrLog = trReserveDao.getRfidGnrLog1Row(rfidGnrLog.getPrgNo());
+	    	//날짜랑 시간 잘 붙는지 확인하고
+	    	//updateRfidGnrLog, updateRfidLog parameterType 변경한 것 잘 동작하는지 확이
+	    	afterInTime = rfidGnrLog.getTcDay()+beforeInTime+"00"; 
+	
+			if(null!=beforeOutTime&&!beforeOutTime.equals("")) {
+	    		afterOutTime = rfidGnrLog.getTcDay()+beforeOutTime+"00";
+	    		rfidGnrLog.setInsertFlug("N");
+	    	}else {
+	    		afterOutTime = null;
+	    		rfidGnrLog.setInsertFlug("Y");
+	    	}
+	    	
+	    	if(null!=afterOutTime&&!afterOutTime.equals("")
+	    		&&afterInTime.compareTo(afterOutTime)>=0) {
+	    		resultCnt = -50;
+	    	}else {
+	    		rfidGnrLog.setInTime(afterInTime);
+	    		rfidGnrLog.setOutTime(afterOutTime);
+	    		rfidGnrLog.setCarRfidId(rfidGnrLog.getCarRfidId());
+	    		
+	    		if(null==beforeOutTime||beforeOutTime.equals(""))
+	    			trReserveDao.minusTrackCapa("T001");
+	    		
+	    		resultCnt = trReserveDao.updateRfidGnrLog(rfidGnrLog);
+	    	}
     	}
     	
-    	if(null!=afterOutTime&&!afterOutTime.equals("")
-    		&&afterInTime.compareTo(afterOutTime)>=0) {
-    		resultCnt = -20;
-    	}else {
-    		rfidGnrLog.setInTime(afterInTime);
-    		rfidGnrLog.setOutTime(afterOutTime);
-    		rfidGnrLog.setCarRfidId(rfidGnrLog.getCarRfidId());
-
-    		resultCnt = trReserveDao.updateRfidGnrLog(rfidGnrLog);
-    	}
     	return resultCnt;
     }
     
@@ -546,43 +658,53 @@ public class TrReserveService{
     	String afterInTime = "";
     	String afterOutTime = "";
     	Integer resultCnt = 0; 
-    	
-    	rfidLog = trReserveDao.getRfidLog1Row(rfidLog.getRlSeq());
-    	afterInTime = rfidLog.getTcDay()+beforeInTime+"00"; 
-    	
-    	if(null!=beforeOutTime&&!beforeOutTime.equals("")) {
-    		afterOutTime = rfidLog.getTcDay()+beforeOutTime+"00";	
+
+    	if(null==beforeInTime||beforeInTime.equals("")) {
+    		resultCnt = -20; //입장시간을 정확하게 입력해 주세요.
     	}else {
-    		afterOutTime = null;
+	    	rfidLog = trReserveDao.getRfidLog1Row(rfidLog.getRlSeq());
+	    	afterInTime = rfidLog.getTcDay()+beforeInTime+"00"; 
+	    	
+	    	if(null!=beforeOutTime&&!beforeOutTime.equals("")) {
+	    		afterOutTime = rfidLog.getTcDay()+beforeOutTime+"00";
+	    		rfidLog.setInsertFlug("N");	
+	    	}else {
+	    		afterOutTime = null;
+	    		rfidLog.setInsertFlug("Y");
+	    	}
+	    	
+	    	if(null!=afterOutTime&&!afterOutTime.equals("")
+	    			&&afterInTime.compareTo(afterOutTime)>=0) {
+	    		resultCnt = -50;
+	    	}else {
+	    		rfidLog.setInTime(afterInTime);
+	    		rfidLog.setOutTime(afterOutTime);
+	    		rfidLog.setCarTagId(rfidLog.getCarTagId());
+	    		
+	    		Integer diffTime = 0;
+	    		
+	    		if(null!=afterOutTime&&!afterOutTime.equals("")) {
+	    			Timestamp inTime = Fn.toTimestamp(afterInTime);
+	    			Timestamp outTime = Fn.toTimestamp(afterOutTime);
+	    			
+	    			diffTime = Fn.getSubMinutes(outTime, inTime);
+	    			rfidLog.setDiffTime(diffTime);	    			
+	    		}
+	    		
+	    		
+	    		Integer cnt_reserved_log = trReserveDao.getCountRfidLog(rfidLog);
+	    		
+	    		if(cnt_reserved_log>0) {
+	    			resultCnt = - 10;
+	    		}else {
+		    		if(null==beforeOutTime||beforeOutTime.equals(""))
+		    			trReserveDao.minusTrackCapa(rfidLog.getTId());
+		    		
+	    			resultCnt = trReserveDao.updateRfidLog(rfidLog);
+	    		}	
+	    	}
     	}
     	
-    	if(null!=afterOutTime&&!afterOutTime.equals("")
-    			&&afterInTime.compareTo(afterOutTime)>=0) {
-    		resultCnt = -20;
-    	}else {
-    		rfidLog.setInTime(afterInTime);
-    		rfidLog.setOutTime(afterOutTime);
-    		rfidLog.setCarTagId(rfidLog.getCarTagId());
-    		
-    		Integer diffTime = 0;
-    		
-    		if(null!=afterOutTime&&!afterOutTime.equals("")) {
-    			Timestamp inTime = Fn.toTimestamp(afterInTime);
-    			Timestamp outTime = Fn.toTimestamp(afterOutTime);
-    			
-    			diffTime = Fn.getSubMinutes(outTime, inTime);
-    			rfidLog.setDiffTime(diffTime);
-    		}
-    		
-    		
-    		Integer cnt_reserved_log = trReserveDao.getCountRfidLog(rfidLog);
-    		
-    		if(cnt_reserved_log>0) {
-    			resultCnt = - 10;
-    		}else {
-    			resultCnt = trReserveDao.updateRfidLog(rfidLog);
-    		}	
-    	}
     	return resultCnt;
     }
 

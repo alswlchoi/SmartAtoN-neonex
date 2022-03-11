@@ -595,6 +595,20 @@
     	WHERE RL_SEQ=#{rlSeq}
     </select>
 
+    <insert id="addGnrLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
+		INSERT INTO PG_RFID_GENERAL
+		(INSERT_FLUG, IN_TIME,  
+		<if test='outTime != null and outTime !=""'>
+		OUT_TIME, 
+		</if>
+		IN_OUT, TC_DAY, TC_RESERV_CODE, COMP_NAME, C_CODE, D_SEQ, D_NAME, D_LEVEL, W_CH, CAR_RFID_ID)
+		VALUES(#{insertFlug}, #{inTime}, 
+		<if test='outTime != null and outTime !=""'>
+		#{outTime}, 
+		</if>
+		#{inOut}, #{tcDay}, #{tcReservCode}, #{compName}, #{cCode}, #{dSeq}, #{dName}, #{dLevel}, #{wCh}, #{carRfidId});
+    </insert>
+
     <insert id="addRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
        INSERT INTO PG_RFID_LOG
 		(INSERT_FLUG, TC_DAY, T_ID, 
@@ -612,6 +626,7 @@
 
     <update id="updateRfidGnrLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto">
         UPDATE PG_RFID_GENERAL SET
+        	INSERT_FLUG=#{insertFlug},
         	IN_TIME=#{inTime},
         	OUT_TIME=#{outTime}
 		WHERE PRG_NO=#{prgNo}
@@ -619,6 +634,7 @@
 
     <update id="updateRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto">
         UPDATE PG_RFID_LOG SET
+        	INSERT_FLUG=#{insertFlug},
         	IN_TIME=#{inTime},
         	OUT_TIME=#{outTime},
         	DIFF_TIME=#{diffTime}
@@ -971,6 +987,36 @@
 	    SELECT COUNT(1) FROM PG_TRACK_RESERV
 		WHERE TC_SEQ = #{tcSeq}
 		AND TR_TRACK_CODE = #{trTrackCode}
+	</select>
+
+    <select id="getCountGnrLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidGnrDto" resultType="Integer">
+	    SELECT COUNT(1) FROM PG_RFID_GENERAL
+		WHERE
+		TC_RESERV_CODE=#{tcReservCode}
+		AND CAR_RFID_ID = #{carRfidId}
+		<if test='inTime != null and inTime !="" and outTime != null and outTime != ""'>
+			AND
+			(
+				(
+					STRCMP(#{inTime}, IN_TIME) &lt;=0 AND STRCMP(#{outTime}, OUT_TIME)&gt;=0
+				)
+			OR
+				(
+					#{inTime} BETWEEN IN_TIME AND OUT_TIME
+						OR
+					#{outTime} BETWEEN IN_TIME AND OUT_TIME
+				)
+			)
+		</if>
+		<if test='(inTime != null and inTime !="") and (outTime == null or outTime == "")'>
+			AND
+			(
+				#{inTime} BETWEEN IN_TIME AND OUT_TIME
+			)
+		</if>
+		<if test='prgNo != null and prgNo != null'>
+			AND PRG_NO != #{prgNo}
+		</if>
 	</select>
 
     <select id="getCountRfidLog" parameterType="com.hankook.pg.content.admin.trReserve.dto.TrRfidDto" resultType="Integer">
@@ -1552,4 +1598,12 @@
 		(COMP_NAME, COMP_LICENSE, COMP_CEO, COMP_PHONE, COMP_COND, COMD_KIND, COMP_FAX, COMP_ADDR, COMP_POST_NO, COMP_ATTR_DETAIL, MEM_NAME, MEM_BIRTH, MEM_PHONE, IN_DATE, CREATE_DATE, CREATE_USER, IF_STATUS)
 		VALUES(#{compName},#{compLicense},#{compCeo},#{compPhone},#{compCond},#{comdKind},#{compFax},#{compAddr},#{compPostNo},#{compAttrDetail},#{memName},#{memBirth},#{memPhone},#{inDate},#{createDate},#{createUser},#{ifStatus})
     </insert>
+    
+    <update id="addTrackCapa" parameterType="String">
+        UPDATE PG_TRACK SET T_CURRENT_CAPA = T_CURRENT_CAPA + 1 WHERE T_ID=#{trackId}
+    </update>
+    
+    <update id="minusTrackCapa" parameterType="String">
+        UPDATE PG_TRACK SET T_CURRENT_CAPA = T_CURRENT_CAPA - 1 WHERE T_ID=#{trackId}
+    </update>
 </mapper>

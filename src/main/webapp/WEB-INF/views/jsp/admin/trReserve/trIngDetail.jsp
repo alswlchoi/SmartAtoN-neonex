@@ -16,6 +16,44 @@ $(document).ready(function(){
 		location.href="/admin/trReserve/trlisting?pageNo=${pageNo}&tcStep="+tcStep;
 	});
 	
+	$(document).on("click",'#addTrBtnGnr' ,function(){
+		if($("#tcDayGnr").val()==""){
+			alert("입출차날짜를 선택해 주세요.");
+		}else if($("#inTimeAddGnr").val()==""||$("#inTimeAddGnr").val().length!=4){
+			alert("입차시간을 4자리로 입력해 주세요.");
+		}else if($("#outTimeAddGnr").val()!=""&&$("#outTimeAddGnr").val().length!=4){
+			alert("출차시간을 4자리로 입력해 주세요.");
+		}else if($("#outTimeAddGnr").val()!=""&&($("#inTimeAddGnr").val()>=$("#outTimeAddGnr").val())){
+			alert("출차시간이 입차시간보다 빠릅니다.");
+		}else if($("select[name=carTagIdGnr] option:eq(0)").is(":selected")){
+			alert('차량 번호를 선택해 주세요.');
+		}else if($("select[name=tagIdGnr] option:eq(0)").is(":selected")){
+			alert('운전자를 선택해 주세요.');
+		}else if($("select[name=tidGnr] option:eq(0)").is(":selected")){
+			alert('시험로를 선택해 주세요.');
+		}else{
+			var tcSeq = "${trReserve.tcSeq}";
+			//var tcDay = $("select[name=tcDay]").val();
+			var tcDay = $("#tcDayGnr").val();
+			var tcReservCode = "${trReserve.tcReservCode}";
+			var inTime = $("#inTimeAddGnr").val();
+			var outTime = $("#outTimeAddGnr").val();
+			var tagId =  $("select[name=tagIdGnr]").val();
+			var carTagId =  $("select[name=carTagIdGnr]").val();
+			
+			var param = {
+				"tcSeq":tcSeq,
+				"tcDay":tcDay,
+				"inTime":inTime,
+				"outTime":outTime,
+				"tagId":tagId,
+				"carRfidId":carTagId,
+				"tcReservCode":tcReservCode
+			};
+			postAjax("/admin/trReserve/add-gnr-log", param,"succAddTrack", null, null, null);
+		}
+	});
+	
 	$(document).on("click",'#addTrBtn' ,function(){
 		if($("select[name=trTrackCode] option:eq(0)").is(":selected")){
 			alert('시험로를 선택해 주세요.');
@@ -591,6 +629,88 @@ function fnChkByte(obj, maxByte){
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                            <c:if test="${fn:length(rfidGnrLog) == 0}">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	                                            <tr>
+	                                                <td>
+                                                		<c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
+                                                			<c:if test='${fn:indexOf(realUseDt,result.tcDay)<0 }'>
+                                                			<c:set var="realUseDt" value="${realUseDt }#${result.tcDay }" />
+                                                			</c:if>
+                                                		</c:forEach>
+	                                                	<div class="trdiv form_group w170">
+		                                                	<div class="form_group">
+		                                                	<c:set var="now" value="<%=new java.util.Date()%>" />
+		                                                		<input type="text" style="text-align:center"
+	                                                		id="tcDayGnr" name="tcDayGnr" class="form_control" value="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" maxlength="10" readonly="readonly" />
+		                                                	</div>
+	                                                	</div>
+	                                                </td>
+	                                                <td>
+	                                                	<div class="form_group w150"><input type="text" style="text-align:center"
+	                                                		id="inTimeAddGnr" name="inTimeAddGnr" class="form_control" value="" placeholder="입차시간(0930)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 9시 30분 - 0930</span>
+	                                                </td>
+	                                                <td>
+	                                                	<div class="form_group w150"><input type="text" style="text-align:center"
+	                                                 		id="outTimeAddGnr" name="outTimeAddGnr" class="form_control" value="" placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" /></div>
+	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span></td>
+	                                                <td><span id="useTime"></span></td>
+	                                                <td>	                                                
+		                                                <div class="trdiv form_group w170">
+		                                                	<div class="select_group">
+			                                                	<select id="tagIdGnr" name="tagIdGnr" class="select_group form_control">
+			                                                		<option value="">운전자 선택</option>
+					                                                <c:forEach var="result" items="${resourceArr}" varStatus="status">
+					                                                	<c:set var="resource" value="${fn:split(result, '#') }" />
+					                                                	<c:if test='${!empty(resource[0])&&resource[0] ne "null"}'><option value="${resource[0] }">${resource[1] }</option></c:if>
+					                                                </c:forEach>
+					                                            </select>
+					                                        </div>
+					                                    </div>
+		                                                <div class="trdiv form_group w170">
+		                                                	<div class="select_group">
+			                                                	<select id="carTagIdGnr" name="carTagIdGnr" class="select_group form_control">
+			                                                		<option value="">시험 차량 선택</option>
+			                                                		<c:forEach var="result" items="${trReserve.carInfo}" varStatus="status">
+			                                                			<c:if test='${!empty(result.RId) }'><option value="${result.RId }">${result.CNumber }</option></c:if>
+			                                                		</c:forEach>
+			                                                	</select>
+			                                                </div>
+		                                                </div>
+														<br /><span class="info_ment color_orange" style="margin-top:10px">시간을 입력하시고 우측 「추가(GNR) +」버튼을 클릭해 주세요.</span>
+	                                                </td>
+	                                                <td>
+														<button type="button" id="addTrBtnGnr" class="btn-line btn_gray">추가(GNR) +</button>
+													</td>	                                                
+	                                            </tr>
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+	                                            
+                                            </c:if>
                                             <c:forEach var="result" items="${rfidGnrLog}" varStatus="status">
                                                 <c:set var="inFullTime" value="${result.inTime }" />                                                    	
                                                 <c:set var="outFullTime" value="${result.outTime }" />
@@ -607,12 +727,7 @@ function fnChkByte(obj, maxByte){
 	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(outFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span>
 	                                                </td>
-                                                    <td>GNR
-                                                    <%--                                                    
-                                                    	<fmt:parseNumber var="inTimeN" value="${startDate_D.time }" integerOnly="true" />
-                                                    	<fmt:parseNumber var="outTimeN" value="${endDate_D.time }" integerOnly="true" />
-                                                    	${(outTimeN - inTimeN)/1000/60 }
-                                                    --%></td>
+                                                    <td>GNR</td>
                                                     <td>GNR Gate (<span class="color_orange">차량 RFID :</span> ${result.carRfidId })
                                                     <br /><span class="info_ment color_orange" style="margin-top:10px">수정하실 시간을 입력하시고 우측 「수정」버튼을 클릭해 주세요.</span></td>
                                                     <td>
@@ -620,13 +735,6 @@ function fnChkByte(obj, maxByte){
 													</td>
                                                 </tr>
                                             </c:forEach>
-                                            
-                                            
-                                            <c:if test="${fn:length(rfidLog)==0 }">
-                                            	<tr>
-                                            		<td colspan="6">시험로 입/출차 내역이 존재하지 않습니다.</td>
-                                            	</tr>
-                                            </c:if>
                                             <c:forEach var="result" items="${rfidLog}" varStatus="status">
                                                 <c:set var="inFullTime" value="${result.inTime }" />                                                    	
                                                 <c:set var="outFullTime" value="${result.outTime }" />
@@ -647,7 +755,12 @@ function fnChkByte(obj, maxByte){
                                                     <td>${result.TName } (<span class="color_orange">차량 RFID : </span> ${result.carTagId })
                                                     <br /><span class="info_ment color_orange" style="margin-top:10px">수정하실 시간을 입력하시고 우측 「수정」버튼을 클릭해 주세요.</span></td>
                                                     <td>
+                                                    	<c:if test='${empty(result.diffTime) or result.diffTime eq ""}'>
 														<button type="button" id="updTrBtn${result.rlSeq }" class="btn-line btn_gray">수정</button>
+														</c:if>
+														<c:if test='${!empty(result.diffTime) and result.diffTime ne ""}'>
+															<button type="button" class="btn-line btn_gray disabled">수정</button>
+														</c:if>
 													</td>
                                                 </tr>
                                             </c:forEach>
@@ -664,14 +777,6 @@ function fnChkByte(obj, maxByte){
 		                                                	<c:set var="now" value="<%=new java.util.Date()%>" />
 		                                                		<input type="text" style="text-align:center"
 	                                                		id="tcDay" name="tcDay" class="form_control" value="<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" />" maxlength="10" readonly="readonly" />
-		                                                		<%--
-			                                                	<select id="tcDay" name="tcDay" class="select_group form_control">
-			                                                		<option value="">입출차날짜</option>
-			                                                		<c:forEach var="result" items="${fn:split(realUseDt, '#')}" varStatus="status">		                                                			
-			                                                			<option value="${result }">${fn:substring(result,0,4)}-${fn:substring(result,4,6)}-${fn:substring(result,6,8)}</option>
-			                                                		</c:forEach>
-			                                                	</select>
-			                                                	 --%>
 		                                                	</div>
 	                                                	</div>
 	                                                </td>

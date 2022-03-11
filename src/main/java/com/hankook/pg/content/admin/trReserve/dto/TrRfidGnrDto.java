@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TrRfidGnrDto {
 	private Integer prgNo;
+	private Integer tcSeq;
 	private String insertFlug;
 	private String inTime;
 	private String outTime;
@@ -17,5 +18,6 @@ public class TrRfidGnrDto {
 	private String dName;
 	private String dLevel;
 	private String wCh;
+	private String tagId;
 	private String carRfidId;
 }
