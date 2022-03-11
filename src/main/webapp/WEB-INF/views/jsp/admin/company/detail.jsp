@@ -73,6 +73,7 @@
 							compMemo : compMemo
 					};
 					
+					console.log(data);
 					postAjax("/admin/company/update-company",data,"successUpdate","",null,null);
 				}
 			});

@@ -68,12 +68,13 @@ $(function(){
         tcDay: stDate,
         tcDay2: edDate
       };
+      //console.log(param);
       postAjax("/admin/statistics/inout", param, "searchCallback", null, null, null);
     }
 
 //조회 콜백
 function searchCallback(data){
-	console.log(data);
+	//console.log(data);
 	var list = data.list;
 	var alllist = data.alllist;
 	

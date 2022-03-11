@@ -18,14 +18,14 @@
 		<choose>
 			<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 				AND (
-			      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-			      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-			      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+			      PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 			     )
 			</when>
 			<otherwise>
 				AND(
-				  DATE(PTS.TC_DAY) = DATE(NOW())
+				  DATE(PRL.TC_DAY) = DATE(NOW())
 				)
 			</otherwise>
 		</choose>
@@ -48,14 +48,14 @@
 		<choose>
 			<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 				AND (
-			      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-			      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-			      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+			      PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 			     )
 			</when>
 			<otherwise>
 				AND(
-				  DATE(PTS.TC_DAY) = DATE(NOW())
+				  DATE(PRL.TC_DAY) = DATE(NOW())
 				)
 			</otherwise>
 		</choose>
@@ -79,14 +79,14 @@
 		<choose>
 			<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 				AND (
-			      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-			      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-			      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+			      PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+			      OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 			     )
 			</when>
 			<otherwise>
 				AND(
-				  DATE(PTS.TC_DAY) = DATE(NOW())
+				  DATE(PRL.TC_DAY) = DATE(NOW())
 				)
 			</otherwise>
 		</choose>
@@ -219,21 +219,21 @@
 				 ON PTS.TC_DAY = T.P_DAY AND PTS.TC_RESERV_CODE = T.P_RESERV_CODE
 			WHERE PTS.TC_STEP = '00003' 
 			<if test="text != null and text != ''">
-				AND (
+				AND (	
 				 PTS.COMP_NAME LIKE CONCAT('%',#{text},'%')				
 				)
 			</if>
 			<choose>
 				<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 					  AND (
-					      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-					      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-					      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+					      T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR (T.P_DAY <![CDATA[<=]]> #{tcDay} AND T.P_DAY >= #{tcDay2} )
 				      )
 				</when>
 				<otherwise>
 					   AND (
-					      DATE(PTS.TC_DAY) = DATE(NOW())
+					      DATE(T.P_DAY) = DATE(NOW())
 				      )
 				</otherwise>
 			</choose>
@@ -269,14 +269,14 @@
 			<choose>
 				<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 					  AND (
-					      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-					      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-					      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+					      T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR (T.P_DAY <![CDATA[<=]]> #{tcDay} AND T.P_DAY >= #{tcDay2} )
 				      )
 				</when>
 				<otherwise>
 					   AND (
-					      DATE(PTS.TC_DAY) = DATE(NOW())
+					      DATE(T.P_DAY) = DATE(NOW())
 				      )
 				</otherwise>
 			</choose>
@@ -313,14 +313,14 @@
 			<choose>
 				<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 					  AND (
-					      PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-					      OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-					      OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+					      T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR T.P_DAY BETWEEN #{tcDay} AND #{tcDay2}
+					      OR (T.P_DAY <![CDATA[<=]]> #{tcDay} AND T.P_DAY >= #{tcDay2} )
 				      )
 				</when>
 				<otherwise>
 					   AND (
-					      DATE(PTS.TC_DAY) = DATE(NOW())
+					      DATE(T.P_DAY) = DATE(NOW())
 				      )
 				</otherwise>
 			</choose>
@@ -358,14 +358,14 @@
 		    <choose>
 		    	<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 		    		AND(
-		    			PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-				        OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-				        OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+		    			PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 		    		)
 		    	</when>
 		    	<otherwise>
 		    		AND(
-		    			DATE(PTS.TC_DAY) = DATE(NOW())
+		    			DATE(PRL.TC_DAY) = DATE(NOW())
 		    		)
 		    	</otherwise>
 		    </choose>
@@ -397,14 +397,14 @@
 		    <choose>
 		    	<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 		    		AND(
-		    			PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-				        OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-				        OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+		    			PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 		    		)
 		    	</when>
 		    	<otherwise>
 		    		AND(
-		    			DATE(PTS.TC_DAY) = DATE(NOW())
+		    			DATE(PRL.TC_DAY) = DATE(NOW())
 		    		)
 		    	</otherwise>
 		    </choose>
@@ -437,14 +437,14 @@
 		    <choose>
 		    	<when test="tcDay != null and tcDay != '' and tcDay2 != null and tcDay2 != ''">
 		    		AND(
-		    			PTS.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
-				        OR PTS.TC_DAY2 BETWEEN #{tcDay} AND #{tcDay2}
-				        OR (PTS.TC_DAY <![CDATA[<=]]> #{tcDay} AND PTS.TC_DAY2 >= #{tcDay2} )
+		    			PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR PRL.TC_DAY BETWEEN #{tcDay} AND #{tcDay2}
+				        OR (PRL.TC_DAY <![CDATA[<=]]> #{tcDay} AND PRL.TC_DAY >= #{tcDay2} )
 		    		)
 		    	</when>
 		    	<otherwise>
 		    		AND(
-		    			DATE(PTS.TC_DAY) = DATE(NOW())
+		    			DATE(PRL.TC_DAY) = DATE(NOW())
 		    		)
 		    	</otherwise>
 		    </choose>
