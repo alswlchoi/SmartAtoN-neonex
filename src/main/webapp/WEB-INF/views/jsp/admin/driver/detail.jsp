@@ -448,7 +448,7 @@ function updateInfo(resdata){
 									<div class="select_group">
 									<c:set var='dLevel' value='${driver.DLevel }' />
 									<select name="dLevel" id="dLevel" class="form_control">
-										<option value="">운전자 레벨</option>
+										<option value="${driver.DLevel }">운전자 레벨</option>
 										<c:forEach var="track" items="${track}">
 											<option var="${track.DLevelName}">${track.DLevelName}</option>
 										</c:forEach>
