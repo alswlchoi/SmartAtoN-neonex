@@ -245,4 +245,10 @@
         DELETE FROM FILE_MANAGEMENT
         WHERE F_SEQ=${fSeq}
     </delete>
+    
+    <select id="driverLevel" parameterType="com.hankook.pg.content.admin.driver.dto.DriverDto" resultType="com.hankook.pg.content.admin.driver.dto.DriverDto">
+    	SELECT D_LEVEL_NAME 
+		FROM PG_DRIVER_LEVEL 
+    </select>
+    
 </mapper>

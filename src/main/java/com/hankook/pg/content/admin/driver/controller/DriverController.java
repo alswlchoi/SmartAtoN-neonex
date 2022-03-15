@@ -189,9 +189,12 @@ public class DriverController {
 		    	mav.setViewName("/admin/driver/detail");
 		        driver = driverService.getDriverDetail(driver.getDSeq());
 		        int pageNo = Fn.toInt(request, "pageNo");
-		
+		        //운전자 등급
+		        List<DriverDto> track = driverService.driverLevel(driver);
+		        
 		        driver.setPageNo(pageNo);
 		        mav.addObject("driver", driver);
+		        mav.addObject("track" , track);
 			}
 		}   
         return mav;

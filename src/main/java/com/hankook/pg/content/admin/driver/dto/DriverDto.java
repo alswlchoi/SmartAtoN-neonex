@@ -32,5 +32,6 @@ public class DriverDto {
 	private String dModDt = "";				//수정일
 	private String dModUser = "";			//수정자
 	private int pageNo;						//페이지번호
+	private String dLevelName;				//운전자 등급
 	private List<UpfilesDto> upfiles;		//저장파일정보
 }

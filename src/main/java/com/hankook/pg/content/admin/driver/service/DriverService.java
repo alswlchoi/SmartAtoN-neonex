@@ -225,6 +225,11 @@ public class DriverService {
 		return cnt;
 	}
 	
+	//운전자 등급
+	public List<DriverDto> driverLevel(DriverDto driver) throws Exception{
+		return driverDao.driverLevel(driver);
+	}
+	
 	/* 상세보기 */
 	public DriverDto getDriverDetail(Integer dSeq) throws Exception {
 		DriverDto driver = driverDao.getDriverDetail(dSeq);

@@ -59,4 +59,7 @@ public interface DriverDao {
 
     /* 파일 정보 수정 */
 	int updateFile(UpfilesDto upfiles) throws Exception;
+	
+	//드라이브 등급
+	List<DriverDto> driverLevel(DriverDto driver) throws Exception;
 }
