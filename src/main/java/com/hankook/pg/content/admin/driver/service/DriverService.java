@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hankook.pg.common.util.Fn;
 import com.hankook.pg.content.admin.driver.dao.DriverDao;
 import com.hankook.pg.content.admin.driver.dto.DriverDto;
+import com.hankook.pg.content.admin.driver.dto.DriverLevelDto;
 import com.hankook.pg.content.admin.driver.dto.SearchDriverDto;
 import com.hankook.pg.content.admin.driver.dto.UpfilesDto;
 import com.hankook.pg.content.member.dto.MemberDto;
@@ -226,7 +227,7 @@ public class DriverService {
 	}
 	
 	//운전자 등급
-	public List<DriverDto> driverLevel(DriverDto driver) throws Exception{
+	public List<DriverLevelDto> driverLevel(DriverDto driver) throws Exception{
 		return driverDao.driverLevel(driver);
 	}
 	

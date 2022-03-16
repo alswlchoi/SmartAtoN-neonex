@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.hankook.pg.common.util.Fn;
 import com.hankook.pg.content.admin.driver.dto.DriverDto;
+import com.hankook.pg.content.admin.driver.dto.DriverLevelDto;
 import com.hankook.pg.content.admin.driver.dto.SearchDriverDto;
 import com.hankook.pg.content.admin.driver.service.DriverService;
 import com.hankook.pg.share.Paging;
@@ -190,11 +191,11 @@ public class DriverController {
 		        driver = driverService.getDriverDetail(driver.getDSeq());
 		        int pageNo = Fn.toInt(request, "pageNo");
 		        //운전자 등급
-		        List<DriverDto> track = driverService.driverLevel(driver);
+		        List<DriverLevelDto> driverLevel = driverService.driverLevel(driver);
 		        
 		        driver.setPageNo(pageNo);
 		        mav.addObject("driver", driver);
-		        mav.addObject("track" , track);
+		        mav.addObject("driverLevel" , driverLevel);
 			}
 		}   
         return mav;

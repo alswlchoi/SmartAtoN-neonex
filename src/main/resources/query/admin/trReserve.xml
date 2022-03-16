@@ -968,7 +968,7 @@
         	RM_TYPE,
         	PRM.D_SEQ,
         	R_ID,
-        	RM_LEVEL,
+        	IFNULL(PDL.D_LEVEL_NAME,'A') AS RM_LEVEL,
         	W_ID,
         	PRM.D_NAME,
         	PD.D_EDU,
@@ -977,6 +977,8 @@
 		FROM PG_RESOURCE_MAPPING PRM
 		INNER JOIN PG_DRIVER PD
 		ON PRM.D_SEQ=PD.D_SEQ
+		LEFT JOIN PG_DRIVER_LEVEL PDL
+		ON PRM.RM_LEVEL=PDL.D_LEVEL
 		WHERE
 		TC_SEQ=#{tcSeq}
 		AND TC_DAY=#{tcDay}

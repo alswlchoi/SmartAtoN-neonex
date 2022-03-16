@@ -448,17 +448,10 @@ function updateInfo(resdata){
 									<div class="select_group">
 									<c:set var='dLevel' value='${driver.DLevel }' />
 									<select name="dLevel" id="dLevel" class="form_control">
-										<option value="${driver.DLevel }">운전자 레벨</option>
-										<c:forEach var="track" items="${track}">
-											<option var="${track.DLevelName}">${track.DLevelName}</option>
+										<option value="">운전자 레벨</option>
+										<c:forEach var="driverLevel" items="${driverLevel}">
+											<option value="${driverLevel.DLevel }"<c:if test='${driver.DLevel == driverLevel.DLevel}'> selected="selected"</c:if>>${driverLevel.DLevelName }</option>
 										</c:forEach>
-										<%-- <option value="T"<c:if test='${dLevel == "T"}'> selected="selected"</c:if>>T</option>
-										<option value="R"<c:if test='${dLevel == "R"}'> selected="selected"</c:if>>R</option>
-										<option value="C"<c:if test='${dLevel == "C"}'> selected="selected"</c:if>>C</option>
-										<option value="B1"<c:if test='${dLevel == "B1"}'> selected="selected"</c:if>>B1</option>
-										<option value="B2"<c:if test='${dLevel == "B2"}'> selected="selected"</c:if>>B2</option>
-										<option value="A"<c:if test='${dLevel == "A"}'> selected="selected"</c:if>>A</option>
-										<option value="As"<c:if test='${dLevel == "As"}'> selected="selected"</c:if>>As</option> --%>
 									</select>
 									</div>
 								</div>

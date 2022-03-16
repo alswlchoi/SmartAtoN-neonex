@@ -180,6 +180,7 @@ public class TrReserveService{
     			rmlist = trReserveDao.getTrHintResourceMapping(searchTrReserve);
     		}else {
     			rmlist = trReserveDao.getTrMyResourceMapping(searchTrReserve);
+    			System.out.println("===============rmlist : " + rmlist);
     		}
     		
     		for(int i=0; i<rmlist.size(); i++) {
@@ -761,6 +762,7 @@ public class TrReserveService{
 		    	/* 기본값 셋팅 */
 			    String compType = "B";
 		    	String tcAgreement = "Y";
+		    	boolean canFlagLevel = true; //false면 예약 불가능
 		    	CompanyDto company = companyDao.getCompanyDetail(memberDto.getCompCode());
 		    	trReserve.setTcPurpose(tcPurpose);
 		    	trReserve.setTcDay(tcStDt);
@@ -773,24 +775,20 @@ public class TrReserveService{
 		    	trReserve.setTcRegUser(memberDto.getMemId());
 		    	trReserve.setTcRegDt(currentTime);
 		    	
-		        String minDLevel = "Z";
-		        for (String dSeq : driver) {
-		    		DriverDto driverDto = driverDao.getDriverDetail(Fn.toInt(dSeq));
-		    		if(driverDto.getDLevel().compareTo(minDLevel)<0) {
-		    			minDLevel=driverDto.getDLevel();
-		    		}
-		        }
-		
-		        String minTLevel = "Z";
 		        for (String trTrackCode : mTrackArr) {
 			    	TrackDto track = trReserveDao.getTrackInfo(trTrackCode);
 			    	if(null==track) {		//트랙코드가 잘못되서 정보를 가져오지 못 하는 경우
 			    		cnt = -10;
 			    		break;
 			    	}else {
-				    	if(track.getTLevel().substring(0,1).compareTo(minTLevel)<0) {
-			    			minTLevel=track.getTLevel();
-			    		}
+				        for (String dSeq : driver) {
+				    		DriverDto driverDto = driverDao.getDriverDetail(Fn.toInt(dSeq));
+				    		if(track.getTLevel().indexOf(driverDto.getDLevel())<0) {	//운전자 등급에 맞지 않는 트랙이 있는 경우
+					        	System.out.println("Mtrack.getTLevel() : " + track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel());
+				    			canFlagLevel = false;
+				    			break;
+				    		}
+				        }
 			    	}
 		        }
 		        
@@ -801,15 +799,20 @@ public class TrReserveService{
 				    		cnt = -10;
 				    		break;
 				    	}else {
-					    	if(track.getTLevel().substring(0,1).compareTo(minTLevel)<0) {
-				    			minTLevel=track.getTLevel();
-				    		}
+					        for (String dSeq : driver) {
+					    		DriverDto driverDto = driverDao.getDriverDetail(Fn.toInt(dSeq));
+					    		System.out.println("Strack.getTLevel() : " + track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel());
+					    		if(track.getTLevel().indexOf(driverDto.getDLevel())<0) {	//운전자 등급에 맞지 않는 트랙이 있는 경우
+					    			canFlagLevel = false;
+					    			break;
+					    		}
+					        }
 				    	}
 			        }
 		        }
 		        
 		        if(cnt == 0) {
-			        if(minDLevel.compareTo(minTLevel)>0) {		//트랙등급보다 높은 운전자가 없으면 예약 방지
+			        if(!canFlagLevel) {		//트랙등급보다 높은 운전자가 없으면 예약 방지
 			        	cnt = -60;
 			        }else {		    	
 				    	String[] carCodeArr = new String[cVender.length];
