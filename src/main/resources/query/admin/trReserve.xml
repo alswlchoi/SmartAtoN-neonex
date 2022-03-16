@@ -968,7 +968,7 @@
         	RM_TYPE,
         	PRM.D_SEQ,
         	R_ID,
-        	IFNULL(PDL.D_LEVEL_NAME,'A') AS RM_LEVEL,
+        	IFNULL(PDL.D_LEVEL_NAME,'') AS RM_LEVEL,
         	W_ID,
         	PRM.D_NAME,
         	PD.D_EDU,
