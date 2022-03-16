@@ -170,6 +170,8 @@
 
     $("#temp").html(parseInt(weather.ta)+ "<small>°</small></span><span>Air</span>");
     $("#road").html(parseInt(weather.road)+ "<small>°</small><span>Track</span>");
+    $("#direction").html(weather.wdTxt+ "</span><span>Direction</span>");
+    $("#speed").html(weather.ws+ "<small class='ms'>m/s</small><span class='m-t-4'>Speed</span>");
   }
 
   function nowTest() {
@@ -237,6 +239,16 @@
                         </div>
                         <span class="line m-t-50"></span>
                         <div class="col" id="road">
+                        </div>
+                    </div>
+                </div>
+                <div class="wrap_temp m-t-50">
+                    <p class="">Wind.</p>
+                    <div class="wrap_state">
+                        <div class="col" id="direction">
+                        </div>
+                        <span class="line"></span>
+                        <div class="col" id="speed">
                         </div>
                     </div>
                 </div>

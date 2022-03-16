@@ -230,6 +230,12 @@ body {
     margin: 0px 0 0 2px;
 }
 
+#wrapper.dashBoard_Lobby .content .col_right .wrap_temp .wrap_state .col small.ms {
+    font-size: 14px;
+    margin: 0 0 12px 0px;
+    vertical-align: bottom;
+}
+
 #wrapper.dashBoard_Lobby .content .col_right .wrap_temp .wrap_state .col span {
     display: block;
     font-size: 18px;
