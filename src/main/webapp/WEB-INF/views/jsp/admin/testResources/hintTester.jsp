@@ -5,8 +5,8 @@
 <sec:csrfMetaTags/>
 <script type="text/javascript">
   $(document).ready(function () {
-    var test = document.querySelector('input');
-    test.addEventListener('input', evt => evt.target);
+    // var test = document.querySelector('input');
+    // test.addEventListener('input', evt, evt.target);
 
     rwTesterSearch(1);
     testerSearch(1, 'S');

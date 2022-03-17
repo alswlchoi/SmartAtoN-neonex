@@ -166,16 +166,16 @@ function searchCallback(data) {
             html += '   <td>'+ (list[i].plnDtm.replace(/^(.{4})/,"$1.")).replace(/^(.{7})/,"$1.") +'</td>';
             html += '   <td class="test'+list[i].reqNo+'2  border-b-1">'+ list[i].reqNo + '</td>';
             html += '   <td class="border-l-1">'+ list[i].setSize +'</td>';
-            html += '   <td>'+ list[i].tireSize.replaceAll(',' , '</br>') + '</td>';
-            html += '   <td>'+ list[i].wheelSize.replaceAll(',', '</br>') + '</td>';
+            html += '   <td>'+ list[i].tireSize.replace(',' , '</br>') + '</td>';
+            html += '   <td>'+ list[i].wheelSize.replace(',', '</br>') + '</td>';
 
             if(list[i].engineer !=null) {
                 html += '   <td>'+ list[i].engineer +'</td>';
             }else {
                 html += '<td/>';
             }
-            html += '   <td>'+ list[i].vhclName.replaceAll(',' , '</br>') +'</td>';
-            html += '   <td>'+ list[i].returnScrap.replaceAll(',','</br>') +'</td>';
+            html += '   <td>'+ list[i].vhclName.replace(',' , '</br>') +'</td>';
+            html += '   <td>'+ list[i].returnScrap.replace(',','</br>') +'</td>';
 
             if(list[i].tirePush !=null) {
                 html += '   <td>Complete</td>';
@@ -193,7 +193,7 @@ function searchCallback(data) {
             else if(list[i].tireLocation == null && list[i].tirePush !=null && list[i].tireNumber ==null) {
                 html+= '    <td>출고완료</td>';
             }else if(list[i].tireLocation == 'TRWH' && list[i].tirePush !=null && list[i].tireNumber !=null) {
-                html+= '    <td>'+ list[i].tireNumber.replaceAll(',' , '</br>') +'</td>';
+                html+= '    <td>'+ list[i].tireNumber.replace(',' , '</br>') +'</td>';
             } else {
                 html+= '<td/>';
             }
@@ -278,8 +278,8 @@ function funRowspan(className){
 
 
 function findRangeDay() {
-    var startDay = $("#date-start").val().replaceAll("-","");
-    var endDay = $("#date-end").val().replaceAll("-","");
+    var startDay = $("#date-start").val().replace("-","");
+    var endDay = $("#date-end").val().replace("-","");
 
     if(startDay>endDay) {
         alert("시작날짜가 종료날짜 보다 클 수 없습니다.");
@@ -359,8 +359,8 @@ function insertCallback(data) {
         if(checkDay == day) {
             searchToday($(".pageNo.on").data("page"));
         }else {
-            var startDay = $("#date-start").val().replaceAll("-","");
-            var endDay = $("#date-end").val().replaceAll("-","");
+            var startDay = $("#date-start").val().replace("-","");
+            var endDay = $("#date-end").val().replace("-","");
             searchDay($(".dayPageNo.on").data("page"),startDay,endDay);
             
         }
