@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import com.hankook.pg.content.admin.driver.dto.DriverDto;
+import com.hankook.pg.content.admin.driver.dto.DriverLevelDto;
 import com.hankook.pg.content.admin.driver.dto.SearchDriverDto;
 import com.hankook.pg.content.admin.driver.dto.UpfilesDto;
 
@@ -61,5 +62,5 @@ public interface DriverDao {
 	int updateFile(UpfilesDto upfiles) throws Exception;
 	
 	//드라이브 등급
-	List<DriverDto> driverLevel(DriverDto driver) throws Exception;
+	List<DriverLevelDto> driverLevel(DriverDto driver) throws Exception;
 }

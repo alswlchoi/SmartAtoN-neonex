@@ -26,10 +26,11 @@
         	D_HISTORY,
         	D_BLOOD_TYPE,
         	D_BLOOD_SPECIAL,
-        	D_LEVEL,
+        	IFNULL(pdl.D_LEVEL_NAME,'') AS D_LEVEL,
         	D_APPROVAL,
         	D_MEMO
-		FROM PG_DRIVER pd INNER JOIN PG_COMPANY pc ON pd.COMP_CODE=pc.COMP_CODE WHERE 1=1
+		FROM PG_DRIVER pd INNER JOIN PG_COMPANY pc ON pd.COMP_CODE=pc.COMP_CODE 
+		LEFT JOIN PG_DRIVER_LEVEL pdl ON pd.D_LEVEL = pdl.D_LEVEL WHERE 1=1
          <if test='keyword != null and keyword != ""'>
          	AND (
          		COMP_NAME LIKE CONCAT('%',#{keyword},'%') OR
@@ -246,8 +247,8 @@
         WHERE F_SEQ=${fSeq}
     </delete>
     
-    <select id="driverLevel" parameterType="com.hankook.pg.content.admin.driver.dto.DriverDto" resultType="com.hankook.pg.content.admin.driver.dto.DriverDto">
-    	SELECT D_LEVEL_NAME 
+    <select id="driverLevel" parameterType="com.hankook.pg.content.admin.driver.dto.DriverDto" resultType="com.hankook.pg.content.admin.driver.dto.DriverLevelDto">
+    	SELECT D_LEVEL, D_LEVEL_NAME 
 		FROM PG_DRIVER_LEVEL 
     </select>
     

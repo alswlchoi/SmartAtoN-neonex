@@ -142,7 +142,7 @@ public class UserTrReserveController {
 			}else if(result == -50) {
 				message = "선택하신 날은 B2B 이용일이 아닙니다.";
 			}else if(result == -60) {
-				message = "시험로 등급보다 높은 운전자를 선택해 주세요.";
+				message = "시험로 입장이 가능한 운전자를 선택해 주세요.";
 			}else if(result == -70) {
 				message = "선택하신 시간은 이미 예약되어 예약하실 수 없습니다.";
 			}else if(result == -80) {
@@ -403,10 +403,15 @@ public class UserTrReserveController {
     }
 
   @RequestMapping(value = "/myPageDetail", method = RequestMethod.GET)
-  public ModelAndView myPageDetail() throws Exception {
-    ModelAndView mv = new ModelAndView("/user/trReserve/myPageDetail");
-
-    return mv;
+  public ModelAndView myPageDetail(ModelAndView mav) throws Exception {
+	  /* 로그인 정보 가져옴 */
+  	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+  	if(authentication.getPrincipal() instanceof String){
+  		mav.setViewName("redirect:/adminLogin");
+  	}else{
+  		mav.setViewName("/user/trReserve/myPageDetail");
+  	}
+    return mav;
   }
 
   @PostMapping("/detail")
