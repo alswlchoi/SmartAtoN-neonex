@@ -220,11 +220,22 @@ public class TrReserveService{
 				String compCode = trReserve.getCompCode();
 				
 				if(compCode.equals("THINT")) {
-					if((null!=trReserve.getTcSeq()&&beforeTcSeq!=trReserve.getTcSeq())
-							||(null!=beforePackageName&&null!=trReserve.getTrPackageName()&&!beforePackageName.equals(trReserve.getTrPackageName()))) {
-						trContent += "<span class=\"event_thint\" title=\""+trReserve.getTrPackageName()+"\">[공] "+trReserve.getTrPackageName()+"</span>";
-						i++;
+					String trTrackType = "";
+					if(trReserve.getTrTrackType().equals("TYP01")) {
+						trTrackType = "공";
+					}else {
+						trTrackType = "외";
 					}
+					
+					if(null!=trReserve.getTcSeq()&&beforeTcSeq!=trReserve.getTcSeq()
+						&&null!=beforePackageName&&null!=trReserve.getTrPackageName()&&!beforePackageName.equals(trReserve.getTrPackageName())) {
+						trContent += "<span class=\"event_thint\" title=\""+trReserve.getTrPackageName()+"\">["+trTrackType+"] "+trReserve.getTrPackageName()+"</span>";
+					}else {
+						trContent += "<span class=\"event_thint\" title=\""+trReserve.getTrTrackName()+"\">["+trTrackType+"] "+trReserve.getTrTrackName()+"</span>";
+					}
+					
+					i++;
+					
 					beforeTcSeq = trReserve.getTcSeq();
 					beforePackageName = trReserve.getTrPackageName();
 				}else {

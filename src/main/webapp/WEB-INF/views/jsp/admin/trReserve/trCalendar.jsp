@@ -784,7 +784,7 @@
 
 										<div class="legend_cal">
 											<span class="approval">승인대기중</span><span class="b2b m-l-14">B2B회원</span><span
-												class="thint m-l-14">T-HINT</span> / [단]단독 [공] 공동
+												class="thint m-l-14">T-HINT</span> / [단]단독 [공]공동 [외]시험외
 										</div>
 
 										<!-- table list -->
