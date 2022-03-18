@@ -217,7 +217,7 @@
       wiressHtml += '</td>';
       wiressHtml += '<td>';
       wiressHtml += '<div class="form_group w_full">';
-      wiressHtml += '<input type="text" id="newWQrId" class="form_control tac" maxlength="100" placeholder="" name="" value="" />';
+      wiressHtml += '<input type="text" id="newWQrId" class="form_control tac" readonly placeholder="" name="" value="'+newName+'" />';
       wiressHtml += '</div>';
       wiressHtml += '</td>';
       wiressHtml += '<td>';

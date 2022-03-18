@@ -210,7 +210,7 @@
     rfidHtml += '<tr class="add">';
     rfidHtml += '<td>'+rIndex+'</td>';
     rfidHtml += '<td><input type="text" readonly id="rId'+rIndex+'" class="form_control tac" placeholder="" name="" value="'+newId+'" /></td>';
-    rfidHtml += '<td><input type="text" maxlength="20" id="rQrId'+rIndex+'" class="form_control" placeholder="" name="" value="" /></td>';
+    rfidHtml += '<td><input type="text" readonly id="rQrId'+rIndex+'" class="form_control tac" placeholder="" name="" value="'+newId+'" /></td>';
     rfidHtml += '<td><input type="text" maxlength="100" id="rSerial'+rIndex+'" class="form_control" placeholder="" name="" value="" /></td>';
     rfidHtml += '<td><input type="text" maxlength="20" id="rTagId'+rIndex+'" class="form_control" placeholder="" name="" value="" /></td>';
     rfidHtml += '<td>';
