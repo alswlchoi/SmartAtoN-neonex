@@ -570,7 +570,7 @@
         </div>
         <!-- //breadcrumb -->
         <!-- title -->
-        <h2 class="title">시험자 관리</h2>
+        <h2 class="title">B2B 시험자 관리</h2>
         <!-- //title -->
         <!-- search_wrap -->
         <section class="search_wrap">
