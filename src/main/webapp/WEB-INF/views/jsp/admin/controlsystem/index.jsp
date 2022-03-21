@@ -107,7 +107,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var nowGnr = resdata.nowGnr;
 
 		$(".now-gnr-count").html(resdata.nowGnrCount);
-		if(nowGnr!=null){
+		if(nowGnr!=null&&nowGnr.tcReservCode!=null){
 			$("#reserve-code").html(nowGnr.tcReservCode);
 			var driverInfo = "";
 			driverInfo += undefinedChk(nowGnr.compName,"")+" "+undefinedChk(nowGnr.dname,"");
@@ -798,7 +798,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <div class="row m-t-8">
                                 <div class="form_group w70">
                                     <div class="select_group">
-                                        <select name="T998" title="select" class="form_control">
+                                        <select name="T013" title="select" class="form_control">
                                             <option value="in">IN</option>
                                             <option value="out">OUT</option>
                                         </select>
@@ -1118,10 +1118,10 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <tr>
                                 <td>10</td>
                                 <td class="tal color_bule2">DHC #2</td>
-                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T998', 'open', 'in', '1', this)">열림</button><button
-                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T998', 'close', 'in', '1', this)">닫힘</button></td>
-                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T998', 'open', 'out', '1', this)">열림</button><button
-                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T998', 'close', 'out', '1', this)">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T013', 'open', 'in', '1', this)">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T013', 'close', 'in', '1', this)">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T013', 'open', 'out', '1', this)">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T013', 'close', 'out', '1', this)">닫힘</button></td>
                                 <td></td>
                             </tr>
                             <tr>

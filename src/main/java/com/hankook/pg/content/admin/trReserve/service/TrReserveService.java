@@ -221,7 +221,9 @@ public class TrReserveService{
 				
 				if(compCode.equals("THINT")) {
 					String trTrackType = "";
-					if(trReserve.getTrTrackType().equals("TYP01")) {
+					log.info("trTrackType :"  + trReserve.getTrTrackType());
+					
+					if(trReserve.getTrTrackType().equals("TYP00")) {
 						trTrackType = "공";
 					}else {
 						trTrackType = "외";
