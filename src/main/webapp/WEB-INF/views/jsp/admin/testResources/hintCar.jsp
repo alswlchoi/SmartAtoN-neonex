@@ -278,7 +278,7 @@
                             <thead>
                             <tr>
                                 <th scope="col">평가차량번호</th>
-                                <th scope="col">RFID NO.</th>
+                                <th scope="col">RFID QRcode</th>
                                 <th scope="col">비고</th>
                             </tr>
                             </thead>
@@ -331,7 +331,7 @@
                             <thead>
                             <tr>
                                 <th scope="col">평가차량번호</th>
-                                <th scope="col">RFID NO.</th>
+                                <th scope="col">RFID ID</th>
 <%--                                <th scope="col">등록일</th>--%>
                                 <th scope="col">반납</th>
                                 <th scope="col">반납일</th>
