@@ -34,7 +34,7 @@ public class HintTesterVo extends Search {
   private String vhclCode;
   private String vhclRgsno;
   private String vhclMaker;
-
+  private String vhclName;
   /**
    * HINT 공통
    */

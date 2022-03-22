@@ -106,7 +106,7 @@
         carHtml += '</div>';
         carHtml += '</td>';
         carHtml += '<td>'+car.vhclRgsno+'</td>';
-        carHtml += '<td>'+car.vhclMaker+'</td>';
+        carHtml += '<td>'+car.vhclName+'</td>';
         carHtml += '</tr>';
       }
     } else {
@@ -401,8 +401,8 @@
                     <thead>
                     <tr>
                         <th scope="col">선택</th>
-                        <th scope="col">평가챠량</th>
-                        <th scope="col">MAKER</th>
+                        <th scope="col">차량번호</th>
+                        <th scope="col">차종</th>
                     </tr>
                     </thead>
                     <tbody id="carTableP"></tbody> <%--평가차량 검색시 팝업--%>
