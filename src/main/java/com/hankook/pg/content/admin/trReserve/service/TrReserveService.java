@@ -537,7 +537,7 @@ public class TrReserveService{
 		    		}
 		    		
 		    		if(null==rfidLog.getOutTime()||rfidLog.getOutTime().equals(""))
-		    			trReserveDao.addTrackCapa("T001");
+		    			trReserveDao.addTrackCapa("T000");
 		    		
 		    		resultCnt = trReserveDao.addGnrLog(rfidLog);
 		    	}	
@@ -656,8 +656,8 @@ public class TrReserveService{
 	    		rfidGnrLog.setOutTime(afterOutTime);
 	    		rfidGnrLog.setCarRfidId(rfidGnrLog.getCarRfidId());
 	    		
-	    		if(null==beforeOutTime||beforeOutTime.equals(""))
-	    			trReserveDao.minusTrackCapa("T001");
+	    		if(null!=beforeOutTime&&!beforeOutTime.equals(""))
+	    			trReserveDao.minusTrackCapa("T000");
 	    		
 	    		resultCnt = trReserveDao.updateRfidGnrLog(rfidGnrLog);
 	    	}
@@ -711,7 +711,7 @@ public class TrReserveService{
 	    		if(cnt_reserved_log>0) {
 	    			resultCnt = - 10;
 	    		}else {
-		    		if(null==beforeOutTime||beforeOutTime.equals(""))
+		    		if(null!=beforeOutTime&&!beforeOutTime.equals(""))
 		    			trReserveDao.minusTrackCapa(rfidLog.getTId());
 		    		
 	    			resultCnt = trReserveDao.updateRfidLog(rfidLog);
