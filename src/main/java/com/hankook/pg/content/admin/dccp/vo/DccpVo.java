@@ -18,7 +18,7 @@ public class DccpVo extends Search {
   private int num;
   private String tcReservCode;
   private String compName;
-  private String dSeq;
+  private int dSeq;
   private String dName;
 
   private int dcSeq;
