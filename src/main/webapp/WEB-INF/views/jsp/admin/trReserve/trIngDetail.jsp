@@ -28,7 +28,7 @@ $(document).ready(function(){
 		}else if($("select[name=tagIdGnr] option:eq(0)").is(":selected")){
 			alert('운전자를 선택해 주세요.');
 		}else if($("select[name=carTagIdGnr] option:eq(0)").is(":selected")){
-			alert('차량 번호를 선택해 주세요.');
+			alert('차량 번호를 선택해 주세요1.');
 		}else if($("select[name=tidGnr] option:eq(0)").is(":selected")){
 			alert('시험로를 선택해 주세요.');
 		}else{
@@ -77,10 +77,10 @@ $(document).ready(function(){
 			alert("출차시간을 4자리로 입력해 주세요.");
 		}else if($("#outTimeAdd").val()!=""&&($("#inTimeAdd").val()>=$("#outTimeAdd").val())){
 			alert("출차시간이 입차시간보다 빠릅니다.");
+		}else if($("select[name=tagId] option:eq(0)").is(":selected")){
+			alert('운전자를 선택해 주세요.2');
 		}else if($("select[name=carTagId] option:eq(0)").is(":selected")){
 			alert('차량 번호를 선택해 주세요.');
-		}else if($("select[name=tagId] option:eq(0)").is(":selected")){
-			alert('운전자를 선택해 주세요.');
 		}else if($("select[name=tid] option:eq(0)").is(":selected")){
 			alert('시험로를 선택해 주세요.');
 		}else{
@@ -191,7 +191,7 @@ $(document).ready(function(){
 function drawTrackSelect(trackList){
 	var trackHtml = '';
 	trackHtml += '<select name="trTrackCode" id="trTrackCode" class="trTrackCode form_control">';
-	trackHtml += '<option value="">시험로선택</option>';
+	trackHtml += '<option value="">시험로 선택</option>';
 	var trTrackCode = '${trTrackCode}';
 	for(var list in trackList){
 		if(parseInt(list)>0){
@@ -789,7 +789,7 @@ function fnChkByte(obj, maxByte){
 		                                                <div class="trdiv form_group w170">
 															<div class="select_group">
 					                                            <select name="tid" id="tid" class="trTrackCode form_control">
-																	<option value="">시험로선택</option>
+																	<option value="">시험로 선택</option>
 																	<c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
 																	<c:if test="${status.index eq 0 }">
 																		<c:set var="trTrackNickName" value="${result.trTrackNickName }" />

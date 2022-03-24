@@ -583,8 +583,8 @@ $(".lodingdimm").removeClass("lodingdimm");
 	initTrack();
 	nowGnr();
 	
-	//setInterval(function () { initTrack();getTime(); }, 3000);
-	//setInterval(function () { nowGnr(); }, 1000);
+	setInterval(function () { initTrack();getTime(); }, 3000);
+	setInterval(function () { nowGnr(); }, 1000);
 	
 	function openTab(evt, tabName) {
       var i, tabcontent, tablinks;

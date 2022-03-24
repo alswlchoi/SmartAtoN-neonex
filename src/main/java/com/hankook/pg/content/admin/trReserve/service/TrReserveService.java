@@ -1357,11 +1357,10 @@ public class TrReserveService{
     			wiressStr += ", ";
     			
     		}
-    		if(!searchTrReserve.getCompCode().equals("THINT")) {
-	    		driverOnlyNameStr += rm.getDName();
-				resourceArr[i++] = rm.getRId()+"#"+rm.getDName();
-    		}
+    		driverOnlyNameStr += rm.getDName();
+			resourceArr[i++] = rm.getRId()+"#"+rm.getDName();
     		driverStr += rm.getDName()+"("+rm.getRmLevel()+" / ";
+    		
     		if(rm.getDEdu().equals("Y")) {
     			driverStr += "안전교육이수";
     		}else {
