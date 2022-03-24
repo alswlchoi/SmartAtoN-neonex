@@ -25,10 +25,10 @@ $(document).ready(function(){
 			alert("출차시간을 4자리로 입력해 주세요.");
 		}else if($("#outTimeAddGnr").val()!=""&&($("#inTimeAddGnr").val()>=$("#outTimeAddGnr").val())){
 			alert("출차시간이 입차시간보다 빠릅니다.");
-		}else if($("select[name=carTagIdGnr] option:eq(0)").is(":selected")){
-			alert('차량 번호를 선택해 주세요.');
 		}else if($("select[name=tagIdGnr] option:eq(0)").is(":selected")){
 			alert('운전자를 선택해 주세요.');
+		}else if($("select[name=carTagIdGnr] option:eq(0)").is(":selected")){
+			alert('차량 번호를 선택해 주세요.');
 		}else if($("select[name=tidGnr] option:eq(0)").is(":selected")){
 			alert('시험로를 선택해 주세요.');
 		}else{
@@ -630,22 +630,7 @@ function fnChkByte(obj, maxByte){
                                             </thead>
                                             <tbody>
                                             <c:if test="${fn:length(rfidGnrLog) == 0}">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	                                            <tr>
+	                                            <tr style="background-color: #f7f7f7;">
 	                                                <td>
                                                 		<c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
                                                 			<c:if test='${fn:indexOf(realUseDt,result.tcDay)<0 }'>
@@ -669,7 +654,7 @@ function fnChkByte(obj, maxByte){
 	                                                	<div class="form_group w150"><input type="text" style="text-align:center"
 	                                                 		id="outTimeAddGnr" name="outTimeAddGnr" class="form_control" value="" placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" /></div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span></td>
-	                                                <td><span id="useTime"></span></td>
+	                                                <td><span id="useTime" style="font-weight:bold">GNR</span></td>
 	                                                <td>	                                                
 		                                                <div class="trdiv form_group w170">
 		                                                	<div class="select_group">
@@ -698,23 +683,11 @@ function fnChkByte(obj, maxByte){
 														<button type="button" id="addTrBtnGnr" class="btn-line btn_gray">추가(GNR) +</button>
 													</td>	                                                
 	                                            </tr>
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
-	                                            
                                             </c:if>
                                             <c:forEach var="result" items="${rfidGnrLog}" varStatus="status">
                                                 <c:set var="inFullTime" value="${result.inTime }" />                                                    	
                                                 <c:set var="outFullTime" value="${result.outTime }" />
-                                                <tr>
+                                                <tr style="background-color:#f7f7f7">
                                                 	<td>${fn:substring(inFullTime, 0, 4) }-${fn:substring(inFullTime, 4, 6) }-${fn:substring(inFullTime, 6, 8) }</td>
                                                     <td><div class="form_group w150"><input type="text" style="text-align:center"
                                                     	name="inTimeUpd" class="form_control inTimeUpd" value="${fn:substring(inFullTime, 8, 12) }"
@@ -727,7 +700,7 @@ function fnChkByte(obj, maxByte){
 	                                                 		placeholder="출차시간(1530)" maxlength="4" onkeypress="numberonly();" />:${fn:substring(outFullTime, 12, 14) }</div>
 	                                                		<br /><span class="color_red" style="margin-top:3px">ex ) 15시 30분 - 1530</span>
 	                                                </td>
-                                                    <td>GNR</td>
+                                                    <td style="font-weight:bold">GNR</td>
                                                     <td>GNR Gate (<span class="color_orange">차량 RFID :</span> ${result.carRfidId })
                                                     <br /><span class="info_ment color_orange" style="margin-top:10px">수정하실 시간을 입력하시고 우측 「수정」버튼을 클릭해 주세요.</span></td>
                                                     <td>
