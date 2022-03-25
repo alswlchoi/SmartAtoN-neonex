@@ -5,8 +5,8 @@
 <sec:csrfMetaTags/>
 <script type="text/javascript">
   $(document).ready(function () {
-    // var test = document.querySelector('input');
-    // test.addEventListener('input', evt, evt.target);
+    //var test = document.querySelector('input');
+    //test.addEventListener('input', evt, evt.target);
 
     rwTesterSearch(1);
     testerSearch(1, 'S');
@@ -55,19 +55,19 @@
         testerHtml += '<td>'+tester.wid+'</td>';
         // testerHtml += '<td>'+moment(tester.crnDtm).format("YYYY.MM.DD")+'</td>';
         if (tester.rreturn == null || tester.rreturn == "") {
-          testerHtml += '<td><button type="button" onclick="rReturn('+tester.hrSeq+',\''+tester.rid+'\')" class="btn-line-s btn_gray" data-layer="return">RFID 반납(교체)</button></td>';
+          testerHtml += '<td><button type="button" onclick="rReturn('+tester.hrSeq+',\''+tester.rid+'\','+tester.employeeNo+')" class="btn-line-s btn_gray" data-layer="return">RFID 반납(교체)</button></td>';
         } else { // 반납시 날짜 보여주기
           testerHtml += '<td>';
           testerHtml += ''+moment(tester.rreturn).format("YYYY.MM.DD")+'</br>   ';
-          testerHtml += '<button type="button" onclick="reRfid('+tester.hrSeq+',\''+tester.name+'('+tester.employeeNo+')\')" class="btn-line-s btn_default" data-layer="reissuance">RFID 재발급</button>';
+          testerHtml += '<button type="button" onclick="reRfid('+tester.hrSeq+',\''+tester.name+'('+tester.employeeNo+')\','+tester.employeeNo+')" class="btn-line-s btn_default" data-layer="reissuance">RFID 재발급</button>';
           testerHtml += '</td>';
         }
         if (tester.wreturn == null || tester.wreturn == "") {
-          testerHtml += '<td><button type="button" onclick="wReturn('+tester.hrSeq+',\''+tester.wid+'\')" class="btn-line-s btn_gray" data-layer="return2">무전기 반납(교체)</button></td>';
+          testerHtml += '<td><button type="button" onclick="wReturn('+tester.hrSeq+',\''+tester.wid+'\','+tester.employeeNo+')" class="btn-line-s btn_gray" data-layer="return2">무전기 반납(교체)</button></td>';
         } else { // 반납시 날짜 보여주기
           testerHtml += '<td>';
           testerHtml += ''+moment(tester.wreturn).format("YYYY.MM.DD")+'</br>   ';
-          testerHtml += '<button type="button" onclick="reWiress('+tester.hrSeq+',\''+tester.name+'('+tester.employeeNo+')\')" class="btn-line-s btn_default" data-layer="reissuance2">무전기 재발급</button>';
+          testerHtml += '<button type="button" onclick="reWiress('+tester.hrSeq+',\''+tester.name+'('+tester.employeeNo+')\','+tester.employeeNo+')" class="btn-line-s btn_default" data-layer="reissuance2">무전기 재발급</button>';
           testerHtml += '</td>';
         }
         testerHtml += '</tr>';
@@ -82,12 +82,13 @@
     drawingPage(list.paging);
   }
 
-  function rReturn(hrSeq,rId) {
+  function rReturn(hrSeq,rId,employeeNo) {
     $("#rChange").html("");
     var rfidHtml = "";
     rfidHtml += '<tr>';
     rfidHtml += '<td id="changeR">'+rId+'</td>';
     rfidHtml += '<td><input type="hidden" id="hrSeqR" value="'+hrSeq+'">';
+    rfidHtml += '<input type="hidden" id="employeeNoR" value="'+employeeNo+'">';
     rfidHtml += '<div class="form_group w200">';
     rfidHtml += '<input type="text" id="changeRfid" class="form_control" placeholder="RFID QR 입력" value="">';
     rfidHtml += '</div>';
@@ -99,7 +100,7 @@
     $("#rChange").html(rfidHtml);
   }
 
-  function wReturn(hrSeq,wId) {
+  function wReturn(hrSeq,wId,employeeNo) {
     $("#wChange").html("");
     var wiressHtml = "";
     wiressHtml += '<tr>';
@@ -110,6 +111,7 @@
     wiressHtml += '</div>';
     wiressHtml += '</td>';
     wiressHtml += '<td><input type="hidden" id="hrSeqW" value="'+hrSeq+'">';
+    wiressHtml += '<input type="hidden" id="employeeNoW" value="'+employeeNo+'">';
     wiressHtml += '<div class="form_group w200">';
     wiressHtml += '<input type="text" id="changeWiress" class="form_control" placeholder="무전기 QR 입력" value="">';
     wiressHtml += '</div>';
@@ -121,13 +123,14 @@
     $("#wChange").html(wiressHtml);
   }
 
-  function reRfid(hrSeq, name) {
+  function reRfid(hrSeq, name, employeeNo) {
     $("#reRfid").html("");
     var rfidHtml = "";
     rfidHtml += '<tr>';
     rfidHtml += '<td id="reIdR"><input type="hidden" id="reHrSeqR" value="'+hrSeq+'">'+name+'</td>';
     rfidHtml += '<td>';
     rfidHtml += '<div class="form_group w200">';
+    rfidHtml += '<input type="hidden" id="employeeNoReR" value="'+employeeNo+'">';
     rfidHtml += '<input type="text" id="reRfidId" class="form_control" placeholder="RFID QR 입력" value="">';
     rfidHtml += '</div>';
     rfidHtml += '<button type="button" class="btn-line-s btn_gray" onclick="putFocus(\'rR\')">발급</button>';
@@ -137,14 +140,15 @@
     $("#reRfid").html(rfidHtml);
 
   }
-  function reWiress(hrSeq, name) {
+  function reWiress(hrSeq, name, employeeNo) {
     $("#reWiress").html("");
     var wiressHtml = "";
     wiressHtml += '<tr>';
     wiressHtml += '<td id="reIdW"><input type="hidden" id="reHrSeqW" value="'+hrSeq+'">'+name+'</td>';
     wiressHtml += '<td><div class="form_group w100"><input type="text" id="reWiressCh" class="form_control" placeholder="무전기CH입력" value=""></div></td>';
     wiressHtml += '<td>';
-    wiressHtml += '<div class="form_group w200">';
+    wiressHtml += '<div class="form_group w150">';
+    wiressHtml += '<input type="hidden" id="employeeNoReW" value="'+employeeNo+'">';
     wiressHtml += '<input type="text" id="reWiressId" class="form_control" placeholder="무전기 QR 입력" value="">';
     wiressHtml += '</div>';
     wiressHtml += '<button type="button" class="btn-line-s btn_gray" onclick="putFocus(\'rW\')">발급</button>';
@@ -163,6 +167,7 @@
         return;
       }
       param = {
+        employeeNo: $("#employeeNoReR").val(),
         hrSeq: $("#reHrSeqR").val(),
         rqrId: $("#reRfidId").val(),
         rReturn: null
@@ -177,6 +182,7 @@
         return;
       }
       param = {
+        employeeNo: $("#employeeNoReW").val(),
         hrSeq: $("#reHrSeqW").val(),
         wqrId:$("#reWiressId").val(),
         wch:$("#reWiressCh").val(),
@@ -187,7 +193,8 @@
         alert3("교체할 RFID를 스캔해주세요.");
         return;
       }
-      param = {
+        param = {
+        employeeNo: $("#employeeNoR").val(),
         hrSeq: hrSeq,
         brid: $("#changeR").html(),
         rqrId: $("#changeRfid").val()
@@ -202,6 +209,7 @@
         return;
       }
       param = {
+        employeeNo: $("#employeeNoW").val(),
         hrSeq: hrSeq,
         bwid: $("#changeW").html(),
         wqrId:$("#changeWiress").val(),
@@ -216,12 +224,14 @@
     var param;
     if (type == 'R') {
       param = {
+        employeeNo: $("#employeeNoR").val(),
         hrSeq: $("#hrSeq"+type).val(),
         hrType: type,
         rid: $("#change"+type).html()
       };
     } else {
       param = {
+        employeeNo: $("#employeeNoW").val(),
         hrSeq: $("#hrSeq"+type).val(),
         hrType: type,
         wid: $("#change"+type).html()

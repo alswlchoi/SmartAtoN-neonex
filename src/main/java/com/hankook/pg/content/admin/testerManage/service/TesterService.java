@@ -413,23 +413,40 @@ public class TesterService {
         bHint.setRId(hintTesterVo.getBRId());
         testerDao.rfidInOut(bHint);
         testerDao.rfidInOut(hintTesterVo);
+        testerDao.hintUpdateRsMappingDrAndWr(hintTesterVo);
       } else {
         bHint.setWId(hintTesterVo.getBWId());
         testerDao.wiressInOut(bHint);
         testerDao.wiressInOut(hintTesterVo);
+        testerDao.hintUpdateRsMappingDrAndWr(hintTesterVo);
       }
       return "발급에 성공했습니다.";
     }
   }
 
-  public String hintReturn(HintTesterVo hintTesterVo) {
+  public String hintReturn(HintTesterVo hintTesterVo) {   //평가자, 평가차량
+    HintTesterVo bHint = new HintTesterVo();
     int result = testerDao.hintReturn(hintTesterVo);
     if (result == 0) {
       return "반납에 실패했습니다.";
     } else {
-      hintTesterVo.setInOut("I");
-      testerDao.rfidInOut(hintTesterVo);
-      testerDao.wiressInOut(hintTesterVo);
+      if(hintTesterVo.getHrType().equals("R")){
+        hintTesterVo.setInOut("I");
+        testerDao.rfidInOut(hintTesterVo);
+        testerDao.wiressInOut(hintTesterVo);
+        testerDao.hintReturnRsMappingDrAndWr(hintTesterVo);
+      }else if(hintTesterVo.getHrType().equals("W")){
+        hintTesterVo.setInOut("I");
+        testerDao.rfidInOut(hintTesterVo);
+        testerDao.wiressInOut(hintTesterVo);
+        testerDao.hintReturnRsMappingDrAndWr(hintTesterVo);
+      }else{
+        hintTesterVo.setInOut("I");
+        testerDao.rfidInOut(hintTesterVo);
+        testerDao.wiressInOut(hintTesterVo);
+        bHint.setVhclCode(hintTesterVo.getVhclCode());
+        testerDao.hintReturnRsMappingCar(hintTesterVo);
+      }
       return "반납에 성공했습니다.";
     }
   }

@@ -356,11 +356,48 @@
     </if>
     WHERE HR_SEQ = #{hrSeq}
   </update>
+  <update id="hintUpdateRsMappingDrAndWr" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET
+    <if test="rId != null and wId == null">
+      R_ID = #{rId}
+    </if>
+    <if test="rId == null and wId != null">
+      W_ID = #{wId}
+    </if>
+    WHERE D_SEQ = #{employeeNo}
+    AND TC_DAY >= DATE_FORMAT(SYSDATE(), '%Y%m%d');
+  </update>
+
+  <update id="hintReturnRsMappingDrAndWr" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET
+    <if test="rId != null and wId == null">
+      R_ID = null
+    </if>
+    <if test="rId == null and wId != null">
+      W_ID = null
+    </if>
+    WHERE D_SEQ = #{employeeNo}
+    AND TC_DAY >= DATE_FORMAT(SYSDATE(), '%Y%m%d');
+  </update>
+
+  <update id="hintReturnRsMappingCar" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET
+      R_ID = null
+    WHERE C_CODE = #{vhclCode}
+    AND TC_DAY >= DATE_FORMAT(SYSDATE(), '%Y%m%d');
+  </update>
+
   <update id="hintReturn" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
     UPDATE PG_HINT_RESOURCE
     SET
     <choose>
       <when test='hrType == "R"'>
+        R_RETURN = DATE_FORMAT(SYSDATE(),'%Y%m%d')
+      </when>
+      <when test='hrType == "C"'>
         R_RETURN = DATE_FORMAT(SYSDATE(),'%Y%m%d')
       </when>
       <otherwise>

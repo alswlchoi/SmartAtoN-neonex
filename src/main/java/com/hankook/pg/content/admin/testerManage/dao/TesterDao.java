@@ -6,9 +6,10 @@ import com.hankook.pg.content.admin.testerManage.vo.SearchTesterVo;
 import com.hankook.pg.content.admin.testerManage.vo.TestCarVo;
 import com.hankook.pg.content.admin.testerManage.vo.TesterVo;
 import com.hankook.pg.content.admin.wiress.vo.WiressVo;
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -60,5 +61,11 @@ public interface TesterDao {
   int wiressIdChk(HintTesterVo hintTesterVo);
 
   List<TestCarVo> getAllCCode(TestCarVo testCarVo);
+
+  int hintUpdateRsMappingDrAndWr(HintTesterVo hintTesterVo);
+
+  int hintReturnRsMappingDrAndWr(HintTesterVo hintTesterVo);
+
+  int hintReturnRsMappingCar(HintTesterVo hintTesterVo);
 
 }

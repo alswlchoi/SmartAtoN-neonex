@@ -55,11 +55,12 @@
         if (car.rreturn == null || car.rreturn == '') {
           carHtml += '<td>';
           carHtml += '<input type="hidden" id="hrSeq'+i+'" value="'+car.hrSeq+'">';
-          carHtml += '<button type="button" class="btn-line-s btn_gray" data-layer="complete2" onclick="inputCCode('+i+')">반납</button>';
+          carHtml += '<input type="hidden" id="vhclCode'+i+'" value="'+car.vhclCode+'">';
+          carHtml += '<button type="button" class="btn-line-s btn_gray" data-layer="complete2" onclick="inputCCode('+i+','+car.vhclCode+')">반납</button>';
           carHtml += '</td>';
           carHtml += '<td></td>';
         } else {
-          carHtml += '<td><button type="button" class="btn-line-s btn_default" data-layer="reissuance" onclick="reRfid('+car.hrSeq+', \''+car.vhclRgsno+'\')">재발급</button>';
+          carHtml += '<td><button type="button" class="btn-line-s btn_default" data-layer="reissuance" onclick="reRfid('+car.hrSeq+', \''+car.vhclRgsno+'\', '+car.vhclCode+')">재발급</button>';
           carHtml += '<td>'+moment(car.rreturn).format("YYYY.MM.DD")+'</td>';
         }
         carHtml += '</tr>';
@@ -126,12 +127,13 @@
     });
   }
 
-  function reRfid(hrSeq, name) {
+  function reRfid(hrSeq, name, vhclCode) {
     $("#reRfid").html("");
     var rfidHtml = "";
 
     rfidHtml += '<tr>';
     rfidHtml += '<td><input type="hidden" id="reHrSeqR" value="'+hrSeq+'">'+name+'</td>';
+    rfidHtml += '<input type="hidden" id="vhclCodeR" value="'+vhclCode+'">'+name+'';
     rfidHtml += '<td>';
     rfidHtml += '<div class="form_group w200">';
     rfidHtml += '<input type="text" id="reRfidId" class="form_control" placeholder="RFID QR 입력" value="">';
@@ -196,16 +198,18 @@
     }
   }
 
-  function inputCCode(i) {
+  function inputCCode(i,vhclCode) {
     var hrSeq = $("#hrSeq"+i).val();
     var rId = $("#rId"+i).html();
+    $("#returnVhclCode").val(vhclCode);
     $("#reHrSeq").val(hrSeq);
     $("#returnRfid").val(rId);
   }
 
   function returnRC() {
     var param = {
-      hrType: 'R',
+      hrType: 'C',
+      vhclCode:  $("#returnVhclCode").val(),
       hrSeq: $("#reHrSeq").val(),
       rid: $("#returnRfid").val()
     }
@@ -222,6 +226,7 @@
         return;
       }
       param = {
+        vhclCode: $("#vhclCodeR").val(),
         hrSeq: $("#reHrSeqR").val(),
         brQrId: $("#changeR").val(),
         rqrId: $("#reRfidId").val(),
@@ -365,6 +370,7 @@
         <div class="ly_con">
             <input type="hidden" id="reHrSeq">
             <input type="hidden" id="returnRfid">
+            <input type="hidden" id="returnVhclCode">
             해당 챠랑의 RFID<br />반납 처리하시겠습니까?
         </div>
         <!-- 버튼 -->
