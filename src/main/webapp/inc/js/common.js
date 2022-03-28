@@ -598,7 +598,30 @@ function roadTempCallback(data){
 	$.each(list,function(i,el){
 		tempHtml +='<tr>';
 		tempHtml += '<td>'+list[i].num+'</td>';
-		tempHtml += '<td>'+list[i].tnickname+'</td>';
+		tempHtml += '<td>';
+		//tempHtml += '<td>' //+list[i].tnickname
+		console.log(list[i].tnickname);
+		console.log(list[i].tnickname == "sensor#1");
+		if(list[i].tnickname == "sensor#1"){
+			tempHtml += 'DHC';
+		}else if(list[i].tnickname == "sensor#2"){
+			tempHtml += 'WHC';
+		}else if(list[i].tnickname == "sensor#3"){
+			tempHtml += 'HPC-WHC';
+		}else if(list[i].tnickname == "sensor#4"){
+			tempHtml += 'NVH-Asp';
+		}else if(list[i].tnickname == "sensor#5"){
+			tempHtml += 'NVH-Con';
+		}else if(list[i].tnickname == "sensor#6"){
+			tempHtml += 'BRK Dry Asp';
+		}else if(list[i].tnickname == "sensor#7"){
+			tempHtml += 'BRK Wet Asp';
+		}else if(list[i].tnickname == "sensor#8"){
+			tempHtml += 'BRK Wet Con';
+		}else if(list[i].tnickname == "sensor#9"){
+			tempHtml += 'HPS-BRK';
+		}
+		tempHtml += '</td>';
 		tempHtml += '<td>'+list[i].roadTemp+'</td>';
 		tempHtml +='</tr>';
 	});
