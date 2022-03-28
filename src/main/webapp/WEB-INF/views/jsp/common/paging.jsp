@@ -19,7 +19,8 @@ function drawingPage(paging){
 	console.log("nextPage"+paging.nextPage);
 	*/
 	var html = "";
-	if(paging.pageNo != 1){
+    html += '<span class="wrap">';
+    if(paging.pageNo != 1){
 		html += '<a class="pageNo btn_prev" data-page="'+paging.prevPage+'" style="cursor:pointer">';
 		html += '   <i class="fas fa-angle-left"></i>';
 		html += '</a>';
@@ -28,7 +29,6 @@ function drawingPage(paging){
 		html += '   <i class="fas fa-angle-left"></i>';
 		html += '</a>';
 	}
-	html += '<span class="wrap">';
 	for(var i=paging.startPage; i<=paging.endPage; i++){
 		html += '<a class="pageNo" data-page="'+i+'" style="cursor:pointer">'+i+'</a>';
 	}
@@ -51,6 +51,7 @@ function drawingPage(paging){
 </script>
 
 <!-- pageing_start -->
+    <span class='wrap'>
       <c:if test="${paging.pageNo ne 1 }">
        <fmt:parseNumber integerOnly="true" type="number" var="i" value="${paging.pageNo }"/>
           <a class="pageNo btn_prev" data-page="${paging.prevPage }" style="cursor:pointer">
@@ -62,7 +63,6 @@ function drawingPage(paging){
               <i class="fas fa-angle-left"></i>
           </a>
       </c:if>
-      <span class='wrap'>
      	<c:forEach var="item" begin="${paging.startPage }" end="${paging.endPage }" step="1" varStatus="status">
 		<a class="pageNo<c:if test="${paging.pageNo == status.index }"> on</c:if>" data-page="${status.index }" style="cursor:pointer">${status.index }</a>
       </c:forEach>
