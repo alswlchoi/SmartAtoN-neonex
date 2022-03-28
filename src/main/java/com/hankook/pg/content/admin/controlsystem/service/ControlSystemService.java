@@ -77,6 +77,14 @@ public class ControlSystemService {
 		return controlSystemDao.modifyInputIntimeLastRfidGeneral(currentTime);
 	}
 
+	public List<SearchDto> selectSearchDriverPopup(SearchDto searchDto) throws Exception {
+		return controlSystemDao.selectSearchDriverPopup(searchDto);
+	}
+
+	public Integer selectSearchDriverPopupCnt(SearchDto searchDto) throws Exception {
+		return controlSystemDao.selectSearchDriverPopupCnt(searchDto);
+	}
+
 	public NowGnrDto selectSearchDriver(SearchDto searchDto) throws Exception {
 		
 		String dName = searchDto.getdName();

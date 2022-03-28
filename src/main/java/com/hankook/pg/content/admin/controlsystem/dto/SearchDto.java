@@ -1,6 +1,8 @@
 package com.hankook.pg.content.admin.controlsystem.dto;
 
-public class SearchDto { 
+import com.hankook.pg.share.Search;
+
+public class SearchDto extends Search {
 	private String tId;			//트랙아이디
 	private Integer dSeq;		//운전자일련번호
 	private String dName;		//운전자명
@@ -9,7 +11,8 @@ public class SearchDto {
 	private Integer tcSeq;		//시험일련번호
 	private String tagId;		//운전자 tagId
 	private String carTagId;	//차량 tagId
-	
+	private String text;		//검색 키워드
+
 	public String gettId() {
 		return tId == null ? "" : tId;
 	}
@@ -57,5 +60,9 @@ public class SearchDto {
 	}
 	public void setCarTagId(String carTagId) {
 		this.carTagId = carTagId;
+	}
+	public String getText()
+	{
+		return text == null ? "" : text;
 	}
 }

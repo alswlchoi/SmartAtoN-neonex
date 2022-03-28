@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hankook.pg.share.Paging;
+import com.hankook.pg.share.Search;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -189,13 +191,36 @@ public class ControlSystemController {
     	
     	return resultMap;
     }
+
+	@RequestMapping("/search-driver-popup")
+	public Map<String, Object> selectSearchDriverPopup(@RequestBody SearchDto searchDto) throws Exception {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		List<SearchDto> driverInfo = controlSystemService.selectSearchDriverPopup(searchDto);
+
+		for(int i=0; i<driverInfo.size(); i++){
+			driverInfo.get(i).setdName(AESCrypt.decrypt(driverInfo.get(i).getdName()));
+		}
+
+		resultMap.put("driverInfo", driverInfo);
+
+		//토탈 카운트
+		int cnt = controlSystemService.selectSearchDriverPopupCnt(searchDto);
+		//페이징 처리
+		Search search = new Search();
+		search.setPageNo(searchDto.getPageNo());
+		search.setPageSize(10);
+		Paging paging = new Paging(search,cnt);
+		resultMap.put("paging", paging);
+		resultMap.put("totalCnt", cnt);
+		return resultMap;
+	}
     
     @RequestMapping("/search-driver")
     public Map<String, Object> selectSearchDriver(@RequestBody SearchDto searchDto) throws Exception {
     	Map<String, Object> resultMap = new HashMap<String, Object>();
 
     	NowGnrDto nowGnrDto = controlSystemService.selectSearchDriver(searchDto);
-    	
+
     	resultMap.put("driverInfo", nowGnrDto);
     	return resultMap;
     }

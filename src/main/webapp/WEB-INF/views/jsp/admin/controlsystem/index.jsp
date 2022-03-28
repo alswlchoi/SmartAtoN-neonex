@@ -441,8 +441,16 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var dName = $("#dName").val();
 
 		if(dName==""){
-			alert("이름을 정확하게 입력해 주세요.");
-		}else{
+			//alert("이름을 정확하게 입력해 주세요.");
+            var data ={
+                pageNo:1,
+                text : dName
+            };
+
+            console.log(data);
+
+            postAjax("/admin/controlsystem/search-driver-popup",data,"SearchDriverPopup", "", null, null);
+        }else{
 			if(dName!=""){
 				var data ={
 					dName : dName,
@@ -455,6 +463,38 @@ $(".lodingdimm").removeClass("lodingdimm");
 			}
 		}
 	});
+
+    function SearchDriverPopup(resdata){
+        console.log(resdata);
+        console.log(resdata.paging);
+        $("#indexP").html("");
+        var indexHtml = "";
+        if(resdata.driverInfo.length > 0){
+            for(var i in resdata.driverInfo) {
+                var driverInfo = resdata.driverInfo[i];
+                indexHtml += '<tr>';
+                indexHtml += '<td>';
+                indexHtml += '<div class="form_group single">';
+                indexHtml += '<div class="check_inline">';
+                indexHtml += '<label class="check_default single">';
+                indexHtml += '<input type="checkbox" name="testerChk" value="'+driverInfo.dName+'">';
+                indexHtml += '<span class="check_icon"></span></label>';
+                indexHtml += '</div>';
+                indexHtml += '</div>';
+                indexHtml += '</td>';
+                indexHtml += '<td>'+driverInfo.dName+'</td>';
+                indexHtml += '</tr>';
+            }
+        } else {
+            indexHtml += '<tr class="tr_nodata">';
+            indexHtml += '<td colspan="3">등록된 정보가 없습니다.</td>';
+            indexHtml += '</tr>';
+        }
+
+        $("#indexP").html(indexHtml);
+        drawingPage(resdata.paging);
+
+    }
 	
 	$(document).on("keypress",'#dName' ,function(event){
 		 if( event.keyCode == 13 )
@@ -484,7 +524,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var data = {};
 		postAjax("/admin/controlsystem/gnr-in-open",data,null,"",null,null);
 	}
-	
+
 	function drawingSearchDriver(resdata){
 		var driverInfo = resdata.driverInfo;
 		if(driverInfo==null){
@@ -898,7 +938,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <div class="form_group w300">
                                 <input type="text" id="dName" name="dName" class="form_control" placeholder="평가자를 입력하세요" autocomplete="off" />
                             </div>
-                            <button type="button" id="search-btn" class="btn-s btn_default">검색</button>
+                            <button type="button" id="search-btn" class="btn-s btn_default" data-layer="popup_Driversearch">검색</button>
                         </div>
                         <div class="wrap_state m-t-12">
                             <ul>
@@ -922,6 +962,52 @@ $(".lodingdimm").removeClass("lodingdimm");
         </div>
         <!-- //container -->
 
+    <!-- popup_s-->
+    <div class="ly_group">
+        <article class="layer_l popup_Driversearch">
+            <!-- # 타이틀 # -->
+            <h1>평가자 선택</h1>
+            <!-- # 컨텐츠 # -->
+            <div class="ly_con">
+                <div class="form_group w200">
+                    <input type="text" id="testerNameP" class="form_control" placeholder="평가자명 입력" name="testerName" />
+                </div>
+                <button type="button" class="btn-s btn_default" onclick="testerSearch(1,'R')">조회</button>
+                <!-- table list -->
+                <section class="tbl_wrap_list m-t-15">
+                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
+                        <caption>테이블</caption>
+                        <colgroup>
+                            <col width="80px" />
+                            <col width="" />
+                            <col width="" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">선택</th>
+                            <th scope="col">운전자명</th>
+                        </tr>
+                        </thead>
+                        <tbody id="indexP"></tbody> <%--평가자 검색시 팝업--%>
+                    </table>
+                </section>
+                <!-- //table list -->
+                <!-- Pagination -->
+                <section id="pagingc" class="pagination m-t-30">
+                    <jsp:include page="/WEB-INF/views/jsp/common/paging.jsp" />
+                </section>
+                <!-- //Pagination -->
+            </div>
+            <!-- 버튼 -->
+            <div class="wrap_btn01">
+                <button type="button" class="btn-pop btn_gray lyClose m-r-6">취소</button>
+               <%-- <button type="button" class="btn-pop btn_default" onclick="putChk()">확인</button>--%>
+            </div>
+            <!-- # 닫기버튼 # -->
+            <button data-fn="lyClose">레이어닫기</button>
+        </article>
+    </div>
+    <!-- //popup_s-->
 
     <!-- popup_m -->
     <div class="ly_group">

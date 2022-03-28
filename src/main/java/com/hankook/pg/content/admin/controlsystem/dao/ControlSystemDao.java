@@ -29,6 +29,10 @@ public interface ControlSystemDao {
 	Integer modifyInputIntimeLastRfidGeneral(String currentTime) throws Exception;
 	
 	NowGnrDto selectGnrInputDriver(SearchDto searchDto) throws Exception;
+
+	Integer selectSearchDriverPopupCnt(SearchDto searchDto) throws Exception;
+
+	List<SearchDto> selectSearchDriverPopup(SearchDto searchDto) throws Exception;
 	
 	NowGnrDto selectSearchDriver(SearchDto searchDto) throws Exception;
 	

@@ -134,7 +134,43 @@
 		ORDER BY PRG_NO DESC 
 		LIMIT 1
 	</select>
-	
+
+	<select id="selectSearchDriverPopup" parameterType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto" resultType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto">
+		<include refid="COMMON.sqlPagingTop" />
+		SELECT PRM.D_NAME
+		FROM PG_RESOURCE_MAPPING PRM
+				 LEFT OUTER JOIN PG_DRIVER PD ON PD.D_SEQ = PRM.D_SEQ
+				 LEFT OUTER JOIN PG_HINT_DRIVER PHD ON PHD.EMPLOYEE_NO = PRM.D_SEQ
+		WHERE 1=1
+		AND R_ID IS NOT NULL
+		AND W_ID IS NOT NULL
+		AND PRM.TC_DAY=  DATE_FORMAT(NOW(),'%Y%m%d')
+		<if test="text != null and text != ''">
+			AND PRM.D_NAME LIKE CONCAT('%',#{text},'%')
+		</if>
+		<include refid="COMMON.sqlPagingBottom" />
+	</select>
+
+
+	<select id="selectSearchDriverPopupCnt" parameterType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto" resultType="_int">
+		<include refid="COMMON.sqlCountTop" />
+		SELECT PRM.D_NAME,
+		PC.COMP_NAME as compName,
+		PHD.COMPANY_NAME as compNameHint
+		FROM PG_RESOURCE_MAPPING PRM
+		LEFT OUTER JOIN PG_DRIVER PD ON PD.D_SEQ = PRM.D_SEQ
+		LEFT OUTER JOIN PG_HINT_DRIVER PHD ON PHD.EMPLOYEE_NO = PRM.D_SEQ
+		LEFT OUTER JOIN PG_COMPANY PC on PD.COMP_CODE = PC.COMP_CODE
+		WHERE 1=1
+		AND R_ID IS NOT NULL
+		AND W_ID IS NOT NULL
+		AND PRM.TC_DAY=  DATE_FORMAT(NOW(),'%Y%m%d')
+		<if test="text != null and text != ''">
+			AND PRM.D_NAME LIKE CONCAT('%',#{text},'%')
+		</if>
+		<include refid="COMMON.sqlCountBottom" />
+	</select>
+
 	<select id="selectSearchDriver" parameterType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto" resultType="com.hankook.pg.content.admin.controlsystem.dto.NowGnrDto">
 		SELECT
 			PTS.TC_SEQ, 
