@@ -32,7 +32,6 @@ function drawingPage2(paging){
 	for(var i=paging.startPage; i<=paging.endPage; i++){
 		html += '<a class="pageNo" data-page="'+i+'" style="cursor:pointer">'+i+'</a>';
 	}
-	html += '</span>';
 	if(paging.finalPageNo > paging.pageNo){
 		html += '<a class="pageNo btn_next" data-page="'+paging.nextPage+'" style="cursor:pointer">';
 		html += '   <i class="fas fa-angle-left"></i>';
@@ -42,7 +41,7 @@ function drawingPage2(paging){
 		html += '   <i class="fas fa-angle-left"></i>';
 		html += '</a>';
 	}
-	
+    html += '</span>';
 	$("#pagingl").html(html);
 	$("#pagingl a.btn_prev").attr("data-page",paging.prevPage);
 	$("#pagingl a.pageNo").removeClass("on");

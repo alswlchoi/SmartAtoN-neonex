@@ -32,7 +32,6 @@ function drawingPage(paging){
 	for(var i=paging.startPage; i<=paging.endPage; i++){
 		html += '<a class="pageNo" data-page="'+i+'" style="cursor:pointer">'+i+'</a>';
 	}
-	html += '</span>';
 	if(paging.finalPageNo > paging.pageNo){
 		html += '<a class="pageNo btn_next" data-page="'+paging.nextPage+'" style="cursor:pointer">';
 		html += '   <i class="fas fa-angle-left"></i>';
@@ -42,6 +41,7 @@ function drawingPage(paging){
 		html += '   <i class="fas fa-angle-left"></i>';
 		html += '</a>';
 	}
+    html += '</span>';
 	
 	$("#pagingc").html(html);
 	$("#pagingc a.btn_prev").attr("data-page",paging.prevPage);
@@ -66,11 +66,12 @@ function drawingPage(paging){
      	<c:forEach var="item" begin="${paging.startPage }" end="${paging.endPage }" step="1" varStatus="status">
 		<a class="pageNo<c:if test="${paging.pageNo == status.index }"> on</c:if>" data-page="${status.index }" style="cursor:pointer">${status.index }</a>
       </c:forEach>
-      </span>
+
       <c:if test="${paging.finalPageNo gt paging.pageNo }">
        <a class="pageNo btn_next" data-page="${paging.nextPage }" style="cursor:pointer">
            <i class="fas fa-angle-right"></i>
        </a>
+      </span>
    </c:if>
       <c:if test="${paging.finalPageNo le paging.pageNo }">
        <a class="btn_next off" style="cursor:default">
