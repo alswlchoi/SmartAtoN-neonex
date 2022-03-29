@@ -409,11 +409,16 @@ public class TesterService {
     } else {
       bHint.setInOut("I");
       hintTesterVo.setInOut("O");
-      if (hintTesterVo.getRQrId() != null) {
+      if (hintTesterVo.getRQrId() != null) {  //무전기 교체시
         bHint.setRId(hintTesterVo.getBRId());
         testerDao.rfidInOut(bHint);
         testerDao.rfidInOut(hintTesterVo);
-        testerDao.hintUpdateRsMappingDrAndWr(hintTesterVo);
+        if (hintTesterVo.getVhclCode() != null)
+        {
+          testerDao.hintUpdateRsMappingCar(hintTesterVo); //차량 rfid
+        }else{
+          testerDao.hintUpdateRsMappingDrAndWr(hintTesterVo); //운전자 rfid
+        }
       } else {
         bHint.setWId(hintTesterVo.getBWId());
         testerDao.wiressInOut(bHint);

@@ -55,12 +55,11 @@
         if (car.rreturn == null || car.rreturn == '') {
           carHtml += '<td>';
           carHtml += '<input type="hidden" id="hrSeq'+i+'" value="'+car.hrSeq+'">';
-          carHtml += '<input type="hidden" id="vhclCode'+i+'" value="'+car.vhclCode+'">';
-          carHtml += '<button type="button" class="btn-line-s btn_gray" data-layer="complete2" onclick="inputCCode('+i+','+car.vhclCode+')">반납</button>';
+          carHtml += '<button type="button" class="btn-line-s btn_gray" data-layer="complete2" onclick="inputCCode('+i+',\''+car.vhclCode+'\')">반납</button>';
           carHtml += '</td>';
           carHtml += '<td></td>';
         } else {
-          carHtml += '<td><button type="button" class="btn-line-s btn_default" data-layer="reissuance" onclick="reRfid('+car.hrSeq+', \''+car.vhclRgsno+'\', '+car.vhclCode+')">재발급</button>';
+          carHtml += '<td><button type="button" class="btn-line-s btn_default" data-layer="reissuance" onclick="reRfid('+car.hrSeq+', \''+car.vhclRgsno+'\', \''+car.vhclCode+'\')">재발급</button>';
           carHtml += '<td>'+moment(car.rreturn).format("YYYY.MM.DD")+'</td>';
         }
         carHtml += '</tr>';
@@ -242,7 +241,6 @@
         rqrId: $("#changeRfid").val()
       }
     }
-
     postAjax("/admin/testerManage/hintUpdate", param, "resultAlert", null, null, null)
   }
 </script>

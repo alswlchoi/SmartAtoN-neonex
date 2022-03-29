@@ -382,6 +382,16 @@
     AND TC_DAY >= DATE_FORMAT(SYSDATE(), '%Y%m%d');
   </update>
 
+  <update id="hintUpdateRsMappingCar" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
+    UPDATE PG_RESOURCE_MAPPING
+    SET
+    <if test="rId != null and wId == null">
+      R_ID = #{rId}
+    </if>
+    WHERE C_CODE = #{vhclCode}
+      AND TC_DAY >= DATE_FORMAT(SYSDATE(), '%Y%m%d');
+  </update>
+
   <update id="hintReturnRsMappingCar" parameterType="com.hankook.pg.content.admin.testerManage.vo.HintTesterVo">
     UPDATE PG_RESOURCE_MAPPING
     SET
