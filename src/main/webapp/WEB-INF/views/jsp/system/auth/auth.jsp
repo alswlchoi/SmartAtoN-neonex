@@ -47,7 +47,7 @@ $(document).ready(function(){
 		html += 		'<div class="form_group w_full">';
 		html += 			'<div class="select_group">';
 		html +=	'<select id="" title="select" class="form_control url" name="defaultUrl">';
-		html += '<option value="/">사용자 메인화면</option>';
+        html += '<option value="/admin">관리자 메인화면</option>';
 		<c:forEach var="m" items="${menuList }">
 			<c:if test="${m.MParent ne '0'}">
 				<c:if test="${m.MName eq '공지사항'}">
@@ -189,8 +189,8 @@ function searchCallback(data){
 				html += 				"</select>";
 			}else{
 				html +=					'<select id="" title="select" class="form_control url" data-opt="'+list[i].authCode+'">';
-				html += '<option value="/">사용자 메인화면</option>';
-				<c:forEach var="m" items="${menuList }">
+                html += '<option value="/admin" selected>관리자 메인화면</option>';
+                <c:forEach var="m" items="${menuList }">
 					<c:if test="${m.MParent ne '0'}">
 						html +=						'<option value="${m.MUrl}" ';
 						if(list[i].authDefaultUrl == "${m.MUrl}"){
