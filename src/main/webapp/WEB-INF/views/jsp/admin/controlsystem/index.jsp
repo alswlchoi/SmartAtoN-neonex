@@ -8,6 +8,17 @@
 
 <sec:csrfMetaTags/>
 <script type="text/javascript">
+
+$(document).ready(function () {
+    driverSearch(1);
+    $(document).on("click","#pagingc>span>.pageNo",function(){
+        driverSearch($(this).attr("data-page"));
+    });
+    $("#dName").focus(function() {
+        $("#search-btn").click();
+    });
+});
+
 var ifserver = "${ifserver}";
 $(".lodingdimm").removeClass("lodingdimm");
 	var trackInfoArr = {};
@@ -437,32 +448,16 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#drivercondition").html(html);
 	}
 
-	$(document).on("click",'#search-btn' ,function(){
+	function driverSearch(page){
 		var dName = $("#dName").val();
-
-		if(dName==""){
-			//alert("이름을 정확하게 입력해 주세요.");
+        if(dName==""){
             var data ={
-                pageNo:1,
+                pageNo: page,
                 text : dName
             };
-
-            console.log(data);
-
             postAjax("/admin/controlsystem/search-driver-popup",data,"SearchDriverPopup", "", null, null);
-        }else{
-			if(dName!=""){
-				var data ={
-					dName : dName,
-					tcDay : getToday(),
-					currentTime : getNowTime(),
-					tcDay : getToday()
-				};
-	
-				postAjax("/admin/controlsystem/search-driver",data,"drawingSearchDriver", "", null, null);
-			}
-		}
-	});
+        }
+	};
 
     function SearchDriverPopup(resdata){
         console.log(resdata);
@@ -477,7 +472,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                 indexHtml += '<div class="form_group single">';
                 indexHtml += '<div class="check_inline">';
                 indexHtml += '<label class="check_default single">';
-                indexHtml += '<input type="checkbox" name="testerChk" value="'+driverInfo.dName+'">';
+                indexHtml += '<input type="checkbox" name="indexChk" value="'+driverInfo.dName+'">';
                 indexHtml += '<span class="check_icon"></span></label>';
                 indexHtml += '</div>';
                 indexHtml += '</div>';
@@ -494,8 +489,33 @@ $(".lodingdimm").removeClass("lodingdimm");
         $("#indexP").html(indexHtml);
         drawingPage(resdata.paging);
 
+        $("input:checkbox[name='indexChk']").click(function(){
+            if($(this).prop("checked")){
+                $("input:checkbox[name='indexChk']").prop("checked",false);
+                $(this).prop("checked",true);
+            }
+        });
     }
-	
+
+    function putChk() {
+        if ($("input:checkbox[name='indexChk']:checked").val() == null) {
+            alert3("선택된 평가자가 없습니다.");
+            return;
+        }
+        $("#dName").val($("input:checkbox[name='indexChk']:checked").val());
+        $(".lyClose").click();
+
+        var dName = $("#dName").val();
+        var data ={
+            dName : dName,
+            tcDay : getToday(),
+            currentTime : getNowTime(),
+            tcDay : getToday()
+        };
+        console.log(data);
+        postAjax("/admin/controlsystem/search-driver",data,"drawingSearchDriver", "", null, null);
+    }
+
 	$(document).on("keypress",'#dName' ,function(event){
 		 if( event.keyCode == 13 )
 			 $("#search-btn").click();
@@ -964,15 +984,11 @@ $(".lodingdimm").removeClass("lodingdimm");
 
     <!-- popup_s-->
     <div class="ly_group">
-        <article class="layer_l popup_Driversearch">
+        <article class="layer_m popup_Driversearch">
             <!-- # 타이틀 # -->
             <h1>평가자 선택</h1>
             <!-- # 컨텐츠 # -->
             <div class="ly_con">
-                <div class="form_group w200">
-                    <input type="text" id="testerNameP" class="form_control" placeholder="평가자명 입력" name="testerName" />
-                </div>
-                <button type="button" class="btn-s btn_default" onclick="testerSearch(1,'R')">조회</button>
                 <!-- table list -->
                 <section class="tbl_wrap_list m-t-15">
                     <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
@@ -1001,7 +1017,7 @@ $(".lodingdimm").removeClass("lodingdimm");
             <!-- 버튼 -->
             <div class="wrap_btn01">
                 <button type="button" class="btn-pop btn_gray lyClose m-r-6">취소</button>
-               <%-- <button type="button" class="btn-pop btn_default" onclick="putChk()">확인</button>--%>
+                <button type="button" class="btn-pop btn_default" onclick="putChk()">확인</button>
             </div>
             <!-- # 닫기버튼 # -->
             <button data-fn="lyClose">레이어닫기</button>
