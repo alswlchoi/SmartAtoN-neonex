@@ -775,7 +775,7 @@ public class TrReserveService{
 		    	/* 기본값 셋팅 */
 			    String compType = "B";
 		    	String tcAgreement = "Y";
-		    	boolean canFlagLevel = true; //false면 예약 불가능
+		    	boolean canFlagLevel = true;
 		    	CompanyDto company = companyDao.getCompanyDetail(memberDto.getCompCode());
 		    	trReserve.setTcPurpose(tcPurpose);
 		    	trReserve.setTcDay(tcStDt);
@@ -796,16 +796,21 @@ public class TrReserveService{
 			    	}else {
 				        for (String dSeq : driver) {
 				    		DriverDto driverDto = driverDao.getDriverDetail(Fn.toInt(dSeq));
-				    		if(track.getTLevel().indexOf(driverDto.getDLevel())<0) {	//운전자 등급에 맞지 않는 트랙이 있는 경우
-					        	System.out.println("Mtrack.getTLevel() : " + track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel());
+				    		if(track.getTLevel().indexOf(driverDto.getDLevel())<0) {		//권한 없는 시험로 예약시
 				    			canFlagLevel = false;
+				    			log.info("Mtrack.getTLevel : " + canFlagLevel +")"+ track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel()+ ", indexOf : " + track.getTLevel().indexOf(driverDto.getDLevel()));
 				    			break;
 				    		}
 				        }
 			    	}
 		        }
 		        
+		        if(mTrackArr.length>0&&!canFlagLevel) {
+		        	cnt = -60;	//권한 없는 시험로 예약시
+		        }
+		        
 		        if(cnt == 0) {
+		        	canFlagLevel = true;
 			        for (String trTrackCode : sTrackArr) {
 				    	TrackDto track = trReserveDao.getTrackInfo(trTrackCode);
 				    	if(null==track) {
@@ -814,9 +819,9 @@ public class TrReserveService{
 				    	}else {
 					        for (String dSeq : driver) {
 					    		DriverDto driverDto = driverDao.getDriverDetail(Fn.toInt(dSeq));
-					    		System.out.println("Strack.getTLevel() : " + track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel());
 					    		if(track.getTLevel().indexOf(driverDto.getDLevel())<0) {	//운전자 등급에 맞지 않는 트랙이 있는 경우
 					    			canFlagLevel = false;
+						    		log.info("Strack.getTLevel() : " + canFlagLevel + ")" + track.getTLevel() + ", driverDto.getDLevel() : " +driverDto.getDLevel() + ", indexOf : " + track.getTLevel().indexOf(driverDto.getDLevel()));
 					    			break;
 					    		}
 					        }
@@ -825,6 +830,7 @@ public class TrReserveService{
 		        }
 		        
 		        if(cnt == 0) {
+		        	log.info("canFlagLevel : " + canFlagLevel);
 			        if(!canFlagLevel) {		//트랙등급보다 높은 운전자가 없으면 예약 방지
 			        	cnt = -60;
 			        }else {		    	
