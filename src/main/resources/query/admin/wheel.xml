@@ -17,6 +17,16 @@
             LOCAKY,
             LOCAKYNM as LOCAKY_NAME
         FROM IFSTK_WHEEL
+        WHERE 1=1
+        <if test="searchSizeT != null and searchSizeT != ''">
+            AND LOTA02 LIKE CONCAT('%',#{searchSizeT},'%')
+        </if>
+        <if test="searchMakerT != null and searchMakerT != ''">
+            AND LOTA04NM LIKE CONCAT('%',#{searchMakerT},'%')
+        </if>
+        <if test="searchProjectT != null and searchProjectT != ''">
+            AND LOTA03 LIKE CONCAT('%',#{searchProjectT},'%')
+        </if>
         <include refid="COMMON.sqlPagingBottom" />
     </select>
 
@@ -34,6 +44,16 @@
             LOCAKY,
             LOCAKYNM as LOCAKY_NAME
         FROM IFSTK_WHEEL
+        WHERE 1=1
+        <if test="searchSizeT != null and searchSizeT != ''">
+            AND LOTA02 LIKE CONCAT('%',#{searchSizeT},'%')
+        </if>
+        <if test="searchMakerT != null and searchMakerT != ''">
+            AND LOTA04NM LIKE CONCAT('%',#{searchMakerT},'%')
+        </if>
+        <if test="searchProjectT != null and searchProjectT != ''">
+            AND LOTA03 LIKE CONCAT('%',#{searchProjectT},'%')
+        </if>
         <include refid="COMMON.sqlCountBottom" />
     </select>
 

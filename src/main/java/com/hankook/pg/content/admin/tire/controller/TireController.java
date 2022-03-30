@@ -182,9 +182,12 @@ public class TireController {
 		Map<String,Object> result = new HashMap<>();
 		List<Wheel> list = tireService.wheelFindAll(request);
 		int count = tireService.wheelFindAllCount(request);
-
+		//페이징 처리
+		Search search = new Search();
+		search.setPageNo(request.getPageNo());
+		search.setPageSize(10);
 		result.put("wheelList",list);
-		result.put("paging",createWheelPaging(request.getPageNo(),count));
+		result.put("paging",createWheelPaging(search.getPageNo(),count));
 		result.put("totalCnt",count);
 
 		return result;
@@ -196,11 +199,13 @@ public class TireController {
 		Map<String,Object> result = new HashMap<>();
 		List<Wheel> list = tireService.findWheelAttr(request);
 		int count = tireService.findWheelAttrCount(request);
-
+		//페이징 처리
+		Search search = new Search();
+		search.setPageNo(request.getPageNo());
+		search.setPageSize(10);
 		result.put("wheelList",list);
-		result.put("paging",createWheelPaging(request.getPageNo(),count));
+		result.put("paging",createWheelPaging(search.getPageNo(),count));
 		result.put("totalCnt",count);
-
 		return result;
 	}
 

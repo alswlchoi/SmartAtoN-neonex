@@ -14,4 +14,7 @@ public class WheelPagingAndSearchRequestDto extends Search {
     private String wheelSize;
     private String maker;
     private String project;
+    private String searchSizeT;
+    private String searchMakerT;
+    private String searchProjectT;
 }
