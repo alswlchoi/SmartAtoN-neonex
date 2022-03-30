@@ -387,6 +387,8 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var data = {}
 		var openClose = $(this).prop("id").replace("btn-all-", "");
 
+        $(".lyClose").click();
+
 		postAjax(ifserver+"/gates/"+openClose+"/in",data,"drawingInGateResult", "drawingInGateFail", null, null);
 		postAjax(ifserver+"/gates/"+openClose+"/out",data,"drawingOutGateResult", "drawingOutGateFail", null, null);
 	});
@@ -1082,8 +1084,8 @@ $(".lodingdimm").removeClass("lodingdimm");
 
             <div class="wrap_btn01 m-t-15">
                 <!-- <button type="button" class="btn-pop btn_gray m-r-11">취소</button> -->
-                <button type="button" id="btn-all-open" class="btn-pop btn_default lyClose">전체 문열림</button>
-                <button type="button" id="btn-all-close" class="btn-pop btn_default lyClose m-l-6">전체 문닫힘</button>
+                <button type="button" id="btn-all-open" class="btn-pop btn_default">전체 문열림</button>
+                <button type="button" id="btn-all-close" class="btn-pop btn_default m-l-6">전체 문닫힘</button>
             </div>
             <!-- # 닫기버튼 # -->
             <button data-fn="lyClose">레이어닫기</button>
