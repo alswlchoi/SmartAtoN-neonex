@@ -8,17 +8,6 @@
 
 <sec:csrfMetaTags/>
 <script type="text/javascript">
-
-$(document).ready(function () {
-    driverSearch(1);
-    $(document).on("click","#pagingc>span>.pageNo",function(){
-        driverSearch($(this).attr("data-page"));
-    });
-    $("#dName").focus(function() {
-        $("#search-btn").click();
-    });
-});
-
 var ifserver = "${ifserver}";
 $(".lodingdimm").removeClass("lodingdimm");
 	var trackInfoArr = {};
@@ -118,7 +107,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var nowGnr = resdata.nowGnr;
 
 		$(".now-gnr-count").html(resdata.nowGnrCount);
-		if(nowGnr!=null&&nowGnr.tcReservCode!=null){
+		if(nowGnr!=null){
 			$("#reserve-code").html(nowGnr.tcReservCode);
 			var driverInfo = "";
 			driverInfo += undefinedChk(nowGnr.compName,"")+" "+undefinedChk(nowGnr.dname,"");
@@ -156,7 +145,6 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#emergency-msg").val($("#emergency-sel-msg option:selected").text());
 	});
 	
-	//전광판
 	$(document).on("click",'#emergency-msg-send-btn' ,function(){
 		var msg = $("#emergency-msg").val().trim();
 
@@ -176,48 +164,23 @@ $(".lodingdimm").removeClass("lodingdimm");
 			postAjax(ifserver+"/billboard/send",data,"successSendMessage","kakaoSend",null,null);
 		}
 	});
-	
-	//알림톡
-	$(document).on("click",'#kakao-msg-send-btn' ,function(){
-		var msg = $("#emergency-msg").val().trim();
-
-		if(msg=="" && $("#emergency-sel-msg option:selected").val()!=""){
-			msg = $("#emergency-sel-msg option:selected").text();
-		}
-
-		if(msg == ""){
-			$("#errEmergencyMsg").text("비상문구 선택 또는 직접입력해 주세요.")
-			.addClass("info_ment")
-			.addClass("redfont");
-		}else{
-		    console.log(msg);
-			var data ={
-                message : msg
-			};
-		    console.log(data);
-			//postAjax(ifserver+"/billboard/send",data,"successSendMessage","kakaoSend",null,null);
-		    postAjax("/user/userShop/test", data, "successSendMessage", "successSendMessage", null, null)
-		}
-	});
 
 	function successSendMessage(resdata){
-		//console.log(resdata);
-		if(resdata != ""){
+		if(resdata.msg=="OK"){
 			$("#errEmergencyMsg").text("");
 			$("#billboard-msg-result").text("비상상황 알림을 완료하였습니다.");		
 		}else{
-			$("#billboard-msg-result").text(resdata);
+			$("#billboard-msg-result").text(resdata.msg);
 		}
 	}
 	
 	function kakaoSend(resdata){
-		//console.log("kakao"+resdata)
 		var msg = $("#emergency-msg").val().trim();
 		var data ={
             message : msg
 		};
 
-		postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
+		//postAjax("/admin/controlsystem/kakao-send",data,"successSendMessage","failSendMessage",null,null);
 	}
 	
 	function failSendMessage(resdata){
@@ -448,74 +411,25 @@ $(".lodingdimm").removeClass("lodingdimm");
 		$("#drivercondition").html(html);
 	}
 
-	function driverSearch(page){
+	$(document).on("click",'#search-btn' ,function(){
 		var dName = $("#dName").val();
-        if(dName==""){
-            var data ={
-                pageNo: page,
-                text : dName
-            };
-            postAjax("/admin/controlsystem/search-driver-popup",data,"SearchDriverPopup", "", null, null);
-        }
-	};
 
-    function SearchDriverPopup(resdata){
-        console.log(resdata);
-        console.log(resdata.paging);
-        $("#indexP").html("");
-        var indexHtml = "";
-        if(resdata.driverInfo.length > 0){
-            for(var i in resdata.driverInfo) {
-                var driverInfo = resdata.driverInfo[i];
-                indexHtml += '<tr>';
-                indexHtml += '<td>';
-                indexHtml += '<div class="form_group single">';
-                indexHtml += '<div class="check_inline">';
-                indexHtml += '<label class="check_default single">';
-                indexHtml += '<input type="checkbox" name="indexChk" value="'+driverInfo.dName+'">';
-                indexHtml += '<span class="check_icon"></span></label>';
-                indexHtml += '</div>';
-                indexHtml += '</div>';
-                indexHtml += '</td>';
-                indexHtml += '<td>'+driverInfo.dName+'</td>';
-                indexHtml += '</tr>';
-            }
-        } else {
-            indexHtml += '<tr class="tr_nodata">';
-            indexHtml += '<td colspan="3">등록된 정보가 없습니다.</td>';
-            indexHtml += '</tr>';
-        }
-
-        $("#indexP").html(indexHtml);
-        drawingPage(resdata.paging);
-
-        $("input:checkbox[name='indexChk']").click(function(){
-            if($(this).prop("checked")){
-                $("input:checkbox[name='indexChk']").prop("checked",false);
-                $(this).prop("checked",true);
-            }
-        });
-    }
-
-    function putChk() {
-        if ($("input:checkbox[name='indexChk']:checked").val() == null) {
-            alert3("선택된 평가자가 없습니다.");
-            return;
-        }
-        $("#dName").val($("input:checkbox[name='indexChk']:checked").val());
-        $(".lyClose").click();
-
-        var dName = $("#dName").val();
-        var data ={
-            dName : dName,
-            tcDay : getToday(),
-            currentTime : getNowTime(),
-            tcDay : getToday()
-        };
-        console.log(data);
-        postAjax("/admin/controlsystem/search-driver",data,"drawingSearchDriver", "", null, null);
-    }
-
+		if(dName==""){
+			alert("이름을 정확하게 입력해 주세요.");
+		}else{
+			if(dName!=""){
+				var data ={
+					dName : dName,
+					tcDay : getToday(),
+					currentTime : getNowTime(),
+					tcDay : getToday()
+				};
+	
+				postAjax("/admin/controlsystem/search-driver",data,"drawingSearchDriver", "", null, null);
+			}
+		}
+	});
+	
 	$(document).on("keypress",'#dName' ,function(event){
 		 if( event.keyCode == 13 )
 			 $("#search-btn").click();
@@ -544,7 +458,7 @@ $(".lodingdimm").removeClass("lodingdimm");
 		var data = {};
 		postAjax("/admin/controlsystem/gnr-in-open",data,null,"",null,null);
 	}
-
+	
 	function drawingSearchDriver(resdata){
 		var driverInfo = resdata.driverInfo;
 		if(driverInfo==null){
@@ -643,8 +557,8 @@ $(".lodingdimm").removeClass("lodingdimm");
 	initTrack();
 	nowGnr();
 	
-	setInterval(function () { initTrack();getTime(); }, 3000);
-	setInterval(function () { nowGnr(); }, 1000);
+	//setInterval(function () { initTrack();getTime(); }, 3000);
+	//setInterval(function () { nowGnr(); }, 1000);
 	
 	function openTab(evt, tabName) {
       var i, tabcontent, tablinks;
@@ -858,7 +772,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <div class="row m-t-8">
                                 <div class="form_group w70">
                                     <div class="select_group">
-                                        <select name="T013" title="select" class="form_control">
+                                        <select name="T998" title="select" class="form_control">
                                             <option value="in">IN</option>
                                             <option value="out">OUT</option>
                                         </select>
@@ -958,7 +872,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <div class="form_group w300">
                                 <input type="text" id="dName" name="dName" class="form_control" placeholder="평가자를 입력하세요" autocomplete="off" />
                             </div>
-                            <button type="button" id="search-btn" class="btn-s btn_default" data-layer="popup_Driversearch">검색</button>
+                            <button type="button" id="search-btn" class="btn-s btn_default">검색</button>
                         </div>
                         <div class="wrap_state m-t-12">
                             <ul>
@@ -982,48 +896,6 @@ $(".lodingdimm").removeClass("lodingdimm");
         </div>
         <!-- //container -->
 
-    <!-- popup_s-->
-    <div class="ly_group">
-        <article class="layer_m popup_Driversearch">
-            <!-- # 타이틀 # -->
-            <h1>평가자 선택</h1>
-            <!-- # 컨텐츠 # -->
-            <div class="ly_con">
-                <!-- table list -->
-                <section class="tbl_wrap_list m-t-15">
-                    <table class="tbl_list" summary="테이블 입니다. 항목으로는 등이 있습니다">
-                        <caption>테이블</caption>
-                        <colgroup>
-                            <col width="80px" />
-                            <col width="" />
-                            <col width="" />
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th scope="col">선택</th>
-                            <th scope="col">운전자명</th>
-                        </tr>
-                        </thead>
-                        <tbody id="indexP"></tbody> <%--평가자 검색시 팝업--%>
-                    </table>
-                </section>
-                <!-- //table list -->
-                <!-- Pagination -->
-                <section id="pagingc" class="pagination m-t-30">
-                    <jsp:include page="/WEB-INF/views/jsp/common/paging.jsp" />
-                </section>
-                <!-- //Pagination -->
-            </div>
-            <!-- 버튼 -->
-            <div class="wrap_btn01">
-                <button type="button" class="btn-pop btn_gray lyClose m-r-6">취소</button>
-                <button type="button" class="btn-pop btn_default" onclick="putChk()">확인</button>
-            </div>
-            <!-- # 닫기버튼 # -->
-            <button data-fn="lyClose">레이어닫기</button>
-        </article>
-    </div>
-    <!-- //popup_s-->
 
     <!-- popup_m -->
     <div class="ly_group">
@@ -1068,10 +940,7 @@ $(".lodingdimm").removeClass("lodingdimm");
                     </table>
                 </div>
                 <!-- //table_view -->
-                <div class="m-t-15 tac">
-	                <button type="button" id="emergency-msg-send-btn" class="btn-sty1 btn_default">전광판 송출</button>
-	                <button type="button" id="kakao-msg-send-btn" class="btn-sty1 btn_default">알림톡 전송</button>
-                </div>
+                <div class="m-t-15 tac"><button type="button" id="emergency-msg-send-btn" class="btn-sty1 btn_default">전광판 송출</button></div>
             </div>
             <!-- 버튼 -->
             <div class="m-t-10">
@@ -1220,10 +1089,10 @@ $(".lodingdimm").removeClass("lodingdimm");
                             <tr>
                                 <td>10</td>
                                 <td class="tal color_bule2">DHC #2</td>
-                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T013', 'open', 'in', '1', this)">열림</button><button
-                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T013', 'close', 'in', '1', this)">닫힘</button></td>
-                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T013', 'open', 'out', '1', this)">열림</button><button
-                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T013', 'close', 'out', '1', this)">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T998', 'open', 'in', '1', this)">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T998', 'close', 'in', '1', this)">닫힘</button></td>
+                                <td><button type="button" class="btn-line-s2 btn_default m-r-5" onclick="controlGatePopup('T998', 'open', 'out', '1', this)">열림</button><button
+                                        type="button" class="btn-line-s2 btn_gray" onclick="controlGatePopup('T998', 'close', 'out', '1', this)">닫힘</button></td>
                                 <td></td>
                             </tr>
                             <tr>

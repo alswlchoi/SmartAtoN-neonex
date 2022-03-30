@@ -349,8 +349,8 @@ function insertData() {
             colType : colType
         };
     }
-
-    //postAjax("/admin/tire/insert",param,"insertCallback",null,null,null);
+console.log(param);
+    postAjax("/admin/tire/insert",param,"insertCallback",null,null,null);
 }
 
 function insertCallback(data) {
