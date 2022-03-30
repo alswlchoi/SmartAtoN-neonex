@@ -278,8 +278,8 @@ function funRowspan(className){
 
 
 function findRangeDay() {
-    var startDay = $("#date-start").val().replace("-","");
-    var endDay = $("#date-end").val().replace("-","");
+    var startDay = $("#date-start").val().replace(/\-/g,'');
+    var endDay = $("#date-end").val().replace(/\-/g,'');
 
     if(startDay>endDay) {
         alert("시작날짜가 종료날짜 보다 클 수 없습니다.");
@@ -349,7 +349,7 @@ function insertData() {
             colType : colType
         };
     }
-console.log(param);
+
     postAjax("/admin/tire/insert",param,"insertCallback",null,null,null);
 }
 
@@ -395,8 +395,9 @@ function calculateWheelSize(data) {
  * ----------------------------------
  */
 
-function findWheelAttr() {
+function findWheelAttr(pageNo) {
     var param = {
+        pageNo : pageNo,
         wheelSize : $("#wheel_search_size").val(),
         maker : $("#wheel_search_maker").val(),
         project : $("#wheel_search_project").val()
@@ -406,6 +407,9 @@ function findWheelAttr() {
 
 function searchWheel(page) {
     var param = {
+        searchSizeT:  $("#wheel_search_size").val(),
+        searchMakerT: $("#wheel_search_maker").val(),
+        searchProjectT: $("#wheel_search_project").val(),
         pageNo:page
     }
     postAjax("/admin/tire/wheel/findAll",param,"searchWheelCallback",null,null,null);
@@ -632,7 +636,7 @@ function resetWheelLocationSearch() {
                         <input type="text" id="wheel_search_project" class="form_control" placeholder="Project 입력" name="" maxlength="100" />
                     </div>
                     <button type="button" class="btn-s btn_gray" onclick="resetWheelLocationSearch()">Reset</button>
-                    <button type="button" class="btn-s btn_default" onclick="findWheelAttr()">Search</button>
+                    <button type="button" class="btn-s btn_default" onclick="findWheelAttr(1)">Search</button>
                 </section>
 
                 <section class="m-t-5" id="selectWheel"></section>
