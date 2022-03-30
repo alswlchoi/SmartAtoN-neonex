@@ -8,7 +8,7 @@ public class ResourceMappingDto {
 	private Integer tcSeq;		//시험일련번호
 	private String tcDay;		//시험일자
 	private String rmType;		//타입 (C:자동차, D:운전자
-	private Integer dSeq;		//운전자코드
+	private String dSeq;		//운전자코드
 	private String cCode;		//자동차코드
 	private String rId;			//운전자 RFID 
 	private String rmLevel;		//운전자레벨
