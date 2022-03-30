@@ -10,6 +10,7 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+        $(".lodingdimm").removeClass("lodingdimm");
         driverSearch(1);
         $(document).on("click","#pagingc>span>.pageNo",function(){
             driverSearch($(this).attr("data-page"));
@@ -20,7 +21,6 @@
     });
 
     var ifserver = "${ifserver}";
-    $(".lodingdimm").removeClass("lodingdimm");
     var trackInfoArr = {};
 
     $(document).on("click","[title='more']",function(event){
@@ -387,6 +387,8 @@
         var data = {}
         var openClose = $(this).prop("id").replace("btn-all-", "");
 
+        $(".lyClose").click();
+
         postAjax(ifserver+"/gates/"+openClose+"/in",data,"drawingInGateResult", "drawingInGateFail", null, null);
         postAjax(ifserver+"/gates/"+openClose+"/out",data,"drawingOutGateResult", "drawingOutGateFail", null, null);
     });
@@ -643,8 +645,8 @@
     initTrack();
     nowGnr();
 
-    setInterval(function () { initTrack();getTime(); }, 3000);
-    setInterval(function () { nowGnr(); }, 1000);
+    //setInterval(function () { initTrack();getTime(); }, 3000);
+    //setInterval(function () { nowGnr(); }, 1000);
 
     function openTab(evt, tabName) {
         var i, tabcontent, tablinks;
@@ -1082,8 +1084,8 @@
 
         <div class="wrap_btn01 m-t-15">
             <!-- <button type="button" class="btn-pop btn_gray m-r-11">취소</button> -->
-            <button type="button" id="btn-all-open" class="btn-pop btn_default lyClose">전체 문열림</button>
-            <button type="button" id="btn-all-close" class="btn-pop btn_default lyClose m-l-6">전체 문닫힘</button>
+            <button type="button" id="btn-all-open" class="btn-pop btn_default">전체 문열림</button>
+            <button type="button" id="btn-all-close" class="btn-pop btn_default  m-l-6">전체 문닫힘</button>
         </div>
         <!-- # 닫기버튼 # -->
         <button data-fn="lyClose">레이어닫기</button>
