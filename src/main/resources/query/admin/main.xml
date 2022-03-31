@@ -41,13 +41,12 @@
     SELECT COUNT(*)
     FROM (
          SELECT TC_RESERV_CODE
-         FROM PG_TEST_SCHDULE PTS
-         LEFT OUTER JOIN PG_TRACK_RESERV PTR on PTS.TC_SEQ = PTR.TC_SEQ
-         WHERE PTR.TC_DAY = #{today}
-           AND TC_APPROVAL = '3'
+         FROM PG_TEST_SCHDULE
+         WHERE TC_DAY = #{today}
+            AND TC_APPROVAL = '3'
            <choose>
            <when test='tcStep == "N"'>
-             AND TC_STEP = '00000'
+            AND (TC_STEP = '00000' OR TC_STEP = '00001')
            </when>
            <otherwise>
              AND TC_STEP = '00001'
@@ -56,7 +55,7 @@
            <if test="type != null and type != ''">
              AND TC_RESERV_CODE LIKE CONCAT('%',#{type},'%')
            </if>
-         GROUP BY PTS.TC_SEQ
+         GROUP BY TC_SEQ
     ) A
   </select>
 
