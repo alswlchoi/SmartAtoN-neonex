@@ -111,4 +111,12 @@ public class ContentController {
     List<NoticeDto> list = noticeService.mainNotice(nType);
     return list;
   }
+
+  @RequestMapping(value = "/personalInfo", method = RequestMethod.GET)
+  public ModelAndView personalInfo() throws Exception {
+    log.info("personalInfo");
+    ModelAndView mv = new ModelAndView("/user/intro/personalInfo");
+
+    return mv;
+  }
 }
