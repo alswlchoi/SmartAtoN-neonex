@@ -66,6 +66,8 @@ public interface TesterDao {
 
   int hintReturnRsMappingDrAndWr(HintTesterVo hintTesterVo);
 
+  int hintUpdateRsMappingCar(HintTesterVo hintTesterVo);
+
   int hintReturnRsMappingCar(HintTesterVo hintTesterVo);
 
 }
