@@ -137,7 +137,7 @@
 
 	<select id="selectSearchDriverPopup" parameterType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto" resultType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto">
 		<include refid="COMMON.sqlPagingTop" />
-		SELECT PRM.D_NAME
+		SELECT DISTINCT PRM.D_NAME
 		FROM PG_RESOURCE_MAPPING PRM
 				 LEFT OUTER JOIN PG_DRIVER PD ON PD.D_SEQ = PRM.D_SEQ
 				 LEFT OUTER JOIN PG_HINT_DRIVER PHD ON PHD.EMPLOYEE_NO = PRM.D_SEQ
@@ -154,7 +154,7 @@
 
 	<select id="selectSearchDriverPopupCnt" parameterType="com.hankook.pg.content.admin.controlsystem.dto.SearchDto" resultType="_int">
 		<include refid="COMMON.sqlCountTop" />
-		SELECT PRM.D_NAME,
+		SELECT DISTINCT PRM.D_NAME,
 		PC.COMP_NAME as compName,
 		PHD.COMPANY_NAME as compNameHint
 		FROM PG_RESOURCE_MAPPING PRM
