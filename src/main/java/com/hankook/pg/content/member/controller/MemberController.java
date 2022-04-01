@@ -291,7 +291,7 @@ public class MemberController {
 				map.put("defaultPassword", defaultPassword);
 				email.setTitle("관리자 임시비밀번호 안내");
 				email.setBdt(null);
-				email.setRcver(mem.getMemEmail());
+				email.setRcverEmail(mem.getMemEmail());
 				email.setTableMap(map);
 				emailService.SenderMail(email, "E06");
 //				}catch(Exception e) {
