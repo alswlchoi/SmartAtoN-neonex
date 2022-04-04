@@ -5,9 +5,10 @@
 <sec:csrfMetaTags/>
 <script type="text/javascript">
 $(document).ready(function(){
-	Temperature(1);
-	pressure(1);
-	
+
+    Temperature(1, moment().add(-6,'day').format('YYYYMMDD'), moment().add(0,'day').format('YYYYMMDD') );
+	pressure(1, moment().add(-6,'day').format('YYYYMMDD'), moment().add(0,'day').format('YYYYMMDD') );
+
 	$("#pressure").hide();
 	$("#allpressure").hide();
 	$("#alltemper").hide();
@@ -38,22 +39,21 @@ $(document).ready(function(){
 	
 	//페이징 조회 버튼
     $(document).on("click", "#pagingc>span>.pageNo", function() {
-    	Temperature($(this).attr("data-page"));
-		});
+        findTempPresure($(this).attr("data-page"));
+    });
 	
 	//페이징 조회 버튼
     $(document).on("click", "#pagingl>span>.pageNo", function() {
-			pressure($(this).attr("data-page"));
-		});
-	
-      
-      $('input[type="checkbox"][name="check"]').click(function(){
+        findTempPresure($(this).attr("data-page"));
+    });
+
+    $('input[type="checkbox"][name="chkList"]').click(function(){
   		if($(this).prop('checked')){
-  			$('input[type="checkbox"][name="check"]').prop('checked',false);
-  			 
+  			$('input[type="checkbox"][name="chkList"]').prop('checked',false);
   		     $(this).prop('checked',true);
   		}
   	});
+
 })
 
 $(function(){
@@ -68,8 +68,8 @@ $(function(){
 	    "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
 	    "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
 	    },
-
-	    timePicker: false,                        // 시간 노출 여부
+        startDate: moment().add(-6, 'day'),
+        timePicker: false,                        // 시간 노출 여부
 	    showDropdowns: true,                     // 년월 수동 설정 여부
 	    autoApply: true,                         // 확인/취소 버튼 사용여부
 	    timePicker24Hour: true,                  // 24시간 노출 여부(ex> true : 23:50, false : PM 11:50)
@@ -90,7 +90,7 @@ $(function(){
 	    "daysOfWeek": ["일", "월", "화", "수", "목", "금", "토"],
 	    "monthNames": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
 	    },
-
+        startDate: moment().add(-6, 'day'),
 	    timePicker: false,                        // 시간 노출 여부
 	    showDropdowns: true,                     // 년월 수동 설정 여부
 	    autoApply: true,                         // 확인/취소 버튼 사용여부
@@ -100,17 +100,7 @@ $(function(){
 	});
 })
 
-//조회
-function Temperature(page) {
-    var stDate = null,edDate = null;
-    
-    if ($("#date1").val() != '') {
-        var readyDate = $("#date1").val().split(' ~ ');
-        stDate = moment(readyDate[0]).format('YYYYMMDD');
-        edDate = moment(readyDate[1]).format('YYYYMMDD');
-      }
- 
-
+function Temperature(page,stDate,edDate) {
 	var param = {
 			pageNo: page,
 			tcDay: stDate,
@@ -142,34 +132,34 @@ function searchCallback(data){
 			alltemphtml += '<td>';
 			alltemphtml += alltemper.avgTa;
 			alltemphtml += '</td>';
-			
+
 			alltemphtml += '<td>';
 			alltemphtml += alltemper.minTa;
 			alltemphtml += '</td>';
-			
+
 			alltemphtml += '<td>';
 			alltemphtml += alltemper.maxTa;
 			alltemphtml += '</td>';
-			
+
 			alltemphtml += '<td>';
 			alltemphtml += alltemper.rainDay;
 			alltemphtml += '</td>';
-			
+
 			alltemphtml += '<td>';
 			alltemphtml += alltemper.dp;
 			alltemphtml += '</td>';
-			
+
 			alltemphtml += '</tr>';
 
-			
+
 			index++
 	})
-	$("#alltemperlist").html(alltemphtml);	
-	
-	
-	
+	$("#alltemperlist").html(alltemphtml);
+
+
+
 		var tempHtml = "";
-	
+
 	if(temper.length == 0){
 		tempHtml += '<tr class="tr_nodata"><td colspan="7">데이터가 존재하지 않습니다.</td></tr>';
 	}else{
@@ -177,35 +167,35 @@ function searchCallback(data){
 		var index = 1;
 		$.each(temper, function(i,el){
 			var temper = el;
-			
+
 			tempHtml += '<tr>';
-			
+
 			tempHtml += '<td>';
-			tempHtml += index; 
+			tempHtml += index;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '<td>'+moment(temper.day, "YYYYMMDDhhmmss").format("YYYY.MM.DD")+'</td>'; //이용일자
-			
+
 			tempHtml += '<td>';
 			tempHtml += temper.avgTa;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '<td>';
 			tempHtml += temper.minTa;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '<td>';
 			tempHtml += temper.maxTa;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '<td>';
 			tempHtml += temper.rainDay;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '<td>';
 			tempHtml += temper.dp;
 			tempHtml += '</td>';
-			
+
 			tempHtml += '</tr>';
 
 			index++
@@ -213,24 +203,39 @@ function searchCallback(data){
 	}
 	$("#temperlist").html(tempHtml);
 	drawingPage(data.paging);
-	
+
 }
 
-//습도 기압
-function pressure(page) {
-    var stDate = null,edDate = null;
-    
-    if ($("#date1").val() != '') {
-        var readyDate = $("#date1").val().split(' ~ ');
-        stDate = moment(readyDate[0]).format('YYYYMMDD');
-        edDate = moment(readyDate[1]).format('YYYYMMDD');
-      }
- 
+function findTempPresure(page){
 
+    var checkedVal = $('input:checkbox[name=chkList]:checked').val();
+    if($("#date1").val() != '' || $("#date2").val() != '')
+    {
+        if(checkedVal =="a"){
+            var readyDate = $("#date1").val().split(' ~ ');
+            stDate = moment(readyDate[0]).format('YYYYMMDD');
+            edDate = moment(readyDate[1]).format('YYYYMMDD');
+            Temperature(page, stDate,edDate);
+        }
+        else if(checkedVal =="b"){
+            var readyDate = $("#date2").val().split(' ~ ');
+            stDate = moment(readyDate[0]).format('YYYYMMDD');
+            edDate = moment(readyDate[1]).format('YYYYMMDD');
+            pressure(page, stDate,edDate);
+        }
+
+    }else{
+        Temperature(page, "", "");
+    }
+}
+
+
+//습도 기압
+function pressure(page,stDate,edDate) {
 	var param = {
 			pageNo: page,
 			tcDay: stDate,
-			tcDay2: edDate,	  
+			tcDay2: edDate,
 	}
 	postAjax("/admin/statistics/pressure",param,"Callback",null,null,null);
 }
@@ -238,88 +243,88 @@ function pressure(page) {
 function Callback(data){
 	var pressure = data.pressure
 	var allpressure = data.allpressure
-	
+
 	var allpressurehtml = "";
 	var index = 1;
 	$.each(allpressure,function(i, el){
 		var allpressure = el;
-		
+
 			allpressurehtml += '<tr>';
-			
+
 			allpressurehtml += '<td>';
-			allpressurehtml += index; 
+			allpressurehtml += index;
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '<td>'+moment(allpressure.day, "YYYYMMDDhhmmss").format("YYYY.MM.DD")+'</td>'; //이용일자
-			
+
 			allpressurehtml += '<td>';
 			allpressurehtml += allpressure.avgRh; //평균습도
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '<td>';
 			allpressurehtml += allpressure.avgWs;
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '<td>';
 			allpressurehtml += allpressure.avgPa;
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '<td>';
 			allpressurehtml += allpressure.maxPa;
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '<td>';
 			allpressurehtml += allpressure.minPa;
 			allpressurehtml += '</td>';
-			
+
 			allpressurehtml += '</tr>';
 
-			
+
 			index++
 	})
-	$("#allpressurelist").html(allpressurehtml);	
-	
-	
-	
-	
+	$("#allpressurelist").html(allpressurehtml);
+
+
+
+
 	var preHtml="";
 	$("#pressurelist").html("");
-	
+
 	if(pressure.length == 0){
 		preHtml += '<tr class="tr_nodata"><td colspan="7">데이터가 존재하지 않습니다.</td></tr>';
 	}else{
 		var index = 1;
 		$.each(pressure, function(i,el){
 			var pressure = el;
-			
+
 			preHtml += '<tr>';
-			
+
 			preHtml += '<td>';
-			preHtml += index; 
+			preHtml += index;
 			preHtml += '</td>';
-			
+
 			preHtml += '<td>'+moment(pressure.day, "YYYYMMDDhhmmss").format("YYYY.MM.DD")+'</td>'; //이용일자
-			
+
 			preHtml += '<td>';
 			preHtml += pressure.avgRh; //평균습도
 			preHtml += '</td>';
-			
+
 			preHtml += '<td>';
 			preHtml += pressure.avgWs;
 			preHtml += '</td>';
-			
+
 			preHtml += '<td>';
 			preHtml += pressure.avgPa;
 			preHtml += '</td>';
-			
+
 			preHtml += '<td>';
 			preHtml += pressure.maxPa;
 			preHtml += '</td>';
-			
+
 			preHtml += '<td>';
 			preHtml += pressure.minPa;
 			preHtml += '</td>';
-			
+
 			preHtml += '</tr>';
 
 			index++
@@ -344,14 +349,32 @@ function pageMove(str){
 //onchange 함수
 function thechange(e){
 	if(e.value == "a"){
-		Temperature(1);
+
+        if ($("#date1").val() != '') {
+            var readyDate = $("#date1").val().split(' ~ ');
+            stDate = moment(readyDate[0]).format('YYYYMMDD');
+            edDate = moment(readyDate[1]).format('YYYYMMDD');
+            Temperature(1, stDate,edDate);
+        }else {
+            Temperature(1, "", "");
+        }
+
 		$("#pagingc").show();
 		$("#pressure").hide();
 		$("#temper").show();
 		$(".w230").show();
 		$(".w2").hide();
 	}else if(e.value == "b"){
-		pressure(1);
+
+        if ($("#date2").val() != '') {
+            var readyDate = $("#date2").val().split(' ~ ');
+            stDate = moment(readyDate[0]).format('YYYYMMDD');
+            edDate = moment(readyDate[1]).format('YYYYMMDD');
+            pressure(1, stDate,edDate);
+        }else {
+            pressure(1, "", "");
+        }
+
 		$("#pagingc").hide();
 		$("#temper").hide();
 		$("#pressure").show();
@@ -421,7 +444,7 @@ function downloadExcel(targetId, fileName) {
                 <!-- title -->
                 <h2 class="title">기상통계</h2>
                 <!-- //title -->
-				
+
 			<div class="wrap_tab">
 	             	<div class="tab">
 		                <button class="tablinks active" onclick="pageMove('tab1')" id="defaultOpen">기상</button>
@@ -434,10 +457,10 @@ function downloadExcel(targetId, fileName) {
                             <div class="check_inline">
                                 <span class="label">구분</span>
                                 <label class="check_default">
-                                    <input type="checkbox" id="temp" onchange=thechange(this) checked="on" name="check" value="a">
+                                    <input type="checkbox" id="temp" name=chkList onchange=thechange(this) checked="on" name="check" value="a">
                                     <span class="check_icon"></span>기온,강수량</label>
                                 <label class="check_default">
-                                    <input type="checkbox" id="press" onchange=thechange(this) name="check" value="b">
+                                    <input type="checkbox" id="press" name=chkList onchange=thechange(this) name="check" value="b">
                                     <span class="check_icon"></span>습도,기압</label>
                             </div>
                         </div>
@@ -445,17 +468,17 @@ function downloadExcel(targetId, fileName) {
                             <input type="text" autocomplete='off' id="date1" class="form_control dateicon datefromto"
                                 placeholder="기간 선택" name="">
                         </div>
-                        
+
                         <div class="form_group w230 w2">
                             <input type="text" autocomplete='off' id="date2" class="form_control dateicon datefromto"
                                 placeholder="기간 선택" name="">
                         </div>
-                        <button type="button" onclick="Temperature(1);	pressure(1); " class="btn-s btn_default">조회</button>
+                        <button type="button" onclick="findTempPresure(1);" class="btn-s btn_default">조회</button>
                         <button type="button" onclick="resetbtn()" class="btn-s btn_default">검색초기화</button>
                     </section>
                 <!-- //search_wrap -->
                 <!-- table list -->
-                
+
                 <!-- 전체다운로드 테이블  -->
                 <div id = "alltemper">
         	<section class="tbl_wrap_list m-t-30">
@@ -561,9 +584,9 @@ function downloadExcel(targetId, fileName) {
 	                </section>
                     	<button type="button" id="temperDown" class="btn btn_default">조회데이터다운로드</button>
                     	<button type="button" id="alltempers" class="btn btn_default">전체다운로드</button>
-                      </div> 
-                <!-- //Pagination -->  
-                    
+                      </div>
+                <!-- //Pagination -->
+
 					<!-- 습도 기압 테이블 -->
                     <div id = "allpressure">
         	<section class="tbl_wrap_list m-t-30">
@@ -610,10 +633,10 @@ function downloadExcel(targetId, fileName) {
                     </tr>
             </table>
         </section>
-        </div>  
-                      
+        </div>
+
                     <!-- 습도 기압 테이블 -->
-                    <div id = "pressure">  
+                    <div id = "pressure">
                     <div id="pressurer">
                     <section class="tbl_wrap_list m-t-30">
                     <table class="tbl_list ww" summary="테이블 입니다. 항목으로는 등이 있습니다">

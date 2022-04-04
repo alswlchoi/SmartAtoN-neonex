@@ -344,7 +344,7 @@ function searchCallBack(data){
 				}
 			}else if(list[i].tnickname=="WHC"){
 				if(list[i].trackOutTime == null){
-					riwhcde.push(list[i]);
+                    whc.push(list[i]);
 				}else{
 					gnr.push(list[i]);
 					whcend += 1;
