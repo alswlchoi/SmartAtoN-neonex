@@ -399,19 +399,22 @@ function setDisable(list){
                                         </tr>
                                     </c:if>
                                     <c:if test="${trReserve.compCode eq 'THINT' }">
-	                                    <c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
-	                                        <tr>
-	                                            <td>${trReserve.tcReservCode }<br /><span class="color_orange">${trReserve.tcRequestNumber }</span></td>
-	                                            <td>${fn:substring(result.tcDay,0,4) }-${fn:substring(result.tcDay,4,6) }-${fn:substring(result.tcDay,6,8) }</td>
-	                                            <td>한국타이어</td>
-								                <td>${result.trTrackNickName }
-								                <br />
-	                                            <div class="trdiv form_group w170" style="padding-left:20px">
-													<div id="trackInfo" class="select_group"></div>
-												</div>
-												<button type="button" id="addTrBtn" class="btn-line btn_gray">시험로 +</button>
-	                                            </td>
-	                                            <td>
+                                        <tr>
+                                            <td>${trReserve.tcReservCode }<br /><span class="color_orange">${trReserve.tcRequestNumber }</span></td>
+                                            <td>${fn:substring(trReserve.tcDay,0,4) }-${fn:substring(trReserve.tcDay,4,6) }-${fn:substring(trReserve.tcDay,6,8) }</td>
+                                            <td>한국타이어</td>
+							                <td>
+							                <c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">
+							                	${result.trTrackNickName }<br />
+							                </c:forEach>
+							                <br />
+                                            <div class="trdiv form_group w170" style="padding-left:20px">
+												<div id="trackInfo" class="select_group"></div>
+											</div>
+											<button type="button" id="addTrBtn" class="btn-line btn_gray">시험로 +</button>
+                                            </td>
+                                            <td>
+                                            	<c:forEach var="result" items="${trReserve.trackInfo}" varStatus="status">								                	
 													<c:if test="${result.trTrackType eq 'TYP00'}">공동</c:if>
 	    	                                        <c:if test="${result.trTrackType eq 'TYP01'}">단독</c:if>
 													<c:if test="${result.trTrackType eq 'TYP02'}">시험</c:if>
@@ -420,14 +423,15 @@ function setDisable(list){
 													<c:if test="${result.trTrackType eq 'TYP05'}">시승</c:if>
 													<c:if test="${result.trTrackType eq 'TYP06'}">사내방문</c:if>
 													<c:if test="${result.trTrackType eq 'TYP07'}">테스트</c:if>
-													<c:if test="${result.trTrackType eq 'TYP99'}">기타</c:if>
-												</td>
-	                                            <td>
-								                	<c:if test="${trReserve.tcStep eq '00001' }"><span class="color_red">시험중</span></c:if>
-								                	<c:if test="${trReserve.tcStep eq '00002' }">시험완료</c:if>
-								                	<c:if test="${trReserve.tcStep eq '00003' }">정산완료</c:if>
-								                </td>
-	                                    </c:forEach>
+													<c:if test="${result.trTrackType eq 'TYP99'}">기타</c:if><br />
+								                </c:forEach>
+											</td>
+                                            <td>
+							                	<c:if test="${trReserve.tcStep eq '00000' }">시험전</c:if>
+							                	<c:if test="${trReserve.tcStep eq '00001' }"><span class="color_red">시험중</span></c:if>
+							                	<c:if test="${trReserve.tcStep eq '00002' }">시험완료</c:if>
+							                	<c:if test="${trReserve.tcStep eq '00003' }">정산완료</c:if>
+							                </td>
                                     </c:if>
                                     </tbody>
                                 </table>
