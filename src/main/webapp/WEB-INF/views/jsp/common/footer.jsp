@@ -4,7 +4,7 @@
         <div class="footer">
             <section>
                 <span><img src="/inc/images/ci_hankook.png" alt="한국타이어" /></span>
-                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.</p>
+                <p>Copyright © Hankook Tire & Technology Co.,Ltd. All Rights Reserved.<a href="/before/personalInfo" target="_blank" title="개인정보 처리방침">개인정보 처리방침</a></p>
             </section>
         </div>
         <!-- //footer -->

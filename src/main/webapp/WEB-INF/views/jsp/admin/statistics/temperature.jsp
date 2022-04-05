@@ -175,7 +175,7 @@ function monthclick(){
 //차트 데이터 
 function searchCallback(data){	
 	//console.log(data);
-	
+
 	//엑셀다운로드 데이터
 	var excel = data.excel;
 	$("#alltracklist").html("");
@@ -212,7 +212,7 @@ function searchCallback(data){
 	var Listdata = data.Listdata;
 	var list = data.list;
 	
-	console.log(list);
+//	console.log(list);
 // 	console.log(Listdata);
 // 	console.log(monthdata);
 // 	console.log(yeardata);
@@ -319,63 +319,63 @@ function searchCallback(data){
   			  data: arr2,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(132, 140, 207)',
+  				  'rgb(180,255,31)',
   			  ],
   		  },
   		  {
-  			  label: 'WHC#2',
+  			  label: 'HPC-WHC',
   			  data: arr3,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(44, 130, 201)',
+  				  'rgb(120,44,201)',
   			  ],
   		  },
   		  {
-  			  label: 'NVH',
+  			  label: 'NVH Asp',
   			  data: arr4,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(0, 181, 204)',
+  				  'rgb(16,129,143)',
   			  ],
   		  },
   		  {
-  			  label: 'NVH#2',
+  			  label: 'NVH Con',
   			  data: arr5,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(30, 139, 195)',
+  				  'rgb(71,195,30)',
   			  ],
   		  },
   		  {
-  			  label: 'BRK(WET-Smooth)',
+  			  label: 'BRK Dry asp',
   			  data: arr6,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(137, 196, 244)',
+  				  'rgb(255,35,35)',
   			  ],
   		  },
   		  {
-  			  label: 'BRK(Hydro-straight)',
+  			  label: 'BRK Wet Asp',
   			  data: arr7,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(72, 113, 247)',
+  				  'rgb(255,222,58)',
   			  ],
   		  },
   		  {
-  			  label: 'BRK(WEB-ASP)',
+  			  label: 'BRK Wet Con',
   			  data: arr8,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(45, 85, 255)',
+  				  'rgb(248,45,255)',
   			  ],
   		  },
   		  {
-  			  label: 'BRK(DRY-ASP)',
+  			  label: 'HPS-BRK',
   			  data: arr9,
    			  fill: false,
    			  borderColor: [
-  				  'rgba(65, 131, 215)',
+  				  'rgb(255,156,84)',
   			  ],
   		  }]
   	  },
@@ -512,7 +512,35 @@ function downloadExcel(targetId, fileName) {
 			                    <select id="selectlist" title="select" class="form_control">
 			                        <option value="">노면센서</option>
 			                        <c:forEach var="list" items="${list}">
-			                        	<option value="${list.TId}"> ${list.TNickname}</option>
+										<c:choose>
+											<c:when test="${list.TNickname eq 'sensor#1'}">
+											<option value="T1">DHC</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#2'}">
+												<option value="T2">WHC</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#3'}">
+												<option value="T3">HPC-WHC</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#4'}">
+												<option value="T4">NVH Asp</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#5'}">
+												<option value="T5">NVH Con</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#6'}">
+												<option value="T6">BRK Dry Asp</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#7'}">
+												<option value="T7">BRK Wet Asp</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#8'}">
+												<option value="T8">BRK Wet Con</option>
+											</c:when>
+											<c:when test="${list.TNickname eq 'sensor#9'}">
+												<option value="T9">HPS-BRK</option>
+											</c:when>
+										</c:choose>
 			                        </c:forEach>
 			                    </select>
 			                </div>

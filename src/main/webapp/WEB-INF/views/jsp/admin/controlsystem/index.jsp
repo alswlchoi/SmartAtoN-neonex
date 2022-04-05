@@ -665,7 +665,7 @@
     $("#defaultOpen").click();
 </script>
 <!-- container -->
-<div id="container">
+<div id="container" class="controlBoard">
     <!-- content -->
     <div class="content">
         <!-- breadcrumb -->
