@@ -18,6 +18,7 @@ import com.hankook.pg.share.Search;
 import com.hankook.pg.share.Utils;
 import lombok.RequiredArgsConstructor;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -270,13 +271,15 @@ public class MemberController {
     }
     //관리자 패스워드 찾기 ajax
     @PostMapping("/adminPwdSearch/modify")
-    public Map<String,Object> adminPwdSearchModify(@RequestBody MemberDto memberDto) throws Exception {
+    public void adminPwdSearchModify(@RequestBody MemberDto memberDto) throws Exception {
+
+		String modifyPassword = RandomStringUtils.randomAlphanumeric(6);
+
     	Map<String,Object> resultMap= new HashMap<String,Object>();
     	//변경할 패스워스
-    	String newPwd = passwordEncoder.encode(defaultPassword);
+    	String newPwd = passwordEncoder.encode(modifyPassword);
 		memberDto.setNewPwd(newPwd);
 		memberDto.setMemName(AESCrypt.encrypt(memberDto.getMemName()));
-		
 		int infoCnt = memberService.chkMemIdName(memberDto);
 		if(infoCnt > 0) {
 			//변경
@@ -288,7 +291,7 @@ public class MemberController {
 				MemberDto mem = memberService.getMemberInfo(memberDto.getMemId());
 				Email email = new Email();
 				Map<String,Object> map = new HashMap<String,Object>();
-				map.put("defaultPassword", defaultPassword);
+				map.put("modifyPassword", modifyPassword);
 				email.setTitle("관리자 임시비밀번호 안내");
 				email.setBdt(null);
 				email.setRcverEmail(mem.getMemEmail());
