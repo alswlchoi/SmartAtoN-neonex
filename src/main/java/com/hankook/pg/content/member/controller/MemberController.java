@@ -271,7 +271,7 @@ public class MemberController {
     }
     //관리자 패스워드 찾기 ajax
     @PostMapping("/adminPwdSearch/modify")
-    public void adminPwdSearchModify(@RequestBody MemberDto memberDto) throws Exception {
+    public Map<String,Object> adminPwdSearchModify(@RequestBody MemberDto memberDto) throws Exception {
 
 		String modifyPassword = RandomStringUtils.randomAlphanumeric(6);
 
