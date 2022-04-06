@@ -459,7 +459,7 @@ public class TrReserveService{
     	Integer cnt_tcday_log = 0;
     	Integer cnt_rfid_log = 0;
     	Integer cnt_carRfid_log = 0;
-    	Integer dSeq = 0;
+    	String dSeq = "";
     	
     	if(null==rfidLog.getInTime() || rfidLog.getInTime().equals("")) {
     		resultCnt = -50;		//intime 없을 경우 등록 안 됨
@@ -502,10 +502,10 @@ public class TrReserveService{
 	    		
 	    		if(resourceMapping.getRmType().equals("D")&&rfidLog.getTagId().equals(resourceMapping.getRId())) {
 	    			cnt_rfid_log++;
-	    			dSeq = Fn.toInt(resourceMapping.getDSeq());
+	    			dSeq = resourceMapping.getDSeq();
 	    			
-	    			if(dSeq>0)
-	    				rfidLog.setDSeq(Fn.toInt(resourceMapping.getDSeq()));
+	    			if(dSeq != null && dSeq.equals(""))
+	    				rfidLog.setDSeq(resourceMapping.getDSeq());
 	
 	    			rfidLog.setDName(resourceMapping.getDName());
 	    			rfidLog.setDLevel(resourceMapping.getRmLevel());

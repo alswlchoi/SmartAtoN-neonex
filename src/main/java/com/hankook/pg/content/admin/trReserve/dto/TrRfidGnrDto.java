@@ -14,7 +14,7 @@ public class TrRfidGnrDto {
 	private String tcReservCode;
 	private String compName;
 	private String cCode;
-	private Integer dSeq;
+	private String dSeq;
 	private String dName;
 	private String dLevel;
 	private String wCh;
