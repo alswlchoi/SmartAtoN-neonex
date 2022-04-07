@@ -270,8 +270,8 @@ function funRowspan(className){
     $("."+className).each(function(){
       var rows = $("."+className);
       if(rows.length > 1){
-        rows.eq(0).attr("rowspan", rows.length);//중복되는 첫번째 td에 rowspan값 세팅
-        rows.not(":eq(0)").remove();//중복되는 td를 삭제 } }); }
+        // rows.eq(0).attr("rowspan", rows.length);//중복되는 첫번째 td에 rowspan값 세팅
+        // rows.not(":eq(0)").remove();//중복되는 td를 삭제 } }); }
       }
     });
   }

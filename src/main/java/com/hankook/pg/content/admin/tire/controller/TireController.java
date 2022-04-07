@@ -78,6 +78,11 @@ public class TireController {
 			result.put("type",TODAY);
 		}
 
+		String[] arrOrderColumn = {"plnDtm asc", "reqNo asc"};
+		request.setArrOrderColumn(arrOrderColumn);
+
+		System.out.println(request.getArrOrderColumn().toString() + "++++");
+
 		List<TireManagement> list = tireService.findAllToday(request);
 		int count = tireService.findAllTodayCount(request);
 
